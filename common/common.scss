@@ -1,1 +1,281 @@
 
+// ============================================
+// 《明日方舟·终末地》Discourse主题 - 核心样式
+// ============================================
+
+// 自定义变量 - 终末地配色系统
+$endfield-primary: #00D4FF;        // 科技蓝
+$endfield-secondary: #1A1F2E;      // 深蓝灰
+$endfield-tertiary: #0A0E14;       // 近黑
+$endfield-accent: #FF6B35;         // 橙色强调
+$endfield-glow: rgba(0, 212, 255, 0.3); // 发光效果
+
+// ============================================
+// 全局样式覆盖
+// ============================================
+
+// 背景处理
+body {
+  background-color: $endfield-tertiary;
+  background-image: 
+    linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
+    linear-gradient(225deg, rgba(0, 212, 255, 0.03) 0%, transparent 50%);
+  background-attachment: fixed;
+  
+  // 添加科技感网格背景
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: -1;
+  }
+}
+
+// ============================================
+// 导航栏样式
+// ============================================
+
+.d-header {
+  background: linear-gradient(180deg, rgba(10, 14, 20, 0.95) 0%, rgba(10, 14, 20, 0.8) 100%);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+  box-shadow: 0 2px 20px rgba(0, 212, 255, 0.1);
+  
+  // Logo样式
+  .title {
+    color: $endfield-primary;
+    text-shadow: 0 0 10px $endfield-glow;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  
+  // 导航链接
+  .nav-items {
+    .nav-item {
+      a {
+        color: rgba(255, 255, 255, 0.7);
+        transition: all 0.3s ease;
+        
+        &:hover {
+          color: $endfield-primary;
+          text-shadow: 0 0 8px $endfield-glow;
+        }
+      }
+    }
+  }
+}
+
+// ============================================
+// 按钮样式 - 科技感设计
+// ============================================
+
+.btn {
+  border-radius: 2px;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  
+  // 主要按钮
+  &.btn-primary {
+    background: linear-gradient(135deg, $endfield-primary 0%, #0099CC 100%);
+    border-color: $endfield-primary;
+    box-shadow: 0 0 15px $endfield-glow;
+    
+    &:hover {
+      box: 0 0 25px $endfield-glow;
+      transform: translateY(-2px);
+    }
+    
+    // 添加扫描线效果
+    &::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        45deg,
+        transparent 40%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 60%
+      );
+      animation: scan 3s infinite;
+      pointer-events: none;
+    }
+  }
+}
+
+@keyframes scan {
+  0% { transform: translateX(-100%) translateY(-100%); }
+  100% { transform: translateX(100%) translateY(100%); }
+}
+
+// ============================================
+// 主题列表样式
+// ============================================
+
+.topic-list {
+  background: rgba(26, 31, 46, 0.5);
+  border-radius: 4px;
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  
+  thead {
+    background: rgba(0, 212, 255, 0.05);
+    border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+    
+    th {
+      color: $endfield-primary;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 0.85em;
+    }
+  }
+  
+  tbody {
+    tr {
+      border-bottom: 1px solid rgba(0, 212, 255, 0.05);
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background: rgba(0, 212, 255, 0.05);
+        border-left: 3px solid $endfield-primary;
+      }
+      
+      td {
+        color: rgba(255, 255, 255, 0.9);
+      }
+    }
+  }
+}
+
+// ============================================
+// 帖子内容样式
+// ============================================
+
+.topic-post {
+  background: rgba(26, 31, 46, 0.3);
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  border-radius: 4px;
+  margin-bottom: 20px;
+  
+  .cooked {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.8;
+    
+    // 代码块样式
+    pre {
+      background: rgba(10, 14, 20, 0.8);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 4px;
+      padding: 15px;
+      
+      code {
+        color: $endfield-primary;
+        font-family: 'Courier New', monospace;
+      }
+    }
+    
+    // 引用块样式
+    blockquote {
+      border-left: 3px solid $endfield-primary;
+      background: rgba(0, 212, 255, 0.05);
+      padding: 15px;
+      margin: 20px 0;
+      
+      &::before {
+        content: '»';
+        color: $endfield-primary;
+        font-size: 2em;
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+// ============================================
+// 侧边栏样式
+// ============================================
+
+.sidebar-section {
+  background: rgba(26, 31, 46, 0.5);
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  border-radius: 4px;
+  
+  .sidebar-section-header {
+    background: rgba(0, 212, 255, 0.05);
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+    color: $endfield-primary;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+}
+
+// ============================================
+// 分类标签样式
+// ============================================
+
+.category-badge {
+  border-radius: 2px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+// ============================================
+// 用户卡片样式
+// ============================================
+
+.user-card {
+  background: rgba(26, 31, 46, 0.95);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 4px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  
+  .user-card-avatar {
+    border: 2px solid $endfield-primary;
+    box-shadow: 0 0 15px $endfield-glow;
+  }
+  
+  .user-card-details {
+    .username {
+      color: $endfield-primary;
+      font-weight: 700;
+    }
+    
+    .title {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9em;
+    }
+  }
+}
+
+// ============================================
+// 辅助类
+// ============================================
+
+.endfield-glow {
+  text-shadow: 0 0 10px $endfield-glow;
+}
+
+.endfield-border {
+  border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.endfield-card {
+  background: rgba(26, 31, 46, 0.5);
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  border-radius: 4px;
+  padding: 20px;
+}
