@@ -10,21 +10,18 @@ export default class EndfieldNewTopicButton extends Component {
 
   constructor() {
     super(...arguments);
-    // 核心修复：一旦组件初始化，就给 body 打上标记
-    // CSS 会根据这个标记去隐藏右上角的旧按钮
+    // 只要组件被加载，就给 body 加这个类，CSS 看到这个类就会隐藏右上角的旧按钮
     if (this.currentUser) {
-      document.body.classList.add("endfield-sidebar-button-active");
+      document.body.classList.add("endfield-has-sidebar-button");
     }
   }
 
   willDestroy() {
     super.willDestroy(...arguments);
-    // 组件销毁时移除标记
-    document.body.classList.remove("endfield-sidebar-button-active");
+    document.body.classList.remove("endfield-has-sidebar-button");
   }
 
   get showButton() {
-    // 只要有用户登录就显示
     return this.currentUser;
   }
 
