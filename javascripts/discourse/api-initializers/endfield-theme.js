@@ -10,11 +10,10 @@ export default apiInitializer("0.8", (api) => {
   // 页面加载动画逻辑
   // ============================================
   const addPageLoadAnimation = () => {
-    // 使用 requestAnimationFrame 确保在下一帧渲染时执行，避免找不到元素
+    // 使用 requestAnimationFrame 确保 DOM 已准备好
     requestAnimationFrame(() => {
       const content = document.querySelector('.d-header');
       if (content) {
-        // 简单的入场动画
         content.style.opacity = '0';
         content.style.transform = 'translateY(-20px)';
         content.style.transition = 'all 0.5s ease';
@@ -40,15 +39,15 @@ export default apiInitializer("0.8", (api) => {
   // ============================================
   api.decorateCooked(
     (elem) => {
-      // 🛠️ 【核心修复点】
-      // elem 是一个 jQuery 对象，没有 querySelectorAll 方法。
-      // 我们通过 elem[0] 获取它包裹的原生 DOM 元素。
+      // 🛠️ 【核心修复】兼容性处理
+      // Discourse 可能会传入 jQuery 对象或原生 DOM 节点
+      // 如果是 jQuery 对象 (elem.jquery 存在)，则取第一个元素转为原生节点
       const domNode = elem.jquery ? elem[0] : elem;
 
-      // 防御性编程：如果节点不存在，直接返回
+      // 防御性编程：如果节点无效，直接返回，防止报错
       if (!domNode) return;
 
-      // 现在可以使用原生 DOM API 了
+      // 现在 domNode 必定是原生元素，可以安全使用 querySelectorAll
       const paragraphs = domNode.querySelectorAll('p');
       paragraphs.forEach((p) => {
         p.style.transition = 'all 0.3s ease';
