@@ -255,3 +255,67 @@ a {
     }
   }
 }
+
+// ============================================
+// 布局调整：话题列表增宽 (User Provided Fluid Fix)
+// ============================================
+
+// 1. 设置宽度占比 (根据你的需求调整为 80% 或 85%)
+$fluid-width: 85%; 
+
+// 2. 覆盖 CSS 变量
+:root {
+  --d-max-width: #{$fluid-width} !important;
+}
+
+// 3. 核心容器解锁
+// 关键：增加了 margin: 0 auto 防止贴左边
+#main-outlet-wrapper #main-outlet > *:not(.experimental-screen):not(.activate-account) {
+  max-width: $fluid-width !important;
+  width: 100% !important;
+  margin-inline: auto !important; // 确保居中！
+}
+
+// 4. 外层容器适配
+.wrap, 
+#main-outlet-wrapper, 
+#main-outlet {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+// 5. 导航栏适配
+.list-controls {
+  max-width: $fluid-width !important;
+  margin: 0 auto !important; // 确保居中！
+  .navigation-container {
+    max-width: 100% !important;
+  }
+}
+
+// 6. 话题列表表格适配
+.topic-list {
+  width: 100% !important;
+  display: table !important;
+  .topic-list-item {
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+}
+
+// 7. 头部内容适配
+body .d-header > .wrap {
+  max-width: 100% !important; 
+  .contents {
+    max-width: $fluid-width !important;
+    margin: 0 auto; // 确保居中！
+  }
+}
+
+// 8. 移动端保护
+@media screen and (max-width: 767px) {
+  #main-outlet-wrapper #main-outlet > *:not(.experimental-screen) {
+     max-width: 100% !important;
+     padding-inline: 10px !important;
+  }
+}
