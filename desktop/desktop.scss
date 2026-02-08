@@ -1,31 +1,38 @@
 // ============================================
-// 桌面端侧边栏发帖按钮 (Glacier/Horizon 同款实现)
+// 桌面端侧边栏发帖按钮 (回退修复版)
 // ============================================
 
-// 1. 隐藏右上角旧按钮
-html.desktop-view body .d-header .create-topic,
-html.desktop-view body .navigation-controls #create-topic {
+// 1. 确保右侧按钮隐藏 (保留之前的有效逻辑)
+body.endfield-has-sidebar-button .d-header .create-topic,
+html.desktop-view .d-header .create-topic,
+html.desktop-view .navigation-controls #create-topic {
   display: none !important;
 }
 
-// 2. 侧边栏按钮容器定位 (CSS Grid 魔法)
+// 2. 侧边栏按钮容器
+// 使用 sticky 定位，让它吸附在侧边栏顶部
 .endfield-sidebar-new-topic-button-container {
-  // 【关键】将这个处于外部的元素，强制放入侧边栏的 Grid 区域
-  grid-area: sidebar; 
-  
-  // 布局微调
-  margin-bottom: 20px;
+  display: block !important; // 强制显示
   width: 100%;
+  
+  // 【位置调整】这里控制按钮的垂直位置
+  // margin-top: 10px 让它离顶端有一点距离，实现“下移”
+  margin-top: 10px; 
+  margin-bottom: 20px; // 把下方的导航栏推下去
+  
+  position: sticky;
+  top: 0; 
+  z-index: 999;
+  
+  padding: 0 5px;
   box-sizing: border-box;
+  background: var(--secondary); // 防止透明穿透
   
-  // 确保它显示
-  display: block; 
-  
-  // 如果侧边栏内容没顶上来，可能需要这个
-  // margin-top: 0; 
+  // 底部加个虚线分隔
+  border-bottom: 1px dashed var(--primary-low);
 }
 
-// 3. 按钮本体样式 (Endfield 工业风)
+// 3. 按钮本体样式 (保持不变)
 .endfield-sidebar-create-btn {
   width: 100%;
   height: 48px;
@@ -43,7 +50,6 @@ html.desktop-view body .navigation-controls #create-topic {
   border: none;
   border-radius: 0;
   
-  // 切角
   clip-path: polygon(
     0 0, 
     calc(100% - 15px) 0, 
@@ -84,25 +90,4 @@ html.desktop-view body .navigation-controls #create-topic {
     box-shadow: 0 2px 0 #cc4e22;
     background: #e55a2b !important;
   }
-}
-
-// 4. 调整“是否显示摘要”按钮的位置 (需求2)
-// 目标：移到导航栏最右侧，并对齐
-.topic-list-layout-trigger {
-  order: 999; // 放到 flex 容器最后
-  margin-left: auto; // 自动挤到最右边
-  
-  // 如果需要绝对定位到角落，可以用下面的代码（取消注释）
-  /*
-  position: absolute;
-  right: 0;
-  top: 0;
-  */
-}
-
-// 确保导航栏容器也是 Flex 布局，以便排序生效
-.navigation-controls {
-  display: flex;
-  align-items: center;
-  // position: relative; // 如果启用绝对定位，需要这个
 }
