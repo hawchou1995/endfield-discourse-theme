@@ -90,35 +90,46 @@
   }
 }
 
-// 5. 侧边栏深度优化 (HUD 战术面板风格)
-// ------------------------------------------------------------
+// ============================================
+// 5. 侧边栏深度优化 (强制覆盖版)
+// ============================================
+
 .sidebar-wrapper {
-  // [关键] 发帖按钮容器
-  // 给按钮一个独立的容器空间，确保它不会贴边
+  // ------------------------------------------------------------
+  // 针对发帖按钮的暴力样式覆盖
+  // ------------------------------------------------------------
+  
+  // 1. 找到所有可能的按钮容器
+  // 我们不依赖特定的类名，而是通过位置查找
+  .sidebar-navigation-controls, 
   .endfield-sidebar-new-topic-button-container {
-    padding: 15px 10px 5px 10px; // 上右下左留白，上方多留点防止贴顶
-    width: 100%;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center; // 确保按钮居中
+    padding: 15px 10px 15px 10px !important; // 上下都留白
+    width: 100% !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    justify-content: center !important;
+    border-bottom: none !important; // 移除可能存在的分割线
+    margin: 0 !important;
   }
 
-  // [关键] 发帖按钮本体重构
-  // 长条形、橙色、指令块风格
-  .endfield-sidebar-create-btn {
-    width: 100% !important; // 强制撑满容器宽度
-    height: 48px; // 增加高度，更适合手指点击
+  // 2. 找到容器内的按钮
+  // 无论是自定义的 .endfield-btn 还是原生的 .btn-default
+  .sidebar-navigation-controls .btn,
+  .endfield-sidebar-new-topic-button-container .btn {
+    width: 100% !important;
+    height: 48px !important;
     
-    // 颜色与质感 (橙色警告风)
-    background: var(--quaternary) !important; 
+    // 强制颜色 (橙色背景 + 白字)
+    background-color: var(--quaternary) !important;
+    background-image: none !important; // 防止渐变干扰
     color: #fff !important;
     
-    // 字体优化
-    font-size: 1.1em;
-    font-weight: 800;
-    letter-spacing: 1px;
+    // 字体
+    font-size: 1.1em !important;
+    font-weight: 800 !important;
+    letter-spacing: 1px !important;
     
-    // 工业风切角 (仅右下角切角)
+    // 形状：移除圆角，应用切角
     border-radius: 0 !important;
     clip-path: polygon(
       0 0, 
@@ -128,51 +139,47 @@
       0 100%
     );
     
-    // 阴影与边框
-    border: none;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.2); // 底部厚度感
-    margin-bottom: 15px; // 关键：把下方的菜单列表顶下去，留出呼吸空间
-
-    // 内部布局
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    // 装饰
+    border: none !important;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2) !important;
     
-    .btn-content {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    // 布局
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    
+    // 内部图标和文字颜色
+    .d-icon, span {
+      color: #fff !important;
     }
-
+    
+    // 修复图标间距
     .d-icon {
-      font-size: 1.1em;
-      color: #fff !important;
-    }
-    
-    .d-button-label {
-      color: #fff !important;
-    }
-
-    // 交互态
-    &:active {
-      transform: translateY(2px);
-      box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+      margin-right: 8px !important;
     }
   }
 
+  // ------------------------------------------------------------
   // 侧边栏菜单项优化
+  // ------------------------------------------------------------
   .sidebar-section-link-wrapper .sidebar-section-link {
     border-radius: 0 !important;
     
-    // 选中状态增加左侧高亮，而不是背景全变
     &.active {
       background: var(--primary-very-low);
       border-left: 3px solid var(--tertiary);
       font-weight: bold;
+      color: var(--primary); // 确保文字颜色正确
+    }
+    
+    // 未选中状态也去掉圆角
+    &:hover {
+      background: var(--hover);
+      border-radius: 0 !important;
     }
   }
   
-  // 修复列表顶部的间隙（因为按钮已经有了 margin-bottom，这里不需要额外的 padding）
+  // 修复列表容器的间距
   .sidebar-navigation {
     padding-top: 0 !important;
   }
