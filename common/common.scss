@@ -316,3 +316,46 @@ a {
     max-width: none !important; // 解除限制
   }
 }
+
+// ============================================
+// 布局调整：增加话题列表宽度 (Fluid Layout Fix)
+// ============================================
+
+// 1. 定义我们期望的最大宽度 (比默认宽，但不是全屏)
+$custom-max-width: 1450px; 
+
+// 2. 覆盖 Discourse 默认容器宽度
+.wrap {
+  max-width: $custom-max-width !important;
+  width: 96%; // 在超大屏上留一点边，不贴死；在小屏上自动适应
+  margin: 0 auto; // 核心：保持居中，这样左侧导航栏就不会贴在屏幕最左边
+}
+
+// 3. 针对头部内容的特殊适配
+.d-header .wrap {
+  max-width: $custom-max-width !important;
+  width: 96%;
+}
+
+// 4. 话题列表区域布局微调
+// 既然总宽度变大了，我们可以让中间的内容区（话题列表）占比更多
+// 默认可能是 flex-grow: 1，我们加强一下
+#main-outlet {
+  width: 100%;
+}
+
+// 5. (可选) 如果你觉得右侧边栏（Sidebar Blocks）太宽了挤占空间
+// 可以稍微限制一下它的宽度
+.tc-right-sidebar {
+  flex: 0 0 300px !important; // 固定 300px
+  width: 300px !important;
+  margin-left: 30px !important; // 给列表和侧边栏之间加点空隙
+}
+
+// 6. 移动端保护：手机上还是满宽好
+@media (max-width: 768px) {
+  .wrap {
+    width: 100%;
+    padding: 0 10px; // 给点内边距防止贴边
+  }
+}
