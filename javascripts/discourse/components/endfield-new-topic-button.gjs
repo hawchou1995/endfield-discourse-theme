@@ -9,18 +9,15 @@ export default class EndfieldNewTopicButton extends Component {
   @service currentUser;
 
   get showButton() {
-    // 只有登录用户才能看到发帖按钮
     return this.currentUser;
   }
 
   @action
   createTopic() {
-    // 获取当前所在的分类（如果有）
     const route = this.router.currentRoute;
     const category = route?.attributes?.category;
     const tag = route?.attributes?.tag;
 
-    // 打开编辑器
     this.composer.open({
       action: "createTopic",
       draftKey: "new_topic",
@@ -31,7 +28,7 @@ export default class EndfieldNewTopicButton extends Component {
 
   <template>
     {{#if this.showButton}}
-      <div class="endfield-sidebar-button-wrapper">
+      <div class="endfield-sidebar-new-topic-button-container">
         <DButton
           @class="btn-primary endfield-sidebar-create-btn"
           @action={{this.createTopic}}
