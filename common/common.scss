@@ -1,93 +1,262 @@
 // ============================================
-// 桌面端侧边栏发帖按钮 (终极修复版)
+// 《明日方舟·终末地》Discourse主题 - 核心样式 (完整恢复版)
 // ============================================
 
-// 1. 隐藏右上角旧按钮 (使用多重选择器确保覆盖)
-html.desktop-view body .d-header .create-topic,
-html.desktop-view body .navigation-controls .create-topic,
-html.desktop-view body .navigation-controls #create-topic {
-  display: none !important;
+// 1. 变量定义
+$endfield-blue: #00D4FF;
+$endfield-orange: #FF6B35;
+$custom-max-width: 1450px;
+
+:root {
+  --d-max-width: #{$custom-max-width}; // 设置 Discourse 核心变量
 }
 
-// 2. 侧边栏按钮容器
-.endfield-sidebar-new-topic-button-container {
-  // 基础盒模型
-  display: block !important;
-  width: 100%;
-  box-sizing: border-box;
-  
-  // 布局位置：稍微下移，并把下方内容挤下去
-  margin-top: 10px;
-  margin-bottom: 20px;
-  padding: 0 5px;
-  
-  // 确保可见性：防止被父级 overflow 切割
-  position: relative; 
-  z-index: 999;
-  
-  // 如果里面没内容（未登录），隐藏容器
-  &:empty {
-    display: none !important;
-  }
-}
-
-// 3. 按钮本体样式
-.endfield-sidebar-create-btn {
-  width: 100%;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-  font-size: 1.1em;
-  font-weight: 800;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  
-  background: #FF6B35 !important; 
-  color: #fff !important;
-  border: none;
+// 混合宏：切角
+@mixin endfield-cut-corner {
   border-radius: 0;
-  
-  // 切角
   clip-path: polygon(
     0 0, 
-    calc(100% - 15px) 0, 
-    100% 15px, 
+    calc(100% - 10px) 0, 
+    100% 10px, 
     100% 100%, 
-    15px 100%, 
-    0 calc(100% - 15px)
+    10px 100%, 
+    0 calc(100% - 10px)
   );
-  
-  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
-  box-shadow: 0 4px 0 #cc4e22;
+}
 
-  .btn-content {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    .d-icon { font-size: 1em; }
-  }
+// ============================================
+// 2. 全局基础与布局
+// ============================================
 
-  .btn-decor-corner {
-    position: absolute;
-    bottom: 3px;
-    right: 3px;
-    width: 8px;
-    height: 8px;
-    background: rgba(0,0,0,0.2);
-    clip-path: polygon(100% 0, 0 100%, 100% 100%);
-  }
+body {
+  background-color: var(--secondary);
+  background-image: 
+    linear-gradient(90deg, var(--primary-very-low) 1px, transparent 1px),
+    linear-gradient(180deg, var(--primary-very-low) 1px, transparent 1px);
+  background-size: 40px 40px; 
+  background-attachment: fixed;
+}
 
+a {
+  color: var(--tertiary);
+  transition: all 0.2s ease;
   &:hover {
-    background: #ff8c61 !important;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 0 #cc4e22;
+    color: var(--tertiary-hover);
+    text-decoration: none;
+  }
+}
+
+// 布局核心：覆盖默认宽度限制，实现增宽且居中
+.wrap {
+  max-width: var(--d-max-width) !important; // 使用变量统一控制
+  width: 94%; // 稍微留点余地
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+// 头部内容区也同步变宽
+.d-header .wrap {
+  max-width: var(--d-max-width) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+// 确保主内容区占满剩余宽度
+#main-outlet {
+  width: 100%;
+}
+
+// 移动端保护
+@media (max-width: 768px) {
+  :root {
+    --d-max-width: 100% !important;
+  }
+  .wrap {
+    width: 100% !important;
+    padding: 0 10px;
+  }
+}
+
+// ============================================
+// 3. UI 组件 (按钮、导航、列表)
+// ============================================
+
+// 按钮
+.btn {
+  @include endfield-cut-corner;
+  border: none;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  position: relative;
+  transition: all 0.2s ease;
+  
+  &.btn-primary {
+    background: var(--tertiary);
+    color: var(--secondary);
+    &:hover {
+      background: var(--tertiary-hover);
+      transform: translateX(2px);
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 5px;
+      height: 5px;
+      background: rgba(255,255,255,0.5);
+    }
   }
   
-  &:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 0 #cc4e22;
-    background: #e55a2b !important;
+  &.btn-default {
+    background: var(--primary-low);
+    color: var(--primary);
+    border: 1px solid var(--primary-low-mid);
+    &:hover {
+      background: var(--primary-low-mid);
+    }
+  }
+}
+
+// 导航栏
+.d-header {
+  background: var(--header_background);
+  border-bottom: 2px solid var(--tertiary); 
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  backdrop-filter: blur(10px);
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, $endfield-blue, transparent 20%, transparent 80%, $endfield-blue);
+  }
+
+  .title {
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  
+  .icons .icon {
+    border: 1px solid transparent;
+    &:hover {
+      background: var(--primary-low);
+      border: 1px solid var(--tertiary);
+      border-radius: 0; 
+    }
+  }
+}
+
+// 搜索框
+#search-button {
+  background: transparent;
+  &:hover { background: var(--primary-low); }
+}
+.search-menu .search-context {
+  background: var(--secondary);
+  border: 1px solid var(--tertiary);
+}
+
+// ============================================
+// 4. 话题列表 & 侧边栏卡片
+// ============================================
+
+.topic-list {
+  border-radius: 0; 
+  
+  thead th {
+    border-bottom: 2px solid var(--primary-low-mid);
+    color: var(--primary-medium);
+    font-size: 0.85em;
+    text-transform: uppercase;
+  }
+  
+  tbody tr {
+    border-bottom: 1px solid var(--primary-low);
+    &:hover { background-color: var(--hover); }
+  }
+  
+  .main-link {
+    font-weight: 600;
+    .link-top-line { display: flex; align-items: center; }
+  }
+  
+  .badge-category-bg { border-radius: 2px; }
+}
+
+// 通用卡片样式 (侧边栏、话题列表)
+.sidebar-section, 
+.rs-component,
+.topic-list {
+  background: var(--secondary); 
+  border: 1px solid var(--primary-low);
+  box-shadow: 4px 4px 0 var(--primary-low);
+  margin-bottom: 24px;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: -1px;
+    width: 10px; height: 10px;
+    border-top: 2px solid $endfield-orange;
+    border-left: 2px solid $endfield-orange;
+    z-index: 1;
+  }
+}
+
+// 侧边栏标题
+.sidebar-section-header, 
+.rs-component h3 {
+  border-bottom: 1px solid var(--primary-low);
+  padding: 10px 15px;
+  background: var(--primary-very-low);
+  color: var(--primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  letter-spacing: 1px;
+  border-left: 4px solid var(--tertiary); 
+}
+
+// 热门标签云
+.popular-tags__container .popular-tags__tag {
+  text-shadow: 0 1px 3px var(--secondary); 
+}
+
+// ============================================
+// 5. 帖子详情
+// ============================================
+
+.topic-post {
+  border-left: 1px solid var(--primary-low);
+  &:first-of-type {
+    border-left: 3px solid $endfield-orange;
+  }
+  .topic-avatar {
+    border-top: none;
+    .avatar {
+      border-radius: 4px;
+      border: 2px solid var(--primary-low);
+    }
+  }
+  .cooked {
+    blockquote {
+      background: var(--primary-very-low);
+      border-left: 4px solid var(--tertiary);
+      color: var(--primary);
+      &::before { color: var(--tertiary); }
+    }
+    pre code {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      border-radius: 4px;
+    }
   }
 }
