@@ -6,6 +6,8 @@ export default apiInitializer("1.0", (api) => {
   if (!api.getCurrentUser()) return;
 
   // 将按钮渲染到侧边栏内容的最上方
-  // "above-sidebar-sections" 是 Discourse 官方侧边栏的一个插件插槽
-  api.renderInOutlet("above-sidebar-sections", EndfieldNewTopicButton);
+  // 使用 "above-main-container" 可能太高了，试用 "before-sidebar-sections"
+  // 如果 "before-sidebar-sections" 不起作用，我们可以尝试 "sidebar-navigation" 相关的 outlet
+  // 但目前最稳妥的是渲染在侧边栏内部顶部，然后用 CSS 提上去
+  api.renderInOutlet("before-sidebar-sections", EndfieldNewTopicButton);
 });
