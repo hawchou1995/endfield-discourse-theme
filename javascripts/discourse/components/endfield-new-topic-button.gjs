@@ -8,19 +8,7 @@ export default class EndfieldNewTopicButton extends Component {
   @service composer;
   @service currentUser;
 
-  constructor() {
-    super(...arguments);
-    // 只要组件被加载，就给 body 加这个类，CSS 看到这个类就会隐藏右上角的旧按钮
-    if (this.currentUser) {
-      document.body.classList.add("endfield-has-sidebar-button");
-    }
-  }
-
-  willDestroy() {
-    super.willDestroy(...arguments);
-    document.body.classList.remove("endfield-has-sidebar-button");
-  }
-
+  // 只要有用户登录就显示
   get showButton() {
     return this.currentUser;
   }
