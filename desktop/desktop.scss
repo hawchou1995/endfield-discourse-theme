@@ -1,13 +1,10 @@
 // ============================================
-// 桌面端布局修正 (Glacier 1:1 复刻版)
+// 桌面端侧边栏发帖按钮 (Glacier 复刻版)
 // ============================================
 
-// --------------------------------------------
-// 1. 左侧发帖按钮 (核心)
-// --------------------------------------------
-
+// 1. 按钮容器定位 (核心)
 .endfield-sidebar-new-topic-button-container {
-  // 【灵魂代码】告诉浏览器：我是侧边栏的一部分
+  // 【关键】告诉浏览器：我是侧边栏的一部分
   // 必须配合 before-sidebar-columns 插槽使用
   grid-area: sidebar; 
   
@@ -15,86 +12,78 @@
   display: block;
   width: 100%;
   margin-bottom: 1em;
-  margin-top: 0; // Glacier 默认是 0，你可以改成 10px 微调下移
+  margin-top: 0; 
   box-sizing: border-box;
   z-index: 100;
+  
+  // 如果需要吸顶，取消注释下面两行
+  // position: sticky;
+  // top: 0;
 }
 
-// 按钮外观 (保持 Endfield 风格)
+// 2. 按钮外观 (Endfield 工业风)
 .endfield-sidebar-create-btn {
   width: 100%;
   height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
+  
   font-size: 1.1em;
   font-weight: 800;
   letter-spacing: 2px;
   text-transform: uppercase;
+  
   background: #FF6B35 !important; 
   color: #fff !important;
   border: none;
   border-radius: 0;
-  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+  
+  // 切角
+  clip-path: polygon(
+    0 0, 
+    calc(100% - 15px) 0, 
+    100% 15px, 
+    100% 100%, 
+    15px 100%, 
+    0 calc(100% - 15px)
+  );
+  
+  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
   box-shadow: 0 4px 0 #cc4e22;
-  transition: all 0.2s ease;
 
   .btn-content {
-    display: flex; align-items: center; gap: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     .d-icon { font-size: 1em; }
   }
+
   .btn-decor-corner {
-    position: absolute; bottom: 3px; right: 3px; width: 8px; height: 8px;
-    background: rgba(0,0,0,0.2); clip-path: polygon(100% 0, 0 100%, 100% 100%);
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    width: 8px;
+    height: 8px;
+    background: rgba(0,0,0,0.2);
+    clip-path: polygon(100% 0, 0 100%, 100% 100%);
   }
+
   &:hover {
-    background: #ff8c61 !important; transform: translateY(-2px); box-shadow: 0 6px 0 #cc4e22;
+    background: #ff8c61 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #cc4e22;
   }
+  
   &:active {
-    transform: translateY(2px); box-shadow: 0 2px 0 #cc4e22; background: #e55a2b !important;
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #cc4e22;
+    background: #e55a2b !important;
   }
 }
 
-// --------------------------------------------
-// 2. 右侧按钮隐藏 (暴力版)
-// --------------------------------------------
-
-// 隐藏顶栏里的新建按钮
-.d-header #create-topic {
+// 3. 隐藏原本的“新建话题”按钮
+html.desktop-view body .d-header #create-topic,
+html.desktop-view body .navigation-controls #create-topic {
   display: none !important;
-}
-// 隐藏导航栏里的新建按钮（防止重复显示）
-.navigation-controls #create-topic {
-  display: none !important;
-}
-
-// --------------------------------------------
-// 3. 摘要按钮移动 (移到导航栏最右)
-// --------------------------------------------
-
-// 确保导航栏占满宽度，方便排版
-.list-controls .container {
-  max-width: 100%; 
-}
-
-.navigation-controls {
-  display: flex;
-  flex-wrap: wrap; // 防止小屏炸裂
-  align-items: center;
-  width: 100%; // 占满剩余空间
-}
-
-// 选中“表格/列表切换”按钮 (摘要按钮)
-// 通常它的 class 包含 topic-list-layout-trigger 或类似
-.navigation-controls .btn.topic-list-layout-trigger,
-.navigation-controls .btn-icon-text.topic-list-layout-trigger {
-  margin-left: auto !important; // 核心：自动挤到最右边
-  order: 999; // 排序到最后
-}
-
-// 如果还有“排序”按钮，确保它在摘要按钮左边
-#topic-sortable {
-  order: 998; 
-  // 如果你也想把排序按钮移到右边，取消下面注释
-  // margin-left: auto !important; 
 }
