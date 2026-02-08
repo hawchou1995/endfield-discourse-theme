@@ -1,282 +1,278 @@
-
 // ============================================
-// 《明日方舟·终末地》Discourse主题 - 核心样式
-// ============================================
-
-// 自定义变量 - 终末地配色系统
-$endfield-primary: #00D4FF;        // 科技蓝
-$endfield-secondary: #1A1F2E;      // 深蓝灰
-$endfield-tertiary: #0A0E14;       // 近黑
-$endfield-accent: #FF6B35;         // 橙色强调
-$endfield-glow: rgba(0, 212, 255, 0.3); // 发光效果
-
-// ============================================
-// 全局样式覆盖
+// 《明日方舟·终末地》Discourse主题 - 核心样式 V2.0
 // ============================================
 
-// 背景处理
+// 核心强调色 (保持不变的品牌色)
+$endfield-blue: #00D4FF;
+$endfield-orange: #FF6B35; 
+
+// ============================================
+// 1. 全局基础 (自动适配深浅色)
+// ============================================
+
 body {
-  background-color: $endfield-tertiary;
+  // 使用系统变量背景，确保浅色模式是白的，深色模式是黑的
+  background-color: var(--secondary);
   background-image: 
-    linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
-    linear-gradient(225deg, rgba(0, 212, 255, 0.03) 0%, transparent 50%);
+    linear-gradient(90deg, var(--primary-very-low) 1px, transparent 1px),
+    linear-gradient(180deg, var(--primary-very-low) 1px, transparent 1px);
+  background-size: 40px 40px; // 技术网格背景
   background-attachment: fixed;
-  
-  // 添加科技感网格背景
-  &::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-      linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
-    background-size: 50px 50px;
-    pointer-events: none;
-    z-index: -1;
+}
+
+// 链接颜色优化
+a {
+  color: var(--tertiary);
+  transition: all 0.2s ease;
+  &:hover {
+    color: var(--tertiary-hover);
+    text-decoration: none;
   }
 }
 
 // ============================================
-// 导航栏样式
+// 2. UI 组件 - 终末地工业风格 (切角设计)
 // ============================================
 
-.d-header {
-  background: linear-gradient(180deg, rgba(10, 14, 20, 0.95) 0%, rgba(10, 14, 20, 0.8) 100%);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 212, 255, 0.2);
-  box-shadow: 0 2px 20px rgba(0, 212, 255, 0.1);
-  
-  // Logo样式
-  .title {
-    color: $endfield-primary;
-    text-shadow: 0 0 10px $endfield-glow;
-    font-weight: 700;
-    letter-spacing: 1px;
-  }
-  
-  // 导航链接
-  .nav-items {
-    .nav-item {
-      a {
-        color: rgba(255, 255, 255, 0.7);
-        transition: all 0.3s ease;
-        
-        &:hover {
-          color: $endfield-primary;
-          text-shadow: 0 0 8px $endfield-glow;
-        }
-      }
-    }
-  }
+// 通用切角混合宏
+@mixin endfield-cut-corner {
+  border-radius: 0;
+  // 右上角和左下角切角
+  clip-path: polygon(
+    0 0, 
+    calc(100% - 10px) 0, 
+    100% 10px, 
+    100% 100%, 
+    10px 100%, 
+    0 calc(100% - 10px)
+  );
 }
 
-// ============================================
-// 按钮样式 - 科技感设计
-// ============================================
-
+// 按钮重构
 .btn {
-  border-radius: 2px;
-  border: 1px solid transparent;
-  transition: all 0.3s ease;
+  @include endfield-cut-corner;
+  border: none;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
   position: relative;
-  overflow: hidden;
   
-  // 主要按钮
+  // 主按钮 (蓝色)
   &.btn-primary {
-    background: linear-gradient(135deg, $endfield-primary 0%, #0099CC 100%);
-    border-color: $endfield-primary;
-    box-shadow: 0 0 15px $endfield-glow;
+    background: var(--tertiary);
+    color: var(--secondary);
     
     &:hover {
-      box: 0 0 25px $endfield-glow;
-      transform: translateY(-2px);
+      background: var(--tertiary-hover);
+      transform: translateX(2px); // 悬浮时产生机械位移感
     }
     
-    // 添加扫描线效果
+    // 装饰性小方块
     &::after {
       content: '';
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        45deg,
-        transparent 40%,
-        rgba(255, 255, 255, 0.1) 50%,
-        transparent 60%
-      );
-      animation: scan 3s infinite;
-      pointer-events: none;
+      bottom: 0;
+      right: 0;
+      width: 5px;
+      height: 5px;
+      background: rgba(255,255,255,0.5);
+    }
+  }
+  
+  // 次级按钮
+  &.btn-default {
+    background: var(--primary-low);
+    color: var(--primary);
+    border: 1px solid var(--primary-low-mid);
+    
+    &:hover {
+      background: var(--primary-low-mid);
     }
   }
 }
 
-@keyframes scan {
-  0% { transform: translateX(-100%) translateY(-100%); }
-  100% { transform: translateX(100%) translateY(100%); }
+// ============================================
+// 3. 导航栏 (HUD 风格)
+// ============================================
+
+.d-header {
+  background: var(--header_background);
+  border-bottom: 2px solid var(--tertiary); // 顶部亮条
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  backdrop-filter: blur(10px);
+  
+  // 顶部装饰线
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, $endfield-blue, transparent 20%, transparent 80%, $endfield-blue);
+  }
+
+  .title {
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  
+  .icons .icon {
+    border: 1px solid transparent;
+    &:hover {
+      background: var(--primary-low);
+      border: 1px solid var(--tertiary);
+      border-radius: 0; // 强制方形
+    }
+  }
 }
 
 // ============================================
-// 主题列表样式
+// 4. 话题列表 (数据列表风格)
 // ============================================
 
 .topic-list {
-  background: rgba(26, 31, 46, 0.5);
-  border-radius: 4px;
-  border: 1px solid rgba(0, 212, 255, 0.1);
+  // 移除圆角，强调硬朗线条
+  border-radius: 0; 
   
-  thead {
-    background: rgba(0, 212, 255, 0.05);
-    border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+  thead th {
+    border-bottom: 2px solid var(--primary-low-mid);
+    color: var(--primary-medium);
+    font-size: 0.85em;
+    text-transform: uppercase;
+  }
+  
+  tbody tr {
+    border-bottom: 1px solid var(--primary-low);
     
-    th {
-      color: $endfield-primary;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-size: 0.85em;
+    &:hover {
+      background-color: var(--hover); // 使用 about.json 定义的悬停色
     }
   }
   
-  tbody {
-    tr {
-      border-bottom: 1px solid rgba(0, 212, 255, 0.05);
-      transition: all 0.3s ease;
-      
-      &:hover {
-        background: rgba(0, 212, 255, 0.05);
-        border-left: 3px solid $endfield-primary;
-      }
-      
-      td {
-        color: rgba(255, 255, 255, 0.9);
-      }
+  .main-link {
+    font-weight: 600;
+    
+    .link-top-line {
+      display: flex;
+      align-items: center;
     }
+  }
+  
+  // 分类徽章 - 变为实心小药丸
+  .badge-category-bg {
+    border-radius: 2px; 
   }
 }
 
 // ============================================
-// 帖子内容样式
+// 5. 侧边栏 & 容器 (工业面板)
+// ============================================
+
+// 统一卡片样式
+.sidebar-section, 
+.rs-component,
+.topic-list {
+  background: var(--secondary); // 适配深浅色背景
+  border: 1px solid var(--primary-low);
+  box-shadow: 4px 4px 0 var(--primary-low); // 硬阴影
+  margin-bottom: 24px;
+  position: relative;
+  
+  // 橙色装饰角
+  &::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 10px;
+    height: 10px;
+    border-top: 2px solid $endfield-orange;
+    border-left: 2px solid $endfield-orange;
+    z-index: 1;
+  }
+}
+
+// 侧边栏标题
+.sidebar-section-header, 
+.rs-component h3 {
+  border-bottom: 1px solid var(--primary-low);
+  padding: 10px 15px;
+  background: var(--primary-very-low);
+  color: var(--primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  letter-spacing: 1px;
+  
+  // 标题左侧装饰条
+  border-left: 4px solid var(--tertiary); 
+}
+
+// 热门标签球体容器修复
+.popular-tags__container {
+  // 确保在浅色模式下文字可见
+  .popular-tags__tag {
+    // 强制增加描边或背景以保证在任何背景下可见
+    // (这里的样式主要由 Sidebar Blocks 插件控制，但我们加一层保险)
+    text-shadow: 0 1px 3px var(--secondary); 
+  }
+}
+
+// ============================================
+// 6. 帖子详情 (阅读区)
 // ============================================
 
 .topic-post {
-  background: rgba(26, 31, 46, 0.3);
-  border: 1px solid rgba(0, 212, 255, 0.1);
-  border-radius: 4px;
-  margin-bottom: 20px;
+  border-left: 1px solid var(--primary-low);
+  
+  // 楼主帖子特殊装饰
+  &:first-of-type {
+    border-left: 3px solid $endfield-orange;
+  }
+  
+  .topic-avatar {
+    border-top: none;
+    .avatar {
+      border-radius: 4px; // 方形头像
+      border: 2px solid var(--primary-low);
+    }
+  }
   
   .cooked {
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 1.8;
-    
-    // 代码块样式
-    pre {
-      background: rgba(10, 14, 20, 0.8);
-      border: 1px solid rgba(0, 212, 255, 0.2);
-      border-radius: 4px;
-      padding: 15px;
+    // 引用块修复
+    blockquote {
+      background: var(--primary-very-low);
+      border-left: 4px solid var(--tertiary);
+      color: var(--primary);
       
-      code {
-        color: $endfield-primary;
-        font-family: 'Courier New', monospace;
-      }
-    }
-    
-// 引用块样式
-    // 修改处：增加了 :not(...) 选择器，排除掉 callouts 组件的样式
-    blockquote:not(.quote-callout):not(.d-callout) {
-      border-left: 3px solid $endfield-primary;
-      background: rgba(0, 212, 255, 0.05);
-      padding: 15px;
-      margin: 20px 0;
-      
+      // 移除原主题可能残留的蓝色背景
       &::before {
-        content: '»';
-        color: $endfield-primary;
-        font-size: 2em;
-        margin-right: 10px;
+        color: var(--tertiary);
       }
     }
-  }
-}
-
-// ============================================
-// 侧边栏样式
-// ============================================
-
-.sidebar-section {
-  background: rgba(26, 31, 46, 0.5);
-  border: 1px solid rgba(0, 212, 255, 0.1);
-  border-radius: 4px;
-  
-  .sidebar-section-header {
-    background: rgba(0, 212, 255, 0.05);
-    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
-    color: $endfield-primary;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-}
-
-// ============================================
-// 分类标签样式
-// ============================================
-
-.category-badge {
-  border-radius: 2px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-// ============================================
-// 用户卡片样式
-// ============================================
-
-.user-card {
-  background: rgba(26, 31, 46, 0.95);
-  border: 1px solid rgba(0, 212, 255, 0.2);
-  border-radius: 4px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  
-  .user-card-avatar {
-    border: 2px solid $endfield-primary;
-    box-shadow: 0 0 15px $endfield-glow;
-  }
-  
-  .user-card-details {
-    .username {
-      color: $endfield-primary;
-      font-weight: 700;
-    }
     
-    .title {
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 0.9em;
+    // 代码块
+    pre code {
+      background: #1e1e1e; // 代码块始终保持深色背景更易读
+      color: #d4d4d4;
+      border-radius: 4px;
     }
   }
 }
 
 // ============================================
-// 辅助类
+// 7. 搜索框优化
 // ============================================
-
-.endfield-glow {
-  text-shadow: 0 0 10px $endfield-glow;
+#search-button {
+  background: transparent;
+  &:hover {
+    background: var(--primary-low);
+  }
 }
 
-.endfield-border {
-  border: 1px solid rgba(0, 212, 255, 0.3);
-}
-
-.endfield-card {
-  background: rgba(26, 31, 46, 0.5);
-  border: 1px solid rgba(0, 212, 255, 0.1);
-  border-radius: 4px;
-  padding: 20px;
+// 搜索下拉框
+.search-menu .search-context {
+  background: var(--secondary);
+  border: 1px solid var(--tertiary);
 }
