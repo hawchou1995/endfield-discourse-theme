@@ -2,6 +2,8 @@ import { apiInitializer } from "discourse/lib/api";
 import EndfieldNewTopicButton from "../components/endfield-new-topic-button";
 
 export default apiInitializer("1.0", (api) => {
-  // Horizon 原版作业：插在 columns 之前，然后用 CSS 把它搬运到 sidebar 区域
-  api.renderInOutlet("before-sidebar-columns", EndfieldNewTopicButton);
+  // 只要用户登录，就渲染到侧边栏顶部区域
+  if (api.getCurrentUser()) {
+    api.renderInOutlet("above-sidebar-sections", EndfieldNewTopicButton);
+  }
 });
