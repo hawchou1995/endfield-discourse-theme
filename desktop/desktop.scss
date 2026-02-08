@@ -22,8 +22,9 @@ html.desktop-view .navigation-controls {
 // 2. 侧边栏按钮容器布局
 // Horizon 风格：给按钮一个独立空间，把下方内容挤下去
 .endfield-sidebar-new-topic-button-container {
-  // [修改] 增加顶部间距，使按钮下移，不紧贴 Header
-  margin-top: 20px; 
+  // [新增] 增加顶部间距，让按钮悬浮感更强，不与 Header 粘连
+  margin-top: 15px; 
+  margin-bottom: 20px;
   
   // [保留] 保持底部间距，确保不遮挡下方的侧边栏导航内容
   margin-bottom: 20px;
