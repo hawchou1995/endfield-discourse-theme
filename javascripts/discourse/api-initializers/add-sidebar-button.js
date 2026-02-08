@@ -2,8 +2,7 @@ import { apiInitializer } from "discourse/lib/api";
 import EndfieldNewTopicButton from "../components/endfield-new-topic-button";
 
 export default apiInitializer("1.0", (api) => {
-  if (!api.getCurrentUser()) return;
-
-  // 改用 'above-sidebar-sections'，这会把它放在侧边栏的最顶端（导航链接之上）
-  api.renderInOutlet("above-sidebar-sections", EndfieldNewTopicButton);
+  // Horizon 核心作业：使用 'before-sidebar-columns' 插槽
+  // 这个插槽位于主要内容列和侧边栏列的包裹层之前，我们需要用 CSS 把它"挪"进左侧
+  api.renderInOutlet("before-sidebar-columns", EndfieldNewTopicButton);
 });
