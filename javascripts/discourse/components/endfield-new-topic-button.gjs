@@ -8,6 +8,10 @@ export default class EndfieldNewTopicButton extends Component {
   @service composer;
   @service currentUser;
 
+  get showButton() {
+    return this.currentUser;
+  }
+
   @action
   createTopic() {
     const route = this.router.currentRoute;
@@ -23,7 +27,7 @@ export default class EndfieldNewTopicButton extends Component {
   }
 
   <template>
-    {{#if this.currentUser}}
+    {{#if this.showButton}}
       <div class="endfield-sidebar-new-topic-button-container">
         <DButton
           @class="btn-primary endfield-sidebar-create-btn"
