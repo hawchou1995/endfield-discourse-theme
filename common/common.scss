@@ -1,18 +1,12 @@
 // ============================================
-// 《明日方舟·终末地》Discourse主题 - 核心样式 (精简版)
+// 《明日方舟·终末地》核心样式 - Final Fix
 // ============================================
 
 // 1. 变量定义
 $endfield-blue: #00D4FF;
 $endfield-orange: #FF6B35;
-$fluid-width: 85%;
-$custom-max-width: 1450px;
 
-:root {
-  --d-max-width: #{$custom-max-width}; // 设置 Discourse 核心变量
-}
-
-// 混合宏：切角
+// 切角混合宏
 @mixin endfield-cut-corner {
   border-radius: 0;
   clip-path: polygon(
@@ -26,7 +20,45 @@ $custom-max-width: 1450px;
 }
 
 // ============================================
-// 2. 全局基础与布局
+// 2. 布局核心 (解决贴边问题)
+// ============================================
+
+// 核心容器：控制页面总宽度和居中
+.wrap {
+  // 使用百分比而不是固定像素，更灵活
+  max-width: 92% !important; 
+  // 限制最大上限，防止在超宽屏（如4K）上太散
+  width: 1450px; 
+  // 核心：强制居中，这样左侧导航栏永远不会贴在浏览器左边缘
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding: 0 20px; // 额外的内边距保险
+  box-sizing: border-box;
+}
+
+// 头部也遵循同样的宽度，保持上下对齐
+.d-header .wrap {
+  max-width: 92% !important;
+  width: 1450px;
+  margin: 0 auto !important;
+}
+
+// 确保话题列表占满分配给它的空间
+#main-outlet {
+  width: 100%;
+}
+
+// 移动端适配
+@media (max-width: 768px) {
+  .wrap, .d-header .wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 10px;
+  }
+}
+
+// ============================================
+// 3. 全局基础
 // ============================================
 
 body {
@@ -47,36 +79,8 @@ a {
   }
 }
 
-// 布局核心：覆盖默认宽度限制，实现增宽且居中
-.wrap {
-  max-width: var(--d-max-width) !important; // 使用变量统一控制
-  width: 96%;
-  margin: 0 auto !important; // 强制居中，防止贴边
-}
-
-// 头部内容区也同步变宽
-.d-header .wrap {
-  max-width: var(--d-max-width) !important;
-}
-
-// 确保主内容区占满剩余宽度
-#main-outlet {
-  width: 100%;
-}
-
-// 移动端保护
-@media (max-width: 768px) {
-  :root {
-    --d-max-width: 100% !important;
-  }
-  .wrap {
-    width: 100% !important;
-    padding: 0 10px;
-  }
-}
-
 // ============================================
-// 3. UI 组件 (按钮、导航、列表)
+// 4. UI 组件
 // ============================================
 
 // 按钮
@@ -98,10 +102,8 @@ a {
     &::after {
       content: '';
       position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 5px;
-      height: 5px;
+      bottom: 0; right: 0;
+      width: 5px; height: 5px;
       background: rgba(255,255,255,0.5);
     }
   }
@@ -110,9 +112,7 @@ a {
     background: var(--primary-low);
     color: var(--primary);
     border: 1px solid var(--primary-low-mid);
-    &:hover {
-      background: var(--primary-low-mid);
-    }
+    &:hover { background: var(--primary-low-mid); }
   }
 }
 
@@ -126,10 +126,8 @@ a {
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
+    top: 0; left: 0;
+    width: 100%; height: 2px;
     background: linear-gradient(90deg, $endfield-blue, transparent 20%, transparent 80%, $endfield-blue);
   }
 
@@ -159,36 +157,30 @@ a {
 }
 
 // ============================================
-// 4. 话题列表 & 侧边栏卡片
+// 5. 话题列表 & 侧边栏卡片
 // ============================================
 
 .topic-list {
   border-radius: 0; 
-  
   thead th {
     border-bottom: 2px solid var(--primary-low-mid);
     color: var(--primary-medium);
     font-size: 0.85em;
     text-transform: uppercase;
   }
-  
   tbody tr {
     border-bottom: 1px solid var(--primary-low);
     &:hover { background-color: var(--hover); }
   }
-  
   .main-link {
     font-weight: 600;
     .link-top-line { display: flex; align-items: center; }
   }
-  
   .badge-category-bg { border-radius: 2px; }
 }
 
-// 通用卡片样式 (侧边栏、话题列表)
-.sidebar-section, 
-.rs-component,
-.topic-list {
+// 通用卡片样式
+.sidebar-section, .rs-component, .topic-list {
   background: var(--secondary); 
   border: 1px solid var(--primary-low);
   box-shadow: 4px 4px 0 var(--primary-low);
@@ -206,9 +198,7 @@ a {
   }
 }
 
-// 侧边栏标题
-.sidebar-section-header, 
-.rs-component h3 {
+.sidebar-section-header, .rs-component h3 {
   border-bottom: 1px solid var(--primary-low);
   padding: 10px 15px;
   background: var(--primary-very-low);
@@ -220,26 +210,20 @@ a {
   border-left: 4px solid var(--tertiary); 
 }
 
-// 热门标签云
 .popular-tags__container .popular-tags__tag {
   text-shadow: 0 1px 3px var(--secondary); 
 }
 
 // ============================================
-// 5. 帖子详情
+// 6. 帖子详情
 // ============================================
 
 .topic-post {
   border-left: 1px solid var(--primary-low);
-  &:first-of-type {
-    border-left: 3px solid $endfield-orange;
-  }
+  &:first-of-type { border-left: 3px solid $endfield-orange; }
   .topic-avatar {
     border-top: none;
-    .avatar {
-      border-radius: 4px;
-      border: 2px solid var(--primary-low);
-    }
+    .avatar { border-radius: 4px; border: 2px solid var(--primary-low); }
   }
   .cooked {
     blockquote {
@@ -253,69 +237,5 @@ a {
       color: #d4d4d4;
       border-radius: 4px;
     }
-  }
-}
-
-// ============================================
-// 布局调整：话题列表增宽 (User Provided Fluid Fix)
-// ============================================
-
-// 1. 设置宽度占比 (根据你的需求调整为 80% 或 85%)
-$fluid-width: 85%; 
-
-// 2. 覆盖 CSS 变量
-:root {
-  --d-max-width: #{$fluid-width} !important;
-}
-
-// 3. 核心容器解锁
-// 关键：增加了 margin: 0 auto 防止贴左边
-#main-outlet-wrapper #main-outlet > *:not(.experimental-screen):not(.activate-account) {
-  max-width: $fluid-width !important;
-  width: 100% !important;
-  margin-inline: auto !important; // 确保居中！
-}
-
-// 4. 外层容器适配
-.wrap, 
-#main-outlet-wrapper, 
-#main-outlet {
-  max-width: 100% !important;
-  width: 100% !important;
-}
-
-// 5. 导航栏适配
-.list-controls {
-  max-width: $fluid-width !important;
-  margin: 0 auto !important; // 确保居中！
-  .navigation-container {
-    max-width: 100% !important;
-  }
-}
-
-// 6. 话题列表表格适配
-.topic-list {
-  width: 100% !important;
-  display: table !important;
-  .topic-list-item {
-    width: 100% !important;
-    box-sizing: border-box;
-  }
-}
-
-// 7. 头部内容适配
-body .d-header > .wrap {
-  max-width: 100% !important; 
-  .contents {
-    max-width: $fluid-width !important;
-    margin: 0 auto; // 确保居中！
-  }
-}
-
-// 8. 移动端保护
-@media screen and (max-width: 767px) {
-  #main-outlet-wrapper #main-outlet > *:not(.experimental-screen) {
-     max-width: 100% !important;
-     padding-inline: 10px !important;
   }
 }
