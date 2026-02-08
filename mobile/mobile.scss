@@ -1,135 +1,35 @@
 // ============================================
-// 移动端适配 & 终末地风格深度优化 (Endfield Mobile Refined)
+// 5. 侧边栏深度优化 (针对 .menu-panel 修复版)
 // ============================================
 
-// 1. 全局基础优化
-// ------------------------------------------------------------
-@media (max-width: 768px) {
-  // 移除背景网格，减少渲染压力，保持干净
-  body {
-    background-image: none;
-  }
-
-  // 导航栏微调
-  .d-header {
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2); // 稍微加深头部阴影
-    border-bottom: 2px solid var(--tertiary); // 顶部增加一条亮色线，像 HUD 边界
-    
-    // 手机端不需要太复杂的顶部装饰线
-    &::before {
-      display: none;
-    }
-  }
-
-  // 列表卡片化 & 风格优化
-  .topic-list {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    
-    // 每个话题变成一个独立卡片
-    tr {
-      display: block;
-      margin-bottom: 8px !important; // 减小卡片间距，更紧凑
-      padding: 10px !important;
-      
-      // 终末地硬朗风格
-      background: var(--secondary);
-      border-radius: 0 !important; // 移除卡片圆角
-      border: 1px solid var(--primary-low); // 细边框
-      border-left: 4px solid var(--quaternary) !important; // 左侧增加橙色强识别条
-      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1) !important; // 硬阴影
-      
-      &:hover {
-        background: var(--secondary);
-        transform: none; // 移动端通常不需要悬停位移
-      }
-    }
-  }
+// 移动端侧边栏的根容器是 .menu-panel
+.menu-panel {
   
-  // 强制隐藏可能存在的右侧侧边栏
-  .tc-right-sidebar {
-    display: none !important;
-  }
-}
-
-// 2. 全局去圆角 - 回归硬朗工业风
-// ------------------------------------------------------------
-:root {
-  --d-border-radius: 0px !important; // 覆盖 Discourse 默认圆角变量
-}
-
-// 3. 顶部横幅优化 (公告栏)
-// ------------------------------------------------------------
-.global-notice, .alert.alert-info {
-  border-radius: 0 !important;
-  margin-bottom: 10px !important;
-  padding: 8px 12px !important;
-  font-size: 0.9em;
-  border-left: 3px solid var(--tertiary);
-}
-
-// 4. 帖子详情页优化
-// ------------------------------------------------------------
-.topic-post {
-  article.boxed {
-    border-radius: 0 !important;
-  }
-  
-  .topic-meta-data {
-    align-items: center;
-    padding-bottom: 8px;
-    border-bottom: 1px dashed var(--primary-low);
-    margin-bottom: 10px;
-  }
-  
-  blockquote {
-    border-left: 3px solid var(--tertiary);
-    background: var(--primary-very-low);
-    border-radius: 0;
-  }
-}
-
-// ============================================
-// 5. 侧边栏深度优化 (强制覆盖版)
-// ============================================
-
-.sidebar-wrapper {
   // ------------------------------------------------------------
-  // 针对发帖按钮的暴力样式覆盖
+  // 发帖按钮样式重构
   // ------------------------------------------------------------
   
-  // 1. 找到所有可能的按钮容器
-  // 我们不依赖特定的类名，而是通过位置查找
-  .sidebar-navigation-controls, 
+  // 1. 按钮容器：给予呼吸空间
   .endfield-sidebar-new-topic-button-container {
-    padding: 15px 10px 15px 10px !important; // 上下都留白
+    padding: 15px 10px 5px 10px !important; // 上方多留白
     width: 100% !important;
     box-sizing: border-box !important;
     display: flex !important;
     justify-content: center !important;
-    border-bottom: none !important; // 移除可能存在的分割线
-    margin: 0 !important;
+    margin-bottom: 10px !important; // 把下方的列表顶下去
   }
 
-  // 2. 找到容器内的按钮
-  // 无论是自定义的 .endfield-btn 还是原生的 .btn-default
-  .sidebar-navigation-controls .btn,
-  .endfield-sidebar-new-topic-button-container .btn {
+  // 2. 按钮本体：强制全宽 + 橙色风格
+  .endfield-sidebar-create-btn {
     width: 100% !important;
     height: 48px !important;
+    padding: 0 !important; // 移除默认 padding
     
-    // 强制颜色 (橙色背景 + 白字)
-    background-color: var(--quaternary) !important;
-    background-image: none !important; // 防止渐变干扰
+    // 强制橙色背景
+    background: var(--quaternary) !important;
     color: #fff !important;
     
-    // 字体
-    font-size: 1.1em !important;
-    font-weight: 800 !important;
-    letter-spacing: 1px !important;
-    
-    // 形状：移除圆角，应用切角
+    // 形状处理：去圆角 + 切角
     border-radius: 0 !important;
     clip-path: polygon(
       0 0, 
@@ -139,23 +39,42 @@
       0 100%
     );
     
-    // 装饰
+    // 阴影与边框
     border: none !important;
     box-shadow: 0 4px 0 rgba(0,0,0,0.2) !important;
     
-    // 布局
+    // 布局：强制让内容显示（对抗 .no-text 类）
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    
-    // 内部图标和文字颜色
-    .d-icon, span {
+
+    // [关键] 强制显示内部文字！
+    // 因为 HTML 里有 .no-text 类，默认会把 span 隐藏，这里必须救回来
+    .d-button-label {
+      display: inline-block !important;
+      font-size: 1.1em !important;
+      font-weight: 800 !important;
+      color: #fff !important;
+      margin-left: 8px !important; // 图标和文字间距
+      line-height: 1 !important;
+    }
+
+    // 图标样式
+    .d-icon {
+      margin: 0 !important;
+      font-size: 1.1em !important;
       color: #fff !important;
     }
     
-    // 修复图标间距
-    .d-icon {
-      margin-right: 8px !important;
+    // 装饰角标（如果有的话，稍微调整一下）
+    .btn-decor-corner {
+      display: none; // 移动端空间小，切角够用了，隐藏额外的装饰元素以防布局错乱
+    }
+
+    // 交互态
+    &:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.2) !important;
     }
   }
 
@@ -167,29 +86,19 @@
     
     &.active {
       background: var(--primary-very-low);
-      border-left: 3px solid var(--tertiary);
+      border-left: 3px solid var(--tertiary); // 青色高亮条
       font-weight: bold;
-      color: var(--primary); // 确保文字颜色正确
     }
     
-    // 未选中状态也去掉圆角
-    &:hover {
-      background: var(--hover);
-      border-radius: 0 !important;
-    }
-  }
-  
-  // 修复列表容器的间距
-  .sidebar-navigation {
-    padding-top: 0 !important;
+    // 增加一点高度，方便点击
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
   }
 }
 
 // 6. 其他微调
 // ------------------------------------------------------------
-.sidebar-section-header {
-  padding-top: 15px !important;
-  font-size: 0.85em;
-  opacity: 0.8;
-  text-transform: uppercase;
+// 稍微调整底部区域，防止被切角遮挡
+.sidebar-footer-wrapper {
+  border-top: 1px solid var(--primary-low);
 }
