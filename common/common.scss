@@ -276,3 +276,43 @@ a {
   background: var(--secondary);
   border: 1px solid var(--tertiary);
 }
+
+// ============================================
+// 布局调整：增加话题列表宽度
+// ============================================
+
+// 1. 增加主容器最大宽度
+// Discourse 默认大约是 1110px，我们加宽它
+.wrap {
+  max-width: 1400px !important; // 针对大屏优化
+  width: 95%; // 在小屏上保持边距
+}
+
+// 2. 调整三栏比例 (Grid Layout)
+// 默认通常是：导航栏(2/12) - 话题列表(7/12) - 侧边栏(3/12)
+// 我们微调一下，给话题列表更多空间
+@media (min-width: 1200px) { // 仅在大屏生效
+  .container.list-container {
+    // 假设 Discourse 使用 flex 或 grid，我们需要强制调整
+    // 这里以常见的 flex 布局为例进行微调
+    
+    // 话题列表区域
+    .topic-list {
+      // 这里的具体选择器取决于你的布局插件，通常是 table 元素
+      // 但更有效的是调整它的父容器
+    }
+  }
+  
+  // 如果是 Sidebar Blocks 插件控制的布局：
+  // 我们可以尝试压缩右侧边栏宽度
+  .tc-right-sidebar {
+    width: 280px !important; // 稍微变窄一点 (默认可能300+)
+    min-width: 280px !important;
+  }
+  
+  // 增加话题列表区域的 flex 权重
+  #list-area {
+    flex: 1 1 auto !important; // 让它自动填满剩余空间
+    max-width: none !important; // 解除限制
+  }
+}
