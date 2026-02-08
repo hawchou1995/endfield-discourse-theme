@@ -1,56 +1,45 @@
 // ============================================
-// 桌面端侧边栏发帖按钮 (Horizon 逻辑复刻版)
+// 桌面端侧边栏发帖按钮 (Fix V3 - Stable)
 // ============================================
 
-// 1. 按钮容器定位
-// 核心逻辑：因为它在 before-sidebar-columns (Grid容器内)，我们要把它放在左侧第一列
-.endfield-sidebar-new-topic-button-container {
-  // Horizon 使用 grid-area 或者 absolute/fixed 配合 margin
-  // 这里我们使用最适合 Endfield 的 grid 布局微调
-  
-  grid-area: sidebar; // 尝试放入 sidebar 区域（如果是 grid 布局）
-  // 或者简单的 margin-bottom 让它把下面的东西顶下去
-  margin-bottom: 20px;
-  width: 100%; // 占满左侧宽度
-  
-  // 确保它不会被下面的 sidebar-navigation 覆盖
-  position: relative;
-  z-index: 100;
-  
-  // 样式微调
-  padding: 0 5px; 
-  box-sizing: border-box;
-}
-
-// 2. 隐藏原顶部的"新建话题"按钮
-// 【关键修改】只有当 JS 成功加载并添加了类名后，才隐藏顶部按钮
-// 这样如果插件挂了，原按钮还会显示，非常安全
-body.endfield-has-sidebar-button .d-header .create-topic {
+// 1. 隐藏右上角旧按钮
+// 只要 JS 添加了类名，或者直接命中桌面端，就隐藏它
+body.endfield-has-sidebar-button .d-header .create-topic,
+html.desktop-view .d-header .create-topic {
   display: none !important;
 }
 
-// 3. 布局适配：让侧边栏导航下移，给按钮腾位置
-// 由于 before-sidebar-columns 是在 columns 容器里，它自然会占据第一行
-// 如果它没有挤下去，说明它是 flex 布局。
-// 针对 Discourse 默认布局的强力修复：
-.sidebar-wrapper {
-  // 确保侧边栏包裹器能容纳我们的按钮
-  display: flex;
-  flex-direction: column;
+// 2. 侧边栏按钮容器
+.endfield-sidebar-new-topic-button-container {
+  // 粘性定位：滚动时吸附在侧边栏顶部
+  position: sticky;
+  top: 0; 
+  z-index: 999;
+  
+  // 确保它占满宽度
+  width: 100%;
+  margin-bottom: 15px; // 把下方导航挤下去
+  padding: 10px 5px 15px 5px; // 留出呼吸感
+  box-sizing: border-box;
+  background: var(--secondary); // 防止透明
+  
+  // 底部装饰线
+  border-bottom: 1px dashed var(--primary-low);
 }
 
-// 4. 按钮本体样式 (Endfield 工业风 - 保持不变)
+// 3. 按钮本体样式
 .endfield-sidebar-create-btn {
   width: 100%;
-  height: 48px;
+  height: 46px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.1em;
   font-weight: 800;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   text-transform: uppercase;
   
+  // 颜色
   background: #FF6B35 !important; 
   color: #fff !important;
   border: none;
@@ -59,29 +48,30 @@ body.endfield-has-sidebar-button .d-header .create-topic {
   // 切角
   clip-path: polygon(
     0 0, 
-    calc(100% - 15px) 0, 
-    100% 15px, 
+    calc(100% - 12px) 0, 
+    100% 12px, 
     100% 100%, 
-    15px 100%, 
-    0 calc(100% - 15px)
+    12px 100%, 
+    0 calc(100% - 12px)
   );
   
-  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.2s ease;
   box-shadow: 0 4px 0 #cc4e22;
 
   .btn-content {
     display: flex;
     align-items: center;
-    gap: 10px;
-    .d-icon { font-size: 1em; }
+    gap: 8px;
+    .d-icon { font-size: 0.9em; }
   }
 
+  // 装饰角标
   .btn-decor-corner {
     position: absolute;
-    bottom: 3px;
-    right: 3px;
-    width: 8px;
-    height: 8px;
+    bottom: 2px;
+    right: 2px;
+    width: 6px;
+    height: 6px;
     background: rgba(0,0,0,0.2);
     clip-path: polygon(100% 0, 0 100%, 100% 100%);
   }
@@ -90,7 +80,6 @@ body.endfield-has-sidebar-button .d-header .create-topic {
     background: #ff8c61 !important;
     transform: translateY(-2px);
     box-shadow: 0 6px 0 #cc4e22;
-    .btn-content { transform: scale(1.05); }
   }
   
   &:active {
