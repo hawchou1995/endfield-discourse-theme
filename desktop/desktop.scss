@@ -1,55 +1,64 @@
 // ============================================
-// 桌面端侧边栏发帖按钮 (Endfield Style - Fix V2)
+// 桌面端侧边栏发帖按钮 (Endfield Style - Final)
 // ============================================
 
 // 1. 彻底隐藏右上角原生"新建话题"按钮
-html.desktop-view body .d-header .current-user .create-topic,
-html.desktop-view body .navigation-controls #create-topic {
+// 增加选择器权重，确保选中
+body.desktop-view .d-header .create-topic,
+body.desktop-view .navigation-controls #create-topic {
   display: none !important;
 }
 
 // 2. 侧边栏按钮容器布局
+// 因为现在在 'above-sidebar-sections' 插槽，它位于侧边栏流中
 .endfield-sidebar-new-topic-button-container {
-  // 使用 sticky 让它在滚动时吸附在侧边栏顶部
-  position: sticky;
-  top: 70px; // 距离顶栏 header 的高度 (header通常是60px，加一点间隙)
-  z-index: 999; // 确保在最上层
+  position: sticky; // 粘性定位
+  top: 0;           // 吸附在侧边栏容器顶部
+  z-index: 100;     // 保证不被覆盖
   
   width: 100%;
-  padding: 0 10px 15px 10px; // 底部留点空隙
+  padding: 15px 10px 15px 10px; // 上下留白
   box-sizing: border-box;
-  background: var(--secondary); // 防止透明背景导致文字穿透
+  background: var(--secondary); // 必须有背景色，否则滚动时文字会透出来
   
-  // 给下方加个渐变遮罩，过渡更自然
+  // 底部装饰线
+  border-bottom: 1px solid var(--primary-low);
+  margin-bottom: 10px;
+  
+  // 渐变遮罩，增加精致感
   &::after {
     content: "";
     position: absolute;
-    bottom: -20px;
+    bottom: -15px;
     left: 0;
     right: 0;
-    height: 20px;
+    height: 15px;
     background: linear-gradient(to bottom, var(--secondary), transparent);
     pointer-events: none;
   }
 }
 
-// 3. 按钮本体样式 (保持不变的工业风)
+// 3. 按钮本体样式 (终末地工业风)
 .endfield-sidebar-create-btn {
   width: 100%;
-  height: 48px;
+  height: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  // 字体
   font-size: 1.1em;
   font-weight: 800;
   letter-spacing: 2px;
   text-transform: uppercase;
   
+  // 颜色
   background: #FF6B35 !important; 
   color: #fff !important;
   border: none;
   border-radius: 0;
   
+  // 切角
   clip-path: polygon(
     0 0, 
     calc(100% - 15px) 0, 
