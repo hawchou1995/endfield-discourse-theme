@@ -23,17 +23,19 @@ export default class EndfieldNewTopicButton extends Component {
   }
 
   <template>
-    <div class="endfield-sidebar-new-topic-button-container">
-      <DButton
-        @class="btn-primary endfield-sidebar-create-btn"
-        @action={{this.createTopic}}
-      >
-        <div class="btn-content">
-          <svg class="fa d-icon d-icon-plus svg-icon svg-string" xmlns="http://www.w3.org/2000/svg"><use href="#plus"></use></svg>
-          <span class="d-button-label">发帖</span>
-        </div>
-        <div class="btn-decor-corner"></div>
-      </DButton>
-    </div>
+    {{#if this.currentUser}}
+      <div class="endfield-sidebar-new-topic-button-container">
+        <DButton
+          @class="btn-primary endfield-sidebar-create-btn"
+          @action={{this.createTopic}}
+        >
+          <div class="btn-content">
+            <svg class="fa d-icon d-icon-plus svg-icon svg-string" xmlns="http://www.w3.org/2000/svg"><use href="#plus"></use></svg>
+            <span class="d-button-label">发帖</span>
+          </div>
+          <div class="btn-decor-corner"></div>
+        </DButton>
+      </div>
+    {{/if}}
   </template>
 }
