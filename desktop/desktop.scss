@@ -1,58 +1,56 @@
 // ============================================
-// 桌面端侧边栏发帖按钮 (Endfield Style - Final)
+// 桌面端侧边栏发帖按钮 (Horizon 逻辑复刻版)
 // ============================================
 
-// 1. 彻底隐藏右上角原生"新建话题"按钮
-// 增加选择器权重，确保选中
-body.desktop-view .d-header .create-topic,
-body.desktop-view .navigation-controls #create-topic {
+// 1. 按钮容器定位
+// 核心逻辑：因为它在 before-sidebar-columns (Grid容器内)，我们要把它放在左侧第一列
+.endfield-sidebar-new-topic-button-container {
+  // Horizon 使用 grid-area 或者 absolute/fixed 配合 margin
+  // 这里我们使用最适合 Endfield 的 grid 布局微调
+  
+  grid-area: sidebar; // 尝试放入 sidebar 区域（如果是 grid 布局）
+  // 或者简单的 margin-bottom 让它把下面的东西顶下去
+  margin-bottom: 20px;
+  width: 100%; // 占满左侧宽度
+  
+  // 确保它不会被下面的 sidebar-navigation 覆盖
+  position: relative;
+  z-index: 100;
+  
+  // 样式微调
+  padding: 0 5px; 
+  box-sizing: border-box;
+}
+
+// 2. 隐藏原顶部的"新建话题"按钮
+// 【关键修改】只有当 JS 成功加载并添加了类名后，才隐藏顶部按钮
+// 这样如果插件挂了，原按钮还会显示，非常安全
+body.endfield-has-sidebar-button .d-header .create-topic {
   display: none !important;
 }
 
-// 2. 侧边栏按钮容器布局
-// 因为现在在 'above-sidebar-sections' 插槽，它位于侧边栏流中
-.endfield-sidebar-new-topic-button-container {
-  position: sticky; // 粘性定位
-  top: 0;           // 吸附在侧边栏容器顶部
-  z-index: 100;     // 保证不被覆盖
-  
-  width: 100%;
-  padding: 15px 10px 15px 10px; // 上下留白
-  box-sizing: border-box;
-  background: var(--secondary); // 必须有背景色，否则滚动时文字会透出来
-  
-  // 底部装饰线
-  border-bottom: 1px solid var(--primary-low);
-  margin-bottom: 10px;
-  
-  // 渐变遮罩，增加精致感
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: -15px;
-    left: 0;
-    right: 0;
-    height: 15px;
-    background: linear-gradient(to bottom, var(--secondary), transparent);
-    pointer-events: none;
-  }
+// 3. 布局适配：让侧边栏导航下移，给按钮腾位置
+// 由于 before-sidebar-columns 是在 columns 容器里，它自然会占据第一行
+// 如果它没有挤下去，说明它是 flex 布局。
+// 针对 Discourse 默认布局的强力修复：
+.sidebar-wrapper {
+  // 确保侧边栏包裹器能容纳我们的按钮
+  display: flex;
+  flex-direction: column;
 }
 
-// 3. 按钮本体样式 (终末地工业风)
+// 4. 按钮本体样式 (Endfield 工业风 - 保持不变)
 .endfield-sidebar-create-btn {
   width: 100%;
-  height: 45px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  // 字体
   font-size: 1.1em;
   font-weight: 800;
   letter-spacing: 2px;
   text-transform: uppercase;
   
-  // 颜色
   background: #FF6B35 !important; 
   color: #fff !important;
   border: none;
