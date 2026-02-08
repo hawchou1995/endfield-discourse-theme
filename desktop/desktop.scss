@@ -1,13 +1,22 @@
+// 文件: desktop/desktop.scss
+
 // ============================================
-// 桌面端侧边栏发帖按钮 (Endfield Style)
+// 桌面端界面优化 (Endfield Style)
 // ============================================
 
-// 1. 彻底隐藏右上角原生"新建话题"按钮
-// 使用更高权重的选择器，确保覆盖 Discourse 默认样式
-// [修改] 增加了 #create-topic 以确保涵盖所有情况
-html.desktop-view body .d-header .create-topic,
-html.desktop-view body .d-header #create-topic {
-  display: none !important;
+// 1. 隐藏导航栏右侧的原生按钮
+// 修改说明：
+// - 之前的 .d-header 选择器无效，因为按钮实际位于 .navigation-controls 容器内
+// - 新增隐藏 .topic-list-layout-trigger (布局切换按钮)
+// - 新增隐藏 #create-topic (原生新建话题按钮)
+html.desktop-view .navigation-controls {
+  // 隐藏布局切换按钮 (表格图标)
+  .topic-list-layout-trigger,
+  // 隐藏原生新建话题按钮
+  #create-topic,
+  .create-topic {
+    display: none !important;
+  }
 }
 
 // 2. 侧边栏按钮容器布局
@@ -24,10 +33,10 @@ html.desktop-view body .d-header #create-topic {
   width: 100%;
   
   // 关键：不需要 sticky，因为它在 before-sidebar-sections 位置
-  // 它天然就在列表最上方，会随着侧边栏内部滚动（如果侧边栏本身固定）
+  // 它天然就在列表最上方，会随着侧边栏内部滚动
 }
 
-// ... (文件其余部分保持不变，包括 .sidebar-wrapper, .endfield-sidebar-create-btn 等样式)
+// ... (文件其余部分保持不变) ...
 
 // 3. 修复侧边栏遮挡问题
 // 给侧边栏导航增加顶部内边距，防止第一项被遮挡（如果使用了 sticky）
