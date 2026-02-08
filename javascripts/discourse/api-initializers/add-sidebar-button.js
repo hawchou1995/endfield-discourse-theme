@@ -2,9 +2,9 @@ import { apiInitializer } from "discourse/lib/api";
 import EndfieldNewTopicButton from "../components/endfield-new-topic-button";
 
 export default apiInitializer("1.0", (api) => {
-  // Glacier/Horizon 核心逻辑：
-  // 使用 before-sidebar-columns 插槽，将按钮注入到页面主网格结构中
+  // 确保用户登录
   if (api.getCurrentUser()) {
-    api.renderInOutlet("before-sidebar-columns", EndfieldNewTopicButton);
+    // 渲染到侧边栏导航列表的正上方，这个位置在侧边栏内部
+    api.renderInOutlet("above-sidebar-sections", EndfieldNewTopicButton);
   }
 });
