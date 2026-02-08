@@ -18,6 +18,9 @@ body {
     linear-gradient(180deg, var(--primary-very-low) 1px, transparent 1px);
   background-size: 40px 40px; // 技术网格背景
   background-attachment: fixed;
+
+    // 优先使用工业感较强的无衬线字体
+  font-family: "Roboto", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 
 // 链接颜色优化
