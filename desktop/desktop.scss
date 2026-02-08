@@ -4,22 +4,30 @@
 
 // 1. 彻底隐藏右上角原生"新建话题"按钮
 // 使用更高权重的选择器，确保覆盖 Discourse 默认样式
-html.desktop-view body .d-header .create-topic {
+// [修改] 增加了 #create-topic 以确保涵盖所有情况
+html.desktop-view body .d-header .create-topic,
+html.desktop-view body .d-header #create-topic {
   display: none !important;
 }
 
 // 2. 侧边栏按钮容器布局
 // Horizon 风格：给按钮一个独立空间，把下方内容挤下去
 .endfield-sidebar-new-topic-button-container {
+  // [修改] 增加顶部间距，使按钮下移，不紧贴 Header
+  margin-top: 20px; 
+  
+  // [保留] 保持底部间距，确保不遮挡下方的侧边栏导航内容
   margin-bottom: 20px;
+  
   padding: 0 10px;
   box-sizing: border-box;
   width: 100%;
   
   // 关键：不需要 sticky，因为它在 before-sidebar-sections 位置
   // 它天然就在列表最上方，会随着侧边栏内部滚动（如果侧边栏本身固定）
-  // 或者我们可以让它相对于侧边栏 wrapper 固定
 }
+
+// ... (文件其余部分保持不变，包括 .sidebar-wrapper, .endfield-sidebar-create-btn 等样式)
 
 // 3. 修复侧边栏遮挡问题
 // 给侧边栏导航增加顶部内边距，防止第一项被遮挡（如果使用了 sticky）
