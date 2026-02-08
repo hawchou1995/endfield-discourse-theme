@@ -1,140 +1,77 @@
 // ============================================
-// 桌面端特定样式
-// ============================================
-
-// 宽屏优化
-@media (min-width: 1200px) {
-  .container {
-    max-width: 1400px;
-  }
-  
-  .topic-list {
-    .main-link {
-      width: 60%;
-    }
-  }
-}
-
-// 桌面端悬停效果增强
-@media (min-width: 768px) {
-  .btn {
-    &.btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
-    }
-  }
-  
-  .topic-list {
-    tbody {
-      tr:hover {
-        transform: translateX(5px);
-      }
-    }
-  }
-}
-
-// 桌面端导航栏增强
-@media (min-width: 768px) {
-  .d-header {
-    .nav-items {
-      .nav-item {
-        a:hover {
-          &::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #00D4FF;
-            box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
-          }
-        }
-      }
-    }
-  }
-}
-
-// ============================================
 // 桌面端侧边栏发帖按钮 (Endfield Style)
 // ============================================
 
-// 1. 隐藏原顶部的"新建话题"按钮
-#create-topic {
+// 1. 隐藏原顶部的"新建话题"按钮 (仅在桌面端)
+.d-header .create-topic {
   display: none !important;
 }
 
 // 2. 新侧边栏按钮容器
 .endfield-sidebar-button-wrapper {
-  position: sticky; // 核心：粘性定位
-  top: 0;           // 固定在侧边栏顶部
-  z-index: 100;     // 保证在列表上方
-  padding: 10px 10px 15px 10px;
-  background: var(--secondary); // 跟随背景色，防止透明穿透
-  margin-bottom: 10px;
-  border-bottom: 1px solid var(--primary-low); // 底部加一条分割线
+  // 核心：粘性定位，确保不随页面滚动
+  position: sticky; 
+  top: var(--header-offset, 60px); // 距离顶部的距离，通常是 header 的高度
+  z-index: 100;     
   
-  // 增加一个渐变遮罩，让下方滚动内容有个过渡
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: -20px;
-    left: 0;
-    right: 0;
-    height: 20px;
-    background: linear-gradient(to bottom, var(--secondary), transparent);
-    pointer-events: none;
-  }
+  // 样式微调
+  margin-bottom: 20px;
+  padding: 0 10px; // 给两侧留点空隙
+  box-sizing: border-box;
 }
 
 // 3. 按钮本体样式
 .endfield-sidebar-create-btn {
   width: 100%;
-  height: 45px; // 大按钮
+  height: 48px; // 更大的点击区域
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  // 字体样式
   font-size: 1.1em;
   font-weight: 800;
   letter-spacing: 2px;
+  text-transform: uppercase;
   
   // 终末地橙色风格
-  background: #FF6B35 !important; // 强制橙色
+  background: #FF6B35 !important; 
   color: #fff !important;
   border: none;
   border-radius: 0; // 移除圆角
   
-  // 切角设计 (右上和左下)
+  // 切角设计 (右上和左下) - 工业风核心
   clip-path: polygon(
     0 0, 
-    calc(100% - 12px) 0, 
-    100% 12px, 
+    calc(100% - 15px) 0, 
+    100% 15px, 
     100% 100%, 
-    12px 100%, 
-    0 calc(100% - 12px)
+    15px 100%, 
+    0 calc(100% - 15px)
   );
   
   transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 4px 0 #cc4e22; // 底部硬阴影，增加厚度感
 
   // 图标和文字布局
   .btn-content {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     
     .d-icon {
-      font-size: 0.9em;
+      font-size: 1em;
     }
   }
 
   // 装饰性小角标 (Tech Decor)
   .btn-decor-corner {
     position: absolute;
-    bottom: 2px;
-    right: 2px;
-    width: 6px;
-    height: 6px;
-    background: rgba(0,0,0,0.3);
+    bottom: 3px;
+    right: 3px;
+    width: 8px;
+    height: 8px;
+    background: rgba(0,0,0,0.2);
     clip-path: polygon(100% 0, 0 100%, 100% 100%);
   }
 
@@ -142,16 +79,17 @@
   &:hover {
     background: #ff8c61 !important; // 变亮
     transform: translateY(-2px); // 轻微上浮
-    box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+    box-shadow: 0 6px 0 #cc4e22; // 阴影变长
     
     .btn-content {
-      transform: scale(1.05); // 文字轻微放大
+      transform: scale(1.05); 
     }
   }
   
   // 点击效果
   &:active {
-    transform: translateY(1px);
+    transform: translateY(2px); // 下沉
+    box-shadow: 0 2px 0 #cc4e22; // 阴影变短
     background: #e55a2b !important;
   }
 }
