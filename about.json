@@ -1,6 +1,40 @@
 {
-  "name": "Sam's Simple Theme",
-  "about_url": "https://meta.discourse.org/t/sams-personal-minimal-topic-list-design/23552",
-  "license_url": "https://github.com/SamSaffron/discourse-simple-theme/blob/master/LICENSE.txt",
-  "screenshots": ["screenshots/light.png", "screenshots/dark.png"]
+  "name": "Endfield Theme",
+  "about_url": "https://github.com/hawchou1995/endfield-discourse-theme",
+  "license_url": "https://github.com/hawchou1995/endfield-discourse-theme/blob/main/LICENSE",
+  "authors": "hawchou1995",
+  "theme_version": "0.1.0",
+  "minimum_discourse_version": "2026.1.0",
+  "maximum_discourse_version": "2026.2.99",
+  "assets": {
+    "endfield-logo": "assets/endfield-logo.png",
+    "endfield-bg": "assets/endfield-bg.jpg"
+  },
+  "color_schemes": {
+    "Endfield Dark": {
+      "primary": "00D4FF",
+      "secondary": "1A1F2E",
+      "tertiary": "0A0E14",
+      "quaternary": "252B3D",
+      "header_background": "0A0E14",
+      "header_primary": "00D4FF",
+      "highlight": "00D4FF",
+      "danger": "FF4757",
+      "success": "2ED573",
+      "love": "FF6B81"
+    },
+    "Endfield Light": {
+      "primary": "0099CC",
+      "secondary": "F0F4F8",
+      "tertiary": "FFFFFF",
+      "quaternary": "E1E8ED",
+      "header_background": "FFFFFF",
+      "header_primary": "0099CC",
+      "highlight": "0099CC",
+      "danger": "FF4757",
+      "success": "2ED573",
+      "love": "FF6B81"
+    }
+  },
+  "learn_more": "https://meta.discourse.org/t/191567"
 }
