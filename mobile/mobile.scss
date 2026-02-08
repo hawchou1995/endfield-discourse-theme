@@ -1,102 +1,185 @@
-// 文件: mobile/mobile.scss
-
 // ============================================
-// 移动端终末地风格深度优化 (Endfield Mobile Refined)
+// 移动端适配 & 终末地风格深度优化 (Endfield Mobile Refined)
 // ============================================
 
-// 1. 全局去圆角 - 回归硬朗工业风
-// 截图显示很多元素有圆角，这里强制直角化以符合主题设定
+// 1. 全局基础优化
+// ------------------------------------------------------------
+@media (max-width: 768px) {
+  // 移除背景网格，减少渲染压力，保持干净
+  body {
+    background-image: none;
+  }
+
+  // 导航栏微调
+  .d-header {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); // 稍微加深头部阴影
+    border-bottom: 2px solid var(--tertiary); // 顶部增加一条亮色线，像 HUD 边界
+    
+    // 手机端不需要太复杂的顶部装饰线
+    &::before {
+      display: none;
+    }
+  }
+
+  // 列表卡片化 & 风格优化
+  .topic-list {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    
+    // 每个话题变成一个独立卡片
+    tr {
+      display: block;
+      margin-bottom: 8px !important; // 减小卡片间距，更紧凑
+      padding: 10px !important;
+      
+      // 终末地硬朗风格
+      background: var(--secondary);
+      border-radius: 0 !important; // 移除卡片圆角
+      border: 1px solid var(--primary-low); // 细边框
+      border-left: 4px solid var(--quaternary) !important; // 左侧增加橙色强识别条
+      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1) !important; // 硬阴影
+      
+      &:hover {
+        background: var(--secondary);
+        transform: none; // 移动端通常不需要悬停位移
+      }
+    }
+  }
+  
+  // 强制隐藏可能存在的右侧侧边栏
+  .tc-right-sidebar {
+    display: none !important;
+  }
+}
+
+// 2. 全局去圆角 - 回归硬朗工业风
+// ------------------------------------------------------------
 :root {
   --d-border-radius: 0px !important; // 覆盖 Discourse 默认圆角变量
 }
 
-// 2. 话题列表卡片优化 (针对截图 1)
-.topic-list tr {
-  border-radius: 0 !important; // 移除卡片圆角
-  border: 1px solid var(--primary-low); // 细边框
-  border-left: 4px solid var(--quaternary) !important; // 左侧增加橙色强识别条(终末地特征)
-  margin-bottom: 8px !important; // 减小卡片间距，更紧凑
-  background: var(--secondary);
-  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1) !important; // 改为硬阴影，而非柔和阴影
-  
-  // 调整卡片内部间距
-  td {
-    padding: 10px !important;
-  }
-}
-
-// 3. 顶部横幅优化 (针对截图 1 & 3)
-// 那个蓝色的"真诚、友善..."横幅在手机上太占地了
+// 3. 顶部横幅优化 (公告栏)
+// ------------------------------------------------------------
 .global-notice, .alert.alert-info {
   border-radius: 0 !important;
   margin-bottom: 10px !important;
-  padding: 8px 12px !important; // 减小内边距
-  font-size: 0.9em; //稍微调小字体
-  border-left: 3px solid var(--tertiary); // 蓝色左边框呼应科技感
+  padding: 8px 12px !important;
+  font-size: 0.9em;
+  border-left: 3px solid var(--tertiary);
 }
 
-// 4. 侧边栏优化 (针对截图 2)
-// 让侧边栏更像是一个 HUD (战术面板)
-.sidebar-wrapper {
-  // 侧边栏发帖按钮
-  .endfield-sidebar-create-btn {
+// 4. 帖子详情页优化
+// ------------------------------------------------------------
+.topic-post {
+  article.boxed {
     border-radius: 0 !important;
-    background: var(--quaternary) !important; // 橙色背景
-    color: #fff !important;
-    font-weight: bold;
-    box-shadow: 0 4px 0 #b33e14; // 按钮立体感
-    margin: 10px;
-    width: calc(100% - 20px); // 留出边距
+  }
+  
+  .topic-meta-data {
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--primary-low);
+    margin-bottom: 10px;
+  }
+  
+  blockquote {
+    border-left: 3px solid var(--tertiary);
+    background: var(--primary-very-low);
+    border-radius: 0;
+  }
+}
+
+// 5. 侧边栏深度优化 (HUD 战术面板风格)
+// ------------------------------------------------------------
+.sidebar-wrapper {
+  // [关键] 发帖按钮容器
+  // 给按钮一个独立的容器空间，确保它不会贴边
+  .endfield-sidebar-new-topic-button-container {
+    padding: 15px 10px 5px 10px; // 上右下左留白，上方多留点防止贴顶
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center; // 确保按钮居中
+  }
+
+  // [关键] 发帖按钮本体重构
+  // 长条形、橙色、指令块风格
+  .endfield-sidebar-create-btn {
+    width: 100% !important; // 强制撑满容器宽度
+    height: 48px; // 增加高度，更适合手指点击
     
-    // 按钮文字
+    // 颜色与质感 (橙色警告风)
+    background: var(--quaternary) !important; 
+    color: #fff !important;
+    
+    // 字体优化
+    font-size: 1.1em;
+    font-weight: 800;
+    letter-spacing: 1px;
+    
+    // 工业风切角 (仅右下角切角)
+    border-radius: 0 !important;
+    clip-path: polygon(
+      0 0, 
+      100% 0, 
+      100% calc(100% - 10px), 
+      calc(100% - 10px) 100%, 
+      0 100%
+    );
+    
+    // 阴影与边框
+    border: none;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2); // 底部厚度感
+    margin-bottom: 15px; // 关键：把下方的菜单列表顶下去，留出呼吸空间
+
+    // 内部布局
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    .btn-content {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .d-icon {
+      font-size: 1.1em;
+      color: #fff !important;
+    }
+    
     .d-button-label {
       color: #fff !important;
     }
+
+    // 交互态
+    &:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+    }
   }
 
-  // 侧边栏菜单项
+  // 侧边栏菜单项优化
   .sidebar-section-link-wrapper .sidebar-section-link {
-    border-radius: 0 !important; // 移除选中项的圆角
+    border-radius: 0 !important;
     
-    // 选中状态增加左侧高亮
+    // 选中状态增加左侧高亮，而不是背景全变
     &.active {
       background: var(--primary-very-low);
       border-left: 3px solid var(--tertiary);
       font-weight: bold;
     }
   }
-}
-
-// 5. 帖子详情页优化 (针对截图 3)
-.topic-post {
-  article.boxed {
-    border-radius: 0 !important; // 移除帖子内容框圆角
-  }
   
-  // 楼主头像旁的元数据区域
-  .topic-meta-data {
-    align-items: center;
-    padding-bottom: 8px;
-    border-bottom: 1px dashed var(--primary-low); // 增加虚线分割，更有科技感
-    margin-bottom: 10px;
-  }
-  
-  // 引用块优化
-  blockquote {
-    border-left: 3px solid var(--tertiary); // 蓝色引用条
-    background: var(--primary-very-low);
-    border-radius: 0;
+  // 修复列表顶部的间隙（因为按钮已经有了 margin-bottom，这里不需要额外的 padding）
+  .sidebar-navigation {
+    padding-top: 0 !important;
   }
 }
 
-// 6. 导航栏微调
-.d-header {
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2); // 稍微加深头部阴影，分离层级
-  border-bottom: 2px solid var(--tertiary); // 顶部增加一条亮色线，像 HUD 边界
-}
-
-// 7. 隐藏不需要的元素 (可选)
-// 如果觉得底部的"外部链接"区域太挤，可以调整它的间距
+// 6. 其他微调
+// ------------------------------------------------------------
 .sidebar-section-header {
   padding-top: 15px !important;
   font-size: 0.85em;
