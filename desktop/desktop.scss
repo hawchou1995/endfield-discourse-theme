@@ -130,3 +130,25 @@ html.desktop-view .navigation-controls {
 }
   }
 }
+
+// ============================================
+// 列表交互增强 (Data List Interaction) - 修正版
+// ============================================
+
+// 使用 box-shadow 代替 border，解决 tr border 不显示的问题
+.topic-list tbody tr.topic-list-item {
+  transition: all 0.15s ease-out; // 添加过渡动画，手感更丝滑
+  
+  &:hover {
+    // 1. 亮色竖线：使用 inset box-shadow 模拟左侧 4px 的高亮条
+    // var(--tertiary) 是你的主题强调色（蓝色）
+    box-shadow: inset 4px 0 0 var(--tertiary) !important;
+    
+    // 2. 背景色变亮：覆盖默认的 hover 颜色
+    // 使用 !important 确保权重足够高
+    background-color: var(--primary-very-low) !important;
+    
+    // 3. (可选) 鼠标指针变成手型，暗示可点击
+    cursor: pointer;
+  }
+}
