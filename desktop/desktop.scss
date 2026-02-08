@@ -114,5 +114,19 @@ html.desktop-view .navigation-controls {
     transform: translateY(2px);
     box-shadow: 0 2px 0 #cc4e22;
     background: #e55a2b !important;
+
+    // ============================================
+// 列表交互增强 (仅桌面端生效)
+// ============================================
+.topic-list tbody tr {
+  transition: all 0.1s ease-out; // 快速响应
+  border-left: 3px solid transparent; // 预留边框位置，防止悬停时内容跳动
+
+  &:hover {
+    // 悬停时左侧出现蓝色(强调色)指示条，模拟终端选中
+    border-left: 3px solid var(--tertiary);
+    background-color: var(--primary-very-low); // 背景微亮
+  }
+}
   }
 }
