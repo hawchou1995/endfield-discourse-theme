@@ -3,28 +3,34 @@
 // ============================================
 
 // 1. 彻底隐藏右上角原生"新建话题"按钮
-// 使用更高权重的选择器，确保覆盖 Discourse 默认样式
-html.desktop-view body .d-header .create-topic {
+// 使用 !important 和更高权重的选择器
+html.desktop-view body .d-header .current-user .create-topic,
+html.desktop-view body .navigation-controls #create-topic {
   display: none !important;
 }
 
-// 2. 侧边栏按钮容器布局
-// Horizon 风格：给按钮一个独立空间，把下方内容挤下去
-.endfield-sidebar-new-topic-button-container {
-  margin-bottom: 20px;
-  padding: 0 10px;
-  box-sizing: border-box;
-  width: 100%;
-  
-  // 关键：不需要 sticky，因为它在 before-sidebar-sections 位置
-  // 它天然就在列表最上方，会随着侧边栏内部滚动（如果侧边栏本身固定）
-  // 或者我们可以让它相对于侧边栏 wrapper 固定
+// 2. 侧边栏布局调整
+// 给侧边栏腾出顶部空间，用来放我们的按钮
+.sidebar-wrapper .sidebar-navigation {
+  margin-top: 60px !important; // 预留高度给按钮
+  position: relative;
 }
 
-// 3. 修复侧边栏遮挡问题
-// 给侧边栏导航增加顶部内边距，防止第一项被遮挡（如果使用了 sticky）
-.sidebar-wrapper .sidebar-navigation {
-  padding-top: 10px;
+// 3. 侧边栏按钮容器布局
+// 将按钮固定在侧边栏区域的左上角
+.endfield-sidebar-new-topic-button-container {
+  position: absolute;
+  top: 0; // 紧贴侧边栏区域顶部
+  left: 0;
+  width: 100%; // 占满侧边栏宽度
+  height: 50px;
+  z-index: 101;
+  padding: 0 10px;
+  box-sizing: border-box;
+  
+  // 此时按钮应该位于 .sidebar-navigation 的 margin-top 区域内
+  // 如果结构不对，可能需要调整 transform
+  transform: translateY(-60px); 
 }
 
 // 4. 按钮本体样式 (终末地工业风)
@@ -34,20 +40,16 @@ html.desktop-view body .d-header .create-topic {
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  // 字体
   font-size: 1.1em;
   font-weight: 800;
   letter-spacing: 2px;
   text-transform: uppercase;
   
-  // 颜色
   background: #FF6B35 !important; 
   color: #fff !important;
   border: none;
   border-radius: 0;
   
-  // 工业切角
   clip-path: polygon(
     0 0, 
     calc(100% - 15px) 0, 
@@ -58,19 +60,15 @@ html.desktop-view body .d-header .create-topic {
   );
   
   transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
-  box-shadow: 0 4px 0 #cc4e22; // 底部厚度
+  box-shadow: 0 4px 0 #cc4e22;
 
   .btn-content {
     display: flex;
     align-items: center;
     gap: 10px;
-    
-    .d-icon {
-      font-size: 1em;
-    }
+    .d-icon { font-size: 1em; }
   }
 
-  // 装饰角标
   .btn-decor-corner {
     position: absolute;
     bottom: 3px;
@@ -81,15 +79,11 @@ html.desktop-view body .d-header .create-topic {
     clip-path: polygon(100% 0, 0 100%, 100% 100%);
   }
 
-  // 交互效果
   &:hover {
     background: #ff8c61 !important;
     transform: translateY(-2px);
     box-shadow: 0 6px 0 #cc4e22;
-    
-    .btn-content {
-      transform: scale(1.05); 
-    }
+    .btn-content { transform: scale(1.05); }
   }
   
   &:active {
