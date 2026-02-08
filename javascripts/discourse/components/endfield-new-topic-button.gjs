@@ -23,8 +23,9 @@ export default class EndfieldNewTopicButton extends Component {
   }
 
   <template>
-    {{#if this.currentUser}}
-      <div class="endfield-sidebar-new-topic-button-container">
+    {{!-- 即使未登录，也渲染外层容器，方便排查位置问题 --}}
+    <div class="endfield-sidebar-new-topic-button-container">
+      {{#if this.currentUser}}
         <DButton
           @class="btn-primary endfield-sidebar-create-btn"
           @action={{this.createTopic}}
@@ -35,7 +36,7 @@ export default class EndfieldNewTopicButton extends Component {
           </div>
           <div class="btn-decor-corner"></div>
         </DButton>
-      </div>
-    {{/if}}
+      {{/if}}
+    </div>
   </template>
 }
