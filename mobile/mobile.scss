@@ -1,1 +1,51 @@
 
+// ============================================
+// 移动端特定样式
+// ============================================
+
+// 移动端导航栏优化
+@media (max-width: 768px) {
+  .d-header {
+    background: rgba(10, 14, 20, 0.98);
+    
+    .title {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+// 移动端主题列表优化
+@media (max-width: 768px) {
+  .topic-list {
+    thead {
+      display: none;
+    }
+    
+    tbody {
+      tr {
+        td {
+          padding: 10px 5px;
+        }
+      }
+    }
+  }
+}
+
+// 移动端按钮优化
+@media (max-width: 480px) {
+  .btn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+}
+
+// 移动端帖子内容优化
+@media (max-width: 480px) {
+  .topic-post {
+    margin-bottom: 15px;
+    
+    .cooked {
+      font-size: 0.95rem;
+    }
+  }
+}
