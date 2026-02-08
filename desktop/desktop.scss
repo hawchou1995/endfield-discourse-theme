@@ -1,36 +1,31 @@
 // ============================================
-// 桌面端侧边栏发帖按钮 (暴力修正版)
+// 桌面端侧边栏发帖按钮 (Glacier/Horizon 同款实现)
 // ============================================
 
-// 1. 暴力隐藏右上角原生"新建话题"按钮
-// 不再依赖任何 JS 类名，只要是桌面端，顶栏里的 #create-topic 就得死
-// 我们使用 html.desktop-view 增加权重
-html.desktop-view .d-header #create-topic,
-html.desktop-view .navigation-controls #create-topic {
+// 1. 隐藏右上角旧按钮
+html.desktop-view body .d-header .create-topic,
+html.desktop-view body .navigation-controls #create-topic {
   display: none !important;
 }
 
-// 2. 侧边栏按钮容器
-// 这个容器会被渲染在侧边栏内部的最上方
+// 2. 侧边栏按钮容器定位 (CSS Grid 魔法)
 .endfield-sidebar-new-topic-button-container {
-  display: block; // 确保显示
-  width: 100%;
+  // 【关键】将这个处于外部的元素，强制放入侧边栏的 Grid 区域
+  grid-area: sidebar; 
   
-  // 你的要求：稍微下移
-  margin-top: 10px; 
+  // 布局微调
   margin-bottom: 20px;
-  
-  // 粘性定位：确保滚动时它还在
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  
-  padding: 0 5px;
+  width: 100%;
   box-sizing: border-box;
-  background: var(--secondary); // 防止透明
+  
+  // 确保它显示
+  display: block; 
+  
+  // 如果侧边栏内容没顶上来，可能需要这个
+  // margin-top: 0; 
 }
 
-// 3. 按钮本体样式 (终末地工业风)
+// 3. 按钮本体样式 (Endfield 工业风)
 .endfield-sidebar-create-btn {
   width: 100%;
   height: 48px;
@@ -89,4 +84,25 @@ html.desktop-view .navigation-controls #create-topic {
     box-shadow: 0 2px 0 #cc4e22;
     background: #e55a2b !important;
   }
+}
+
+// 4. 调整“是否显示摘要”按钮的位置 (需求2)
+// 目标：移到导航栏最右侧，并对齐
+.topic-list-layout-trigger {
+  order: 999; // 放到 flex 容器最后
+  margin-left: auto; // 自动挤到最右边
+  
+  // 如果需要绝对定位到角落，可以用下面的代码（取消注释）
+  /*
+  position: absolute;
+  right: 0;
+  top: 0;
+  */
+}
+
+// 确保导航栏容器也是 Flex 布局，以便排序生效
+.navigation-controls {
+  display: flex;
+  align-items: center;
+  // position: relative; // 如果启用绝对定位，需要这个
 }
