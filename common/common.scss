@@ -1,8 +1,8 @@
 // ============================================
-// 《明日方舟·终末地》Discourse主题 - 核心样式 V2.0
+// 《明日方舟·终末地》Discourse主题 - 核心样式 (修复版)
 // ============================================
 
-// 核心强调色 (保持不变的品牌色)
+// 核心强调色
 $endfield-blue: #00D4FF;
 $endfield-orange: #FF6B35; 
 
@@ -11,12 +11,11 @@ $endfield-orange: #FF6B35;
 // ============================================
 
 body {
-  // 使用系统变量背景，确保浅色模式是白的，深色模式是黑的
   background-color: var(--secondary);
   background-image: 
     linear-gradient(90deg, var(--primary-very-low) 1px, transparent 1px),
     linear-gradient(180deg, var(--primary-very-low) 1px, transparent 1px);
-  background-size: 40px 40px; // 技术网格背景
+  background-size: 40px 40px; 
   background-attachment: fixed;
 }
 
@@ -31,13 +30,12 @@ a {
 }
 
 // ============================================
-// 2. UI 组件 - 终末地工业风格 (切角设计)
+// 2. UI 组件 - 终末地工业风格
 // ============================================
 
 // 通用切角混合宏
 @mixin endfield-cut-corner {
   border-radius: 0;
-  // 右上角和左下角切角
   clip-path: polygon(
     0 0, 
     calc(100% - 10px) 0, 
@@ -57,17 +55,13 @@ a {
   letter-spacing: 0.5px;
   position: relative;
   
-  // 主按钮 (蓝色)
   &.btn-primary {
     background: var(--tertiary);
     color: var(--secondary);
-    
     &:hover {
       background: var(--tertiary-hover);
-      transform: translateX(2px); // 悬浮时产生机械位移感
+      transform: translateX(2px);
     }
-    
-    // 装饰性小方块
     &::after {
       content: '';
       position: absolute;
@@ -79,12 +73,10 @@ a {
     }
   }
   
-  // 次级按钮
   &.btn-default {
     background: var(--primary-low);
     color: var(--primary);
     border: 1px solid var(--primary-low-mid);
-    
     &:hover {
       background: var(--primary-low-mid);
     }
@@ -97,11 +89,10 @@ a {
 
 .d-header {
   background: var(--header_background);
-  border-bottom: 2px solid var(--tertiary); // 顶部亮条
+  border-bottom: 2px solid var(--tertiary); 
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
   backdrop-filter: blur(10px);
   
-  // 顶部装饰线
   &::before {
     content: '';
     position: absolute;
@@ -122,17 +113,16 @@ a {
     &:hover {
       background: var(--primary-low);
       border: 1px solid var(--tertiary);
-      border-radius: 0; // 强制方形
+      border-radius: 0; 
     }
   }
 }
 
 // ============================================
-// 4. 话题列表 (数据列表风格)
+// 4. 话题列表 & 侧边栏卡片
 // ============================================
 
 .topic-list {
-  // 移除圆角，强调硬朗线条
   border-radius: 0; 
   
   thead th {
@@ -144,42 +134,33 @@ a {
   
   tbody tr {
     border-bottom: 1px solid var(--primary-low);
-    
     &:hover {
-      background-color: var(--hover); // 使用 about.json 定义的悬停色
+      background-color: var(--hover); 
     }
   }
   
   .main-link {
     font-weight: 600;
-    
     .link-top-line {
       display: flex;
       align-items: center;
     }
   }
   
-  // 分类徽章 - 变为实心小药丸
   .badge-category-bg {
     border-radius: 2px; 
   }
 }
 
-// ============================================
-// 5. 侧边栏 & 容器 (工业面板)
-// ============================================
-
-// 统一卡片样式
 .sidebar-section, 
 .rs-component,
 .topic-list {
-  background: var(--secondary); // 适配深浅色背景
+  background: var(--secondary); 
   border: 1px solid var(--primary-low);
-  box-shadow: 4px 4px 0 var(--primary-low); // 硬阴影
+  box-shadow: 4px 4px 0 var(--primary-low);
   margin-bottom: 24px;
   position: relative;
   
-  // 橙色装饰角
   &::before {
     content: '';
     position: absolute;
@@ -193,7 +174,6 @@ a {
   }
 }
 
-// 侧边栏标题
 .sidebar-section-header, 
 .rs-component h3 {
   border-bottom: 1px solid var(--primary-low);
@@ -204,66 +184,48 @@ a {
   text-transform: uppercase;
   font-size: 0.9em;
   letter-spacing: 1px;
-  
-  // 标题左侧装饰条
   border-left: 4px solid var(--tertiary); 
 }
 
-// 热门标签球体容器修复
 .popular-tags__container {
-  // 确保在浅色模式下文字可见
   .popular-tags__tag {
-    // 强制增加描边或背景以保证在任何背景下可见
-    // (这里的样式主要由 Sidebar Blocks 插件控制，但我们加一层保险)
     text-shadow: 0 1px 3px var(--secondary); 
   }
 }
 
 // ============================================
-// 6. 帖子详情 (阅读区)
+// 5. 帖子详情
 // ============================================
 
 .topic-post {
   border-left: 1px solid var(--primary-low);
-  
-  // 楼主帖子特殊装饰
   &:first-of-type {
     border-left: 3px solid $endfield-orange;
   }
-  
   .topic-avatar {
     border-top: none;
     .avatar {
-      border-radius: 4px; // 方形头像
+      border-radius: 4px;
       border: 2px solid var(--primary-low);
     }
   }
-  
   .cooked {
-    // 引用块修复
     blockquote {
       background: var(--primary-very-low);
       border-left: 4px solid var(--tertiary);
       color: var(--primary);
-      
-      // 移除原主题可能残留的蓝色背景
       &::before {
         color: var(--tertiary);
       }
     }
-    
-    // 代码块
     pre code {
-      background: #1e1e1e; // 代码块始终保持深色背景更易读
+      background: #1e1e1e;
       color: #d4d4d4;
       border-radius: 4px;
     }
   }
 }
 
-// ============================================
-// 7. 搜索框优化
-// ============================================
 #search-button {
   background: transparent;
   &:hover {
@@ -271,91 +233,19 @@ a {
   }
 }
 
-// 搜索下拉框
 .search-menu .search-context {
   background: var(--secondary);
   border: 1px solid var(--tertiary);
 }
 
 // ============================================
-// 布局调整：增加话题列表宽度
+// 6. 布局调整 (安全版)
 // ============================================
 
-// 1. 增加主容器最大宽度
-// Discourse 默认大约是 1110px，我们加宽它
-.wrap {
-  max-width: 1400px !important; // 针对大屏优化
-  width: 95%; // 在小屏上保持边距
+// 使用 CSS 变量调整最大宽度，而不是强制 width: 100%
+// 这会自动让话题列表变宽，但保留左右边距
+:root {
+  --d-max-width: 1450px; 
 }
 
-// 2. 调整三栏比例 (Grid Layout)
-// 默认通常是：导航栏(2/12) - 话题列表(7/12) - 侧边栏(3/12)
-// 我们微调一下，给话题列表更多空间
-@media (min-width: 1200px) { // 仅在大屏生效
-  .container.list-container {
-    // 假设 Discourse 使用 flex 或 grid，我们需要强制调整
-    // 这里以常见的 flex 布局为例进行微调
-    
-    // 话题列表区域
-    .topic-list {
-      // 这里的具体选择器取决于你的布局插件，通常是 table 元素
-      // 但更有效的是调整它的父容器
-    }
-  }
-  
-  // 如果是 Sidebar Blocks 插件控制的布局：
-  // 我们可以尝试压缩右侧边栏宽度
-  .tc-right-sidebar {
-    width: 280px !important; // 稍微变窄一点 (默认可能300+)
-    min-width: 280px !important;
-  }
-  
-  // 增加话题列表区域的 flex 权重
-  #list-area {
-    flex: 1 1 auto !important; // 让它自动填满剩余空间
-    max-width: none !important; // 解除限制
-  }
-}
-
-// ============================================
-// 布局调整：增加话题列表宽度 (Fluid Layout Fix)
-// ============================================
-
-// 1. 定义我们期望的最大宽度 (比默认宽，但不是全屏)
-$custom-max-width: 1450px; 
-
-// 2. 覆盖 Discourse 默认容器宽度
-.wrap {
-  max-width: $custom-max-width !important;
-  width: 96%; // 在超大屏上留一点边，不贴死；在小屏上自动适应
-  margin: 0 auto; // 核心：保持居中，这样左侧导航栏就不会贴在屏幕最左边
-}
-
-// 3. 针对头部内容的特殊适配
-.d-header .wrap {
-  max-width: $custom-max-width !important;
-  width: 96%;
-}
-
-// 4. 话题列表区域布局微调
-// 既然总宽度变大了，我们可以让中间的内容区（话题列表）占比更多
-// 默认可能是 flex-grow: 1，我们加强一下
-#main-outlet {
-  width: 100%;
-}
-
-// 5. (可选) 如果你觉得右侧边栏（Sidebar Blocks）太宽了挤占空间
-// 可以稍微限制一下它的宽度
-.tc-right-sidebar {
-  flex: 0 0 300px !important; // 固定 300px
-  width: 300px !important;
-  margin-left: 30px !important; // 给列表和侧边栏之间加点空隙
-}
-
-// 6. 移动端保护：手机上还是满宽好
-@media (max-width: 768px) {
-  .wrap {
-    width: 100%;
-    padding: 0 10px; // 给点内边距防止贴边
-  }
-}
+// 移除 .wrap 和 #main-outlet 的危险样式，让 Discourse 默认布局接管
