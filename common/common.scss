@@ -249,3 +249,38 @@ a {
 }
 
 // 移除 .wrap 和 #main-outlet 的危险样式，让 Discourse 默认布局接管
+
+// ============================================
+// 布局调整：加宽话题列表 (Fluid Fix)
+// ============================================
+
+// 1. 设置流式宽度占比 (参考你给的 76%)
+:root {
+  --d-max-width: 85% !important; // 稍微保守一点，避免贴边太紧
+}
+
+// 2. 强制解锁 Discourse 的硬编码限制
+.wrap {
+  max-width: var(--d-max-width) !important;
+  margin: 0 auto; // 保持居中！
+}
+
+// 3. 头部适配
+.d-header .wrap {
+  max-width: var(--d-max-width) !important;
+}
+
+// 4. 确保话题列表占满剩余空间
+#main-outlet {
+  width: 100%;
+}
+
+// 5. 移动端回退
+@media (max-width: 768px) {
+  :root {
+    --d-max-width: 100% !important;
+  }
+  .wrap {
+    padding: 0 10px;
+  }
+}
