@@ -1,24 +1,30 @@
 // ============================================
-// 桌面端侧边栏发帖按钮 (Horizon 完美复刻版)
+// 桌面端侧边栏发帖按钮 (Horizon 1:1 复刻版)
 // ============================================
 
-// 1. 【核心】隐藏右上角旧按钮
-// 只有当 JS 成功加载并添加了类名后才隐藏，双重保险
-body.endfield-sidebar-button-active .d-header #create-topic {
+// 1. 隐藏右上角旧按钮
+// 只要 JS 成功运行并添加了类名，就隐藏顶部按钮
+body.endfield-has-sidebar-button .d-header .create-topic {
   display: none !important;
 }
 
-// 2. 侧边栏按钮容器布局
+// 2. 侧边栏按钮容器定位 (核心作业)
 .endfield-sidebar-new-topic-button-container {
-  // 这里的 margin-top 就是你想要的“稍微下移”
-  margin-top: 10px; 
-  margin-bottom: 20px;
+  // 【灵魂代码】将按钮归位到侧边栏网格区域
+  grid-area: sidebar; 
+  
+  // 布局微调
+  margin-bottom: 1em;
+  margin-top: 4px; // 稍微下移一点点，对齐右侧内容
   width: 100%;
-  padding: 0 5px; // 两侧微调
   box-sizing: border-box;
   
-  // 确保它在侧边栏内正常显示
-  display: block;
+  // 确保层级
+  position: relative; 
+  z-index: 20; 
+  
+  // 如果你想让他稍微吸顶，可以开启下面这行（Horizon默认是不吸顶的）
+  // position: sticky; top: 70px;
 }
 
 // 3. 按钮本体样式 (Endfield 工业风)
@@ -29,11 +35,13 @@ body.endfield-sidebar-button-active .d-header #create-topic {
   align-items: center;
   justify-content: center;
   
+  // 字体
   font-size: 1.1em;
   font-weight: 800;
   letter-spacing: 2px;
   text-transform: uppercase;
   
+  // 颜色
   background: #FF6B35 !important; 
   color: #fff !important;
   border: none;
@@ -55,7 +63,7 @@ body.endfield-sidebar-button-active .d-header #create-topic {
   .btn-content {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     .d-icon { font-size: 1em; }
   }
 
@@ -73,6 +81,7 @@ body.endfield-sidebar-button-active .d-header #create-topic {
     background: #ff8c61 !important;
     transform: translateY(-2px);
     box-shadow: 0 6px 0 #cc4e22;
+    .btn-content { transform: scale(1.05); }
   }
   
   &:active {
