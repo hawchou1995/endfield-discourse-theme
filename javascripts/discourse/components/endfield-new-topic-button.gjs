@@ -8,11 +8,6 @@ export default class EndfieldNewTopicButton extends Component {
   @service composer;
   @service currentUser;
 
-  // 只要有用户登录就显示
-  get showButton() {
-    return this.currentUser;
-  }
-
   @action
   createTopic() {
     const route = this.router.currentRoute;
@@ -28,19 +23,17 @@ export default class EndfieldNewTopicButton extends Component {
   }
 
   <template>
-    {{#if this.showButton}}
-      <div class="endfield-sidebar-new-topic-button-container">
-        <DButton
-          @class="btn-primary endfield-sidebar-create-btn"
-          @action={{this.createTopic}}
-        >
-          <div class="btn-content">
-            <svg class="fa d-icon d-icon-plus svg-icon svg-string" xmlns="http://www.w3.org/2000/svg"><use href="#plus"></use></svg>
-            <span class="d-button-label">发帖</span>
-          </div>
-          <div class="btn-decor-corner"></div>
-        </DButton>
-      </div>
-    {{/if}}
+    <div class="endfield-sidebar-new-topic-button-container">
+      <DButton
+        @class="btn-primary endfield-sidebar-create-btn"
+        @action={{this.createTopic}}
+      >
+        <div class="btn-content">
+          <svg class="fa d-icon d-icon-plus svg-icon svg-string" xmlns="http://www.w3.org/2000/svg"><use href="#plus"></use></svg>
+          <span class="d-button-label">发帖</span>
+        </div>
+        <div class="btn-decor-corner"></div>
+      </DButton>
+    </div>
   </template>
 }
