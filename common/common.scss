@@ -187,17 +187,34 @@ body {
     }
     
     // 引用块样式
-    blockquote:not(.quote-callout):not(.d-callout) {
+    // 1. Endfield 主题普通引用块样式
+    // 增加 :not 选择器作为基础过滤
+    blockquote:not(.d-callout) {
       border-left: 3px solid $endfield-primary;
       background: rgba(0, 212, 255, 0.05);
       padding: 15px;
       margin: 20px 0;
       
+      // 那个蓝色的箭头图标
       &::before {
         content: '»';
         color: $endfield-primary;
         font-size: 2em;
         margin-right: 10px;
+      }
+    }
+
+    // 2. 【核心修复】强制重置引用提示（Callouts）的样式
+    // 这段代码会确保当检测到是 callout 时，移除主题添加的背景和图标
+    blockquote.d-callout {
+      background: transparent !important; // 移除主题背景色，使用插件自带颜色
+      border-left-width: 5px !important;  // 恢复插件的边框宽度
+      // 注意：这里不要写 border-left-color，否则会覆盖插件的颜色分类
+      
+      // 关键：强制隐藏主题添加的箭头图标
+      &::before {
+        content: none !important;
+        display: none !important;
       }
     }
   }
