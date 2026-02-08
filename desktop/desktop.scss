@@ -1,45 +1,39 @@
 // ============================================
-// 桌面端侧边栏发帖按钮 (Fix V3 - Stable)
+// 桌面端侧边栏发帖按钮 (Horizon 完美复刻版)
 // ============================================
 
-// 1. 隐藏右上角旧按钮
-// 只要 JS 添加了类名，或者直接命中桌面端，就隐藏它
-body.endfield-has-sidebar-button .d-header .create-topic,
-html.desktop-view .d-header .create-topic {
+// 1. 【核心】隐藏右上角旧按钮
+// 只有当 JS 成功加载并添加了类名后才隐藏，双重保险
+body.endfield-sidebar-button-active .d-header #create-topic {
   display: none !important;
 }
 
-// 2. 侧边栏按钮容器
+// 2. 侧边栏按钮容器布局
 .endfield-sidebar-new-topic-button-container {
-  // 粘性定位：滚动时吸附在侧边栏顶部
-  position: sticky;
-  top: 0; 
-  z-index: 999;
-  
-  // 确保它占满宽度
+  // 这里的 margin-top 就是你想要的“稍微下移”
+  margin-top: 10px; 
+  margin-bottom: 20px;
   width: 100%;
-  margin-bottom: 15px; // 把下方导航挤下去
-  padding: 10px 5px 15px 5px; // 留出呼吸感
+  padding: 0 5px; // 两侧微调
   box-sizing: border-box;
-  background: var(--secondary); // 防止透明
   
-  // 底部装饰线
-  border-bottom: 1px dashed var(--primary-low);
+  // 确保它在侧边栏内正常显示
+  display: block;
 }
 
-// 3. 按钮本体样式
+// 3. 按钮本体样式 (Endfield 工业风)
 .endfield-sidebar-create-btn {
   width: 100%;
-  height: 46px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
+  
   font-size: 1.1em;
   font-weight: 800;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   text-transform: uppercase;
   
-  // 颜色
   background: #FF6B35 !important; 
   color: #fff !important;
   border: none;
@@ -48,30 +42,29 @@ html.desktop-view .d-header .create-topic {
   // 切角
   clip-path: polygon(
     0 0, 
-    calc(100% - 12px) 0, 
-    100% 12px, 
+    calc(100% - 15px) 0, 
+    100% 15px, 
     100% 100%, 
-    12px 100%, 
-    0 calc(100% - 12px)
+    15px 100%, 
+    0 calc(100% - 15px)
   );
   
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
   box-shadow: 0 4px 0 #cc4e22;
 
   .btn-content {
     display: flex;
     align-items: center;
     gap: 8px;
-    .d-icon { font-size: 0.9em; }
+    .d-icon { font-size: 1em; }
   }
 
-  // 装饰角标
   .btn-decor-corner {
     position: absolute;
-    bottom: 2px;
-    right: 2px;
-    width: 6px;
-    height: 6px;
+    bottom: 3px;
+    right: 3px;
+    width: 8px;
+    height: 8px;
     background: rgba(0,0,0,0.2);
     clip-path: polygon(100% 0, 0 100%, 100% 100%);
   }
