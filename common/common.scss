@@ -239,3 +239,31 @@ a {
     }
   }
 }
+
+// ============================================
+// 布局对齐修复
+// ============================================
+
+// 1. 强制对齐：让侧边栏按钮和话题列表导航栏顶部对齐
+// Discourse 的 Main Outlet 是 Grid 布局
+#main-outlet {
+  // 确保侧边栏内容不会因为 Grid Gap 而错位
+  align-items: start; 
+}
+
+// 2. 导航栏 (List Controls) 顶部修正
+.list-controls {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  
+  // 如果侧边栏按钮有 margin-top，这里可能也需要加一点 padding-top 来视觉对齐
+  // 或者给侧边栏按钮 margin-top: 0
+}
+
+// 3. 话题列表增宽 (保留之前的)
+$custom-max-width: 1450px; 
+.wrap {
+  max-width: $custom-max-width !important;
+  margin: 0 auto !important; 
+  width: 96%;
+}
