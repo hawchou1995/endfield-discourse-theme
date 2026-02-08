@@ -1,19 +1,43 @@
 // ============================================
-// 《明日方舟·终末地》Discourse主题 - 核心样式 (完整恢复版)
+// 《明日方舟·终末地》Discourse主题 - 核心样式 V2.0
 // ============================================
 
-// 1. 变量定义
+// 核心强调色 (保持不变的品牌色)
 $endfield-blue: #00D4FF;
-$endfield-orange: #FF6B35;
-$custom-max-width: 1450px;
+$endfield-orange: #FF6B35; 
 
-:root {
-  --d-max-width: #{$custom-max-width}; // 设置 Discourse 核心变量
+// ============================================
+// 1. 全局基础 (自动适配深浅色)
+// ============================================
+
+body {
+  // 使用系统变量背景，确保浅色模式是白的，深色模式是黑的
+  background-color: var(--secondary);
+  background-image: 
+    linear-gradient(90deg, var(--primary-very-low) 1px, transparent 1px),
+    linear-gradient(180deg, var(--primary-very-low) 1px, transparent 1px);
+  background-size: 40px 40px; // 技术网格背景
+  background-attachment: fixed;
 }
 
-// 混合宏：切角
+// 链接颜色优化
+a {
+  color: var(--tertiary);
+  transition: all 0.2s ease;
+  &:hover {
+    color: var(--tertiary-hover);
+    text-decoration: none;
+  }
+}
+
+// ============================================
+// 2. UI 组件 - 终末地工业风格 (切角设计)
+// ============================================
+
+// 通用切角混合宏
 @mixin endfield-cut-corner {
   border-radius: 0;
+  // 右上角和左下角切角
   clip-path: polygon(
     0 0, 
     calc(100% - 10px) 0, 
@@ -24,66 +48,7 @@ $custom-max-width: 1450px;
   );
 }
 
-// ============================================
-// 2. 全局基础与布局
-// ============================================
-
-body {
-  background-color: var(--secondary);
-  background-image: 
-    linear-gradient(90deg, var(--primary-very-low) 1px, transparent 1px),
-    linear-gradient(180deg, var(--primary-very-low) 1px, transparent 1px);
-  background-size: 40px 40px; 
-  background-attachment: fixed;
-}
-
-a {
-  color: var(--tertiary);
-  transition: all 0.2s ease;
-  &:hover {
-    color: var(--tertiary-hover);
-    text-decoration: none;
-  }
-}
-
-// 布局核心：覆盖默认宽度限制，实现增宽且居中
-.wrap {
-  max-width: var(--d-max-width) !important; // 使用变量统一控制
-  width: 94%; // 稍微留点余地
-  margin-left: auto !important;
-  margin-right: auto !important;
-  padding: 0 10px;
-  box-sizing: border-box;
-}
-
-// 头部内容区也同步变宽
-.d-header .wrap {
-  max-width: var(--d-max-width) !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-
-// 确保主内容区占满剩余宽度
-#main-outlet {
-  width: 100%;
-}
-
-// 移动端保护
-@media (max-width: 768px) {
-  :root {
-    --d-max-width: 100% !important;
-  }
-  .wrap {
-    width: 100% !important;
-    padding: 0 10px;
-  }
-}
-
-// ============================================
-// 3. UI 组件 (按钮、导航、列表)
-// ============================================
-
-// 按钮
+// 按钮重构
 .btn {
   @include endfield-cut-corner;
   border: none;
@@ -91,15 +56,18 @@ a {
   font-weight: 700;
   letter-spacing: 0.5px;
   position: relative;
-  transition: all 0.2s ease;
   
+  // 主按钮 (蓝色)
   &.btn-primary {
     background: var(--tertiary);
     color: var(--secondary);
+    
     &:hover {
       background: var(--tertiary-hover);
-      transform: translateX(2px);
+      transform: translateX(2px); // 悬浮时产生机械位移感
     }
+    
+    // 装饰性小方块
     &::after {
       content: '';
       position: absolute;
@@ -111,23 +79,29 @@ a {
     }
   }
   
+  // 次级按钮
   &.btn-default {
     background: var(--primary-low);
     color: var(--primary);
     border: 1px solid var(--primary-low-mid);
+    
     &:hover {
       background: var(--primary-low-mid);
     }
   }
 }
 
-// 导航栏
+// ============================================
+// 3. 导航栏 (HUD 风格)
+// ============================================
+
 .d-header {
   background: var(--header_background);
-  border-bottom: 2px solid var(--tertiary); 
+  border-bottom: 2px solid var(--tertiary); // 顶部亮条
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
   backdrop-filter: blur(10px);
   
+  // 顶部装饰线
   &::before {
     content: '';
     position: absolute;
@@ -148,26 +122,17 @@ a {
     &:hover {
       background: var(--primary-low);
       border: 1px solid var(--tertiary);
-      border-radius: 0; 
+      border-radius: 0; // 强制方形
     }
   }
 }
 
-// 搜索框
-#search-button {
-  background: transparent;
-  &:hover { background: var(--primary-low); }
-}
-.search-menu .search-context {
-  background: var(--secondary);
-  border: 1px solid var(--tertiary);
-}
-
 // ============================================
-// 4. 话题列表 & 侧边栏卡片
+// 4. 话题列表 (数据列表风格)
 // ============================================
 
 .topic-list {
+  // 移除圆角，强调硬朗线条
   border-radius: 0; 
   
   thead th {
@@ -179,32 +144,49 @@ a {
   
   tbody tr {
     border-bottom: 1px solid var(--primary-low);
-    &:hover { background-color: var(--hover); }
+    
+    &:hover {
+      background-color: var(--hover); // 使用 about.json 定义的悬停色
+    }
   }
   
   .main-link {
     font-weight: 600;
-    .link-top-line { display: flex; align-items: center; }
+    
+    .link-top-line {
+      display: flex;
+      align-items: center;
+    }
   }
   
-  .badge-category-bg { border-radius: 2px; }
+  // 分类徽章 - 变为实心小药丸
+  .badge-category-bg {
+    border-radius: 2px; 
+  }
 }
 
-// 通用卡片样式 (侧边栏、话题列表)
+// ============================================
+// 5. 侧边栏 & 容器 (工业面板)
+// ============================================
+
+// 统一卡片样式
 .sidebar-section, 
 .rs-component,
 .topic-list {
-  background: var(--secondary); 
+  background: var(--secondary); // 适配深浅色背景
   border: 1px solid var(--primary-low);
-  box-shadow: 4px 4px 0 var(--primary-low);
+  box-shadow: 4px 4px 0 var(--primary-low); // 硬阴影
   margin-bottom: 24px;
   position: relative;
   
+  // 橙色装饰角
   &::before {
     content: '';
     position: absolute;
-    top: -1px; left: -1px;
-    width: 10px; height: 10px;
+    top: -1px;
+    left: -1px;
+    width: 10px;
+    height: 10px;
     border-top: 2px solid $endfield-orange;
     border-left: 2px solid $endfield-orange;
     z-index: 1;
@@ -222,41 +204,75 @@ a {
   text-transform: uppercase;
   font-size: 0.9em;
   letter-spacing: 1px;
+  
+  // 标题左侧装饰条
   border-left: 4px solid var(--tertiary); 
 }
 
-// 热门标签云
-.popular-tags__container .popular-tags__tag {
-  text-shadow: 0 1px 3px var(--secondary); 
+// 热门标签球体容器修复
+.popular-tags__container {
+  // 确保在浅色模式下文字可见
+  .popular-tags__tag {
+    // 强制增加描边或背景以保证在任何背景下可见
+    // (这里的样式主要由 Sidebar Blocks 插件控制，但我们加一层保险)
+    text-shadow: 0 1px 3px var(--secondary); 
+  }
 }
 
 // ============================================
-// 5. 帖子详情
+// 6. 帖子详情 (阅读区)
 // ============================================
 
 .topic-post {
   border-left: 1px solid var(--primary-low);
+  
+  // 楼主帖子特殊装饰
   &:first-of-type {
     border-left: 3px solid $endfield-orange;
   }
+  
   .topic-avatar {
     border-top: none;
     .avatar {
-      border-radius: 4px;
+      border-radius: 4px; // 方形头像
       border: 2px solid var(--primary-low);
     }
   }
+  
   .cooked {
+    // 引用块修复
     blockquote {
       background: var(--primary-very-low);
       border-left: 4px solid var(--tertiary);
       color: var(--primary);
-      &::before { color: var(--tertiary); }
+      
+      // 移除原主题可能残留的蓝色背景
+      &::before {
+        color: var(--tertiary);
+      }
     }
+    
+    // 代码块
     pre code {
-      background: #1e1e1e;
+      background: #1e1e1e; // 代码块始终保持深色背景更易读
       color: #d4d4d4;
       border-radius: 4px;
     }
   }
+}
+
+// ============================================
+// 7. 搜索框优化
+// ============================================
+#search-button {
+  background: transparent;
+  &:hover {
+    background: var(--primary-low);
+  }
+}
+
+// 搜索下拉框
+.search-menu .search-context {
+  background: var(--secondary);
+  border: 1px solid var(--tertiary);
 }
