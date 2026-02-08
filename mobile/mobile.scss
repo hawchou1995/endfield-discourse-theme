@@ -1,51 +1,47 @@
-
 // ============================================
-// 移动端特定样式
+// 移动端适配
 // ============================================
 
-// 移动端导航栏优化
 @media (max-width: 768px) {
-  .d-header {
-    background: rgba(10, 14, 20, 0.98);
-    
-    .title {
-      font-size: 1.2rem;
-    }
+  // 移除背景网格，减少渲染压力，保持干净
+  body {
+    background-image: none;
   }
-}
 
-// 移动端主题列表优化
-@media (max-width: 768px) {
-  .topic-list {
-    thead {
+  // 导航栏简化
+  .d-header {
+    border-bottom: 1px solid var(--primary-low);
+    
+    // 手机端不需要太复杂的顶部线条
+    &::before {
       display: none;
     }
+  }
+
+  // 列表卡片化
+  .topic-list {
+    background: transparent;
+    border: none;
+    box-shadow: none;
     
-    tbody {
-      tr {
-        td {
-          padding: 10px 5px;
-        }
+    // 每个话题变成一个独立卡片
+    tr {
+      display: block;
+      background: var(--secondary);
+      border: 1px solid var(--primary-low);
+      margin-bottom: 10px;
+      border-radius: 4px; // 手机端保留圆角手感更好
+      padding: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      
+      &:hover {
+        background: var(--secondary); // 移除悬停变色
       }
     }
   }
-}
-
-// 移动端按钮优化
-@media (max-width: 480px) {
-  .btn {
-    padding: 8px 16px;
-    font-size: 0.9rem;
-  }
-}
-
-// 移动端帖子内容优化
-@media (max-width: 480px) {
-  .topic-post {
-    margin-bottom: 15px;
-    
-    .cooked {
-      font-size: 0.95rem;
-    }
+  
+  // 侧边栏隐藏（通常 Discourse 移动端会自动隐藏侧边栏，但以防万一）
+  .tc-right-sidebar {
+    display: none !important;
   }
 }
