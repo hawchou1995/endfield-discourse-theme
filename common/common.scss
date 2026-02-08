@@ -187,7 +187,7 @@ body {
     }
     
     // 引用块样式
-    blockquote {
+    blockquote:not(.quote-callout):not(.d-callout) {
       border-left: 3px solid $endfield-primary;
       background: rgba(0, 212, 255, 0.05);
       padding: 15px;
