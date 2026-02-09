@@ -2,7 +2,7 @@
 // 1. 布局核心修正 (Horizon Layout Fix - 终极版)
 // =======================================================
 
-// [设置] 页面总宽度 (Endspace 风格通常比较宽，富有张力)
+// [设置] 页面总宽度
 $page-width: 94%; 
 
 // 仅在列表页生效
@@ -66,7 +66,7 @@ body.tags-page {
 }
 
 // =======================================================
-// 2. 界面元素管理 (Endspace Style)
+// 2. 界面元素管理
 // =======================================================
 
 // 隐藏原生导航栏右侧按钮
@@ -91,7 +91,7 @@ html.desktop-view .navigation-controls {
   padding-top: 10px;
 }
 
-// [关键] 自定义发帖按钮 - 终末地橙色
+// 自定义发帖按钮 - 终末地橙色
 .endfield-sidebar-create-btn {
   width: 100%;
   height: 48px;
@@ -103,13 +103,12 @@ html.desktop-view .navigation-controls {
   letter-spacing: 2px;
   text-transform: uppercase;
   
-  // 强制橙色，拒绝紫色
+  // 按钮维持橙色
   background: #FF6B35 !important; 
   color: #fff !important;
   border: none;
   border-radius: 0;
   
-  // 工业切角
   clip-path: polygon(
     0 0, 
     calc(100% - 15px) 0, 
@@ -128,7 +127,6 @@ html.desktop-view .navigation-controls {
     gap: 10px;
   }
 
-  // 装饰角标
   .btn-decor-corner {
     position: absolute;
     bottom: 3px;
@@ -154,16 +152,16 @@ html.desktop-view .navigation-controls {
 }
 
 // =======================================================
-// 3. 列表交互增强 (Endspace Cyber Cyan)
-// 核心效果：青色扫描光效，绝对不带紫色
+// 3. 列表交互增强 (Endspace Warning Orange)
+// 核心效果：警示橙色 (#FF6B35) 扫描光效
 // =======================================================
 
 .topic-list tbody tr {
   position: relative;
   
-  // [修改] 背景定义：使用纯正的终末地青色 (#00D4FF)，透明度 10%
-  // 这样无论底色如何，都会显示为青色光晕，不会变成紫色
-  background-image: linear-gradient(to right, rgba(0, 212, 255, 0.1), rgba(0, 212, 255, 0.1));
+  // [修改] 背景定义：使用终末地橙色 (#FF6B35)
+  // rgba(255, 107, 53, 0.15) -> 橙色，15% 不透明度
+  background-image: linear-gradient(to right, rgba(255, 107, 53, 0.15), rgba(255, 107, 53, 0.15));
   
   background-repeat: no-repeat;
   background-size: 0% 100%; // 初始宽度0
@@ -171,15 +169,15 @@ html.desktop-view .navigation-controls {
   transition: background-size 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.1s ease;
   
   border-left: 0; 
-  // 预留位置，颜色设为透明青色
-  box-shadow: inset 0 0 0 rgba(0, 212, 255, 0); 
+  // 预留位置，颜色设为透明橙色
+  box-shadow: inset 0 0 0 rgba(255, 107, 53, 0); 
 
   &:hover {
     // 悬停：背景拉满
     background-size: 100% 100% !important; 
     
-    // 左侧：亮起 4px 实心青色光条 (#00D4FF)
-    box-shadow: inset 4px 0 0 #00D4FF !important;
+    // 左侧：亮起 4px 实心橙色光条 (#FF6B35)
+    box-shadow: inset 4px 0 0 #FF6B35 !important;
     
     cursor: pointer;
   }
