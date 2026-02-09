@@ -7,17 +7,33 @@ $endfield-cyan: #00D4FF;  // 终端青
 $endfield-orange: #FF6B35; // 警示橙
 $endfield-dark-bg: #12151A; // 深色背景
 
+// [核心] 暴力覆盖系统变量，彻底消灭紫色
+:root {
+  --tertiary: #{$endfield-cyan} !important;
+  --tertiary-hover: #{lighten($endfield-cyan, 10%)} !important;
+  --tertiary-low: rgba(0, 212, 255, 0.2) !important;
+  --tertiary-medium: rgba(0, 212, 255, 0.5) !important;
+  --tertiary-high: rgba(0, 212, 255, 0.8) !important;
+  
+  --quaternary: #{$endfield-orange} !important;
+  --quaternary-hover: #{lighten($endfield-orange, 10%)} !important;
+  
+  --highlight-bg: rgba(0, 212, 255, 0.1) !important;
+  --love: #{$endfield-orange} !important; // 点赞心形改为橙色
+  
+  --d-hover: rgba(0, 212, 255, 0.05) !important;
+  --d-selected: rgba(0, 212, 255, 0.1) !important;
+}
+
 // 1. 全局基础
 body {
   background-color: var(--secondary);
-  // 网格背景
   background-image: 
     linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
     linear-gradient(180deg, rgba(255,255,255,0.03) 1px, transparent 1px);
   background-size: 40px 40px; 
   background-attachment: fixed;
   
-  // [字体] Endspace 风格等宽/工业字体
   font-family: "JetBrains Mono", "Roboto Mono", "Segoe UI", sans-serif;
 }
 
@@ -28,8 +44,13 @@ a {
   &:hover {
     color: lighten($endfield-cyan, 10%);
     text-decoration: none;
-    text-shadow: 0 0 8px rgba(0, 212, 255, 0.6); // 发光效果
+    text-shadow: 0 0 8px rgba(0, 212, 255, 0.6); 
   }
+}
+
+// 访问过的链接也不要变紫
+a:visited {
+  color: $endfield-cyan; 
 }
 
 // 2. UI 组件 (切角)
@@ -55,7 +76,7 @@ a {
   
   &.btn-primary {
     background: $endfield-cyan;
-    color: #000; // 青色背景配黑色文字对比度更高
+    color: #000; 
     &:hover {
       background: lighten($endfield-cyan, 10%);
       transform: translateX(2px);
@@ -82,13 +103,13 @@ a {
 
 // 3. 导航栏 (HUD 风格)
 .d-header {
-  background: rgba(18, 21, 26, 0.9); // 强制深色半透明
-  border-bottom: 2px solid $endfield-cyan; // 青色底边
+  background: rgba(18, 21, 26, 0.9); 
+  border-bottom: 2px solid $endfield-cyan; 
   box-shadow: 0 4px 20px rgba(0,0,0,0.5);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   
-  &::before { // 顶部装饰线
+  &::before { 
     content: '';
     position: absolute;
     top: 0; left: 0; width: 100%; height: 2px;
@@ -142,13 +163,13 @@ a {
 .sidebar-section, 
 .rs-component,
 .topic-list {
-  background: rgba(255,255,255,0.02); // 极淡的背景
+  background: rgba(255,255,255,0.02); 
   border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: none; // 移除硬阴影，改用发光边框效果(可选)
+  box-shadow: none; 
   margin-bottom: 24px;
   position: relative;
   
-  // [新增] 角标装饰 (Endspace 特征)
+  // 角标装饰
   background-image: 
     linear-gradient(to right, $endfield-cyan 2px, transparent 2px),
     linear-gradient(to bottom, $endfield-cyan 2px, transparent 2px),
@@ -158,7 +179,7 @@ a {
   background-size: 8px 8px;
   background-repeat: no-repeat;
   
-  &::before { display: none; } // 移除旧的橙色角，改用上面的青色四角
+  &::before { display: none; } 
 }
 
 .sidebar-section-header, 
@@ -202,7 +223,7 @@ a {
   }
 }
 
-// 6. 滚动条 (Endspace 青色风格)
+// 6. 滚动条
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -216,4 +237,19 @@ a {
 ::-webkit-scrollbar-track {
     background: #222;
     border-left: 1px solid #333;
+}
+
+// 7. 特殊组件去紫 (Tag, Badge, Notifications)
+.discourse-tag {
+    color: $endfield-cyan !important; // 标签文字青色
+}
+.badge-notification {
+    background-color: $endfield-orange !important; // 通知气泡橙色
+    color: #fff !important;
+}
+.select-kit .select-kit-row.is-selected {
+    background-color: rgba(0, 212, 255, 0.1) !important;
+}
+.select-kit .select-kit-row.is-highlighted {
+    background-color: rgba(0, 212, 255, 0.05) !important;
 }
