@@ -1,5 +1,5 @@
 // ============================================
-// 《明日方舟·终末地》 (Endspace Style) - 核心样式
+// 《明日方舟·终末地》 (Endspace Style) - 核心样式 V2.2
 // ============================================
 
 // [强制定义颜色变量]
@@ -7,7 +7,7 @@ $endfield-cyan: #00D4FF;  // 终端青
 $endfield-orange: #FF6B35; // 警示橙
 $endfield-dark-bg: #12151A; // 深色背景
 
-// [核心] 暴力覆盖系统变量，彻底消灭紫色
+// [核心] 暴力覆盖系统变量
 :root {
   --tertiary: #{$endfield-cyan} !important;
   --tertiary-hover: #{lighten($endfield-cyan, 10%)} !important;
@@ -19,7 +19,7 @@ $endfield-dark-bg: #12151A; // 深色背景
   --quaternary-hover: #{lighten($endfield-orange, 10%)} !important;
   
   --highlight-bg: rgba(0, 212, 255, 0.1) !important;
-  --love: #{$endfield-orange} !important; // 点赞心形改为橙色
+  --love: #{$endfield-orange} !important; 
   
   --d-hover: rgba(0, 212, 255, 0.05) !important;
   --d-selected: rgba(0, 212, 255, 0.1) !important;
@@ -28,30 +28,29 @@ $endfield-dark-bg: #12151A; // 深色背景
 // 1. 全局基础
 body {
   background-color: var(--secondary);
+  // 网格背景
   background-image: 
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(125,125,125,0.05) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(125,125,125,0.05) 1px, transparent 1px);
   background-size: 40px 40px; 
   background-attachment: fixed;
   
   font-family: "JetBrains Mono", "Roboto Mono", "Segoe UI", sans-serif;
 }
 
-// 链接颜色：强制青色
+// 链接颜色
 a {
   color: $endfield-cyan;
   transition: all 0.2s ease;
   &:hover {
     color: lighten($endfield-cyan, 10%);
     text-decoration: none;
-    text-shadow: 0 0 8px rgba(0, 212, 255, 0.6); 
+    // 使用 box-shadow 代替 text-shadow 以获得更清晰的边缘
+    text-shadow: none; 
   }
 }
 
-// 访问过的链接也不要变紫
-a:visited {
-  color: $endfield-cyan; 
-}
+a:visited { color: $endfield-cyan; }
 
 // 2. UI 组件 (切角)
 @mixin endfield-cut-corner {
@@ -92,9 +91,9 @@ a:visited {
   &.btn-default {
     background: transparent;
     color: var(--primary);
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid var(--primary-low);
     &:hover { 
-        background: rgba(255,255,255,0.05); 
+        background: var(--primary-low); 
         border-color: $endfield-cyan;
         color: $endfield-cyan;
     }
@@ -102,10 +101,11 @@ a:visited {
 }
 
 // 3. 导航栏 (HUD 风格)
+// 注意：Header 我们强制深色背景，所以文字保持白色是正确的
 .d-header {
-  background: rgba(18, 21, 26, 0.9); 
+  background: rgba(18, 21, 26, 0.95); // 强制深色
   border-bottom: 2px solid $endfield-cyan; 
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   
@@ -119,28 +119,29 @@ a:visited {
   .title {
     font-weight: 800;
     letter-spacing: -0.5px;
-    color: #fff;
+    color: #fff !important; // Header 强制白色文字
   }
   
   .icons .icon {
-    color: #fff;
+    color: #fff !important; // Header 图标强制白色
     border: 1px solid transparent;
     &:hover {
       background: rgba(0, 212, 255, 0.1);
       border: 1px solid $endfield-cyan;
       border-radius: 0;
-      .d-icon { color: $endfield-cyan; }
+      .d-icon { color: $endfield-cyan !important; }
     }
   }
 }
 
-// 搜索框发光：强制青色
+// 搜索框
 .search-menu .search-input:focus, 
 .d-header .search-input:focus {
     outline: none;
     border: 1px solid $endfield-cyan !important;
     box-shadow: 0 0 8px rgba(0, 212, 255, 0.4), inset 0 0 5px rgba(0, 212, 255, 0.2) !important; 
     background-color: rgba(0,0,0,0.3) !important;
+    color: #fff !important; // 输入文字强制白
     transition: all 0.2s ease;
 }
 
@@ -148,13 +149,14 @@ a:visited {
 .topic-list {
   border-radius: 0; 
   thead th {
-    border-bottom: 2px solid rgba(255,255,255,0.1);
-    color: #aaa;
+    border-bottom: 2px solid var(--primary-low);
+    // [修复] 使用变量代替硬编码颜色，适配浅色模式
+    color: var(--primary-medium); 
     font-size: 0.85em;
     text-transform: uppercase;
   }
   tbody tr {
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid var(--primary-low);
   }
   .main-link { font-weight: 600; }
   .badge-category-bg { border-radius: 2px; }
@@ -163,8 +165,9 @@ a:visited {
 .sidebar-section, 
 .rs-component,
 .topic-list {
-  background: rgba(255,255,255,0.02); 
-  border: 1px solid rgba(255,255,255,0.1);
+  background: transparent; 
+  // [修复] 边框颜色适配
+  border: 1px solid var(--primary-low);
   box-shadow: none; 
   margin-bottom: 24px;
   position: relative;
@@ -182,12 +185,17 @@ a:visited {
   &::before { display: none; } 
 }
 
+// [核心修复点] 侧边栏标题
 .sidebar-section-header, 
 .rs-component h3 {
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid var(--primary-low);
   padding: 10px 15px;
-  background: rgba(0, 212, 255, 0.05);
-  color: #fff;
+  background: rgba(0, 212, 255, 0.05); // 极淡青色背景
+  
+  // [关键修改]：从 #fff 改为 var(--primary)
+  // 这样浅色模式下是深色字，深色模式下是浅色字
+  color: var(--primary) !important; 
+  
   font-weight: 700;
   text-transform: uppercase;
   font-size: 0.9em;
@@ -197,25 +205,25 @@ a:visited {
 
 // 5. 帖子详情
 .topic-post {
-  border-left: 1px solid rgba(255,255,255,0.1);
+  border-left: 1px solid var(--primary-low);
   &:first-of-type { border-left: 3px solid $endfield-orange; }
   
   .topic-avatar {
     border-top: none;
     .avatar {
       border-radius: 4px;
-      border: 2px solid rgba(255,255,255,0.1);
+      border: 2px solid var(--primary-low);
     }
   }
   
   .cooked {
     blockquote {
-      background: rgba(0, 212, 255, 0.05);
+      background: var(--primary-very-low); // 适配背景
       border-left: 4px solid $endfield-cyan;
-      color: #ddd;
+      color: var(--primary); // 适配文字
     }
     pre code {
-      background: #000;
+      background: #1e1e1e; // 代码块保持深色
       border: 1px solid #333;
       color: $endfield-cyan;
       border-radius: 0;
@@ -227,24 +235,24 @@ a:visited {
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
-    background: #111;
+    background: var(--secondary);
 }
 ::-webkit-scrollbar-thumb {
     background-color: $endfield-cyan; 
     border-radius: 0; 
-    &:hover { background-color: #fff; }
+    &:hover { background-color: var(--primary); }
 }
 ::-webkit-scrollbar-track {
-    background: #222;
-    border-left: 1px solid #333;
+    background: var(--primary-very-low);
+    border-left: 1px solid var(--primary-low);
 }
 
-// 7. 特殊组件去紫 (Tag, Badge, Notifications)
+// 7. 特殊组件去紫
 .discourse-tag {
-    color: $endfield-cyan !important; // 标签文字青色
+    color: $endfield-cyan !important; 
 }
 .badge-notification {
-    background-color: $endfield-orange !important; // 通知气泡橙色
+    background-color: $endfield-orange !important; 
     color: #fff !important;
 }
 .select-kit .select-kit-row.is-selected {
