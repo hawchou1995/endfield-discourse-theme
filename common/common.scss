@@ -268,3 +268,12 @@ a:visited { color: $endfield-cyan; }
 .cooked p {
   transition: all 0.3s ease;
 }
+// ============================================
+// 性能优化替代方案 (CSS Replace JS)
+// ============================================
+
+// 替代原 JS 的 decorateCooked 功能，给帖子段落添加过渡动画
+// 性能消耗几乎为 0
+.cooked p {
+  transition: all 0.3s ease;
+}
