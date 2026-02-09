@@ -27,6 +27,7 @@ export default class EndfieldNewTopicButton extends Component {
   }
 
   <template>
+    {{! v2.5 fix }}
     {{#if this.showButton}}
       <div class="endfield-sidebar-new-topic-button-container">
         <DButton
