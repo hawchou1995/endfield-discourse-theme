@@ -280,3 +280,28 @@ a:visited { color: $endfield-cyan; }
 .select-kit .select-kit-row.is-highlighted {
     background-color: rgba(0, 212, 255, 0.05) !important;
 }
+
+// ============================================
+// 修复顶栏通知角标被切角遮挡的问题
+// ============================================
+
+// 针对顶栏的所有图标按钮 (头像、聊天、搜索等)
+.d-header .icons .icon,
+.d-header .header-buttons .btn {
+  // [关键] 移除 clip-path 裁剪，让右上角的角标能完整显示
+  clip-path: none !important; 
+  
+  // 可选：如果你希望保持一点工业感，可以设为直角，或者微圆角
+  border-radius: 0 !important; 
+}
+
+// 针对头像按钮的特殊微调
+#toggle-current-user {
+  // 确保 overflow 不会隐藏溢出的角标 (虽然 clip-path: none 解决了大部分问题，但这行是双保险)
+  overflow: visible !important; 
+  
+  // 确保内部图片和角标的层级正确
+  .badge-notification {
+    z-index: 2; // 提升角标层级
+  }
+}
