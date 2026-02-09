@@ -2,7 +2,7 @@ import { apiInitializer } from "discourse/lib/api";
 
 export default apiInitializer("0.8", (api) => {
   // 控制台日志：验证新代码是否生效
-  console.log("Endfield Theme: Core Systems Online (v2.6 Clean)");
+  console.log("Endfield Theme: Core Systems Online v2.6");
 
   // ============================================
   // 1. 页面加载动画 (Header Slide-in)
