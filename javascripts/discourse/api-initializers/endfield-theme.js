@@ -1,7 +1,8 @@
 import { apiInitializer } from "discourse/lib/api";
 
 export default apiInitializer("0.8", (api) => {
-  console.log("Endfield Theme: Core Systems Online");
+  // 控制台日志：验证新代码是否生效
+  console.log("Endfield Theme: Core Systems Online (v2.6 Clean)");
 
   // ============================================
   // 1. 页面加载动画 (Header Slide-in)
@@ -30,9 +31,6 @@ export default apiInitializer("0.8", (api) => {
   // 2. 全局调度 (Scheduler)
   // ============================================
   api.onPageChange((url) => {
-    // 仅播放头部动画，不再触碰标签云
     playHeaderAnimation();
   });
 });
-
-
