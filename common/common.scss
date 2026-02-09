@@ -1,5 +1,5 @@
 // ============================================
-// 《明日方舟·终末地》 (Endspace Style) - 核心样式 V2.2
+// 《明日方舟·终末地》 (Endspace Style) - 核心样式 V2.3
 // ============================================
 
 // [强制定义颜色变量]
@@ -45,7 +45,6 @@ a {
   &:hover {
     color: lighten($endfield-cyan, 10%);
     text-decoration: none;
-    // 使用 box-shadow 代替 text-shadow 以获得更清晰的边缘
     text-shadow: none; 
   }
 }
@@ -101,13 +100,15 @@ a:visited { color: $endfield-cyan; }
 }
 
 // 3. 导航栏 (HUD 风格)
-// 注意：Header 我们强制深色背景，所以文字保持白色是正确的
+// [核心修复区] 强制深色背景 + 强制白色文字
 .d-header {
-  background: rgba(18, 21, 26, 0.95); // 强制深色
+  background: rgba(18, 21, 26, 0.95); 
   border-bottom: 2px solid $endfield-cyan; 
   box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  
+  // 移除 backdrop-filter 以优化性能 (可选，如果你觉得卡就删掉下面这两行)
+  // backdrop-filter: blur(10px);
+  // -webkit-backdrop-filter: blur(10px);
   
   &::before { 
     content: '';
@@ -116,14 +117,16 @@ a:visited { color: $endfield-cyan; }
     background: linear-gradient(90deg, $endfield-cyan, transparent 20%, transparent 80%, $endfield-cyan);
   }
 
-  .title {
+  // 3.1 站点标题 (Logo)
+  .title a, #site-text-logo {
     font-weight: 800;
     letter-spacing: -0.5px;
-    color: #fff !important; // Header 强制白色文字
+    color: #fff !important; // [修复] 强制白色
   }
   
+  // 3.2 图标
   .icons .icon {
-    color: #fff !important; // Header 图标强制白色
+    color: #fff !important; 
     border: 1px solid transparent;
     &:hover {
       background: rgba(0, 212, 255, 0.1);
@@ -131,6 +134,26 @@ a:visited { color: $endfield-cyan; }
       border-radius: 0;
       .d-icon { color: $endfield-cyan !important; }
     }
+  }
+
+  // 3.3 帖子标题 (滚动时显示)
+  .extra-info-wrapper {
+    .topic-link {
+       color: #fff !important; // [修复] 强制白色
+    }
+    .badge-wrapper.bullet span.badge-category {
+       color: #e0e0e0 !important; // 分类颜色微调
+    }
+  }
+
+  // 3.4 顶栏按钮 (登录/注册)
+  .header-buttons .btn {
+      color: #fff !important;
+      border-color: rgba(255,255,255,0.3);
+      &:hover {
+          border-color: $endfield-cyan;
+          color: $endfield-cyan !important;
+      }
   }
 }
 
@@ -141,7 +164,7 @@ a:visited { color: $endfield-cyan; }
     border: 1px solid $endfield-cyan !important;
     box-shadow: 0 0 8px rgba(0, 212, 255, 0.4), inset 0 0 5px rgba(0, 212, 255, 0.2) !important; 
     background-color: rgba(0,0,0,0.3) !important;
-    color: #fff !important; // 输入文字强制白
+    color: #fff !important; 
     transition: all 0.2s ease;
 }
 
@@ -150,7 +173,6 @@ a:visited { color: $endfield-cyan; }
   border-radius: 0; 
   thead th {
     border-bottom: 2px solid var(--primary-low);
-    // [修复] 使用变量代替硬编码颜色，适配浅色模式
     color: var(--primary-medium); 
     font-size: 0.85em;
     text-transform: uppercase;
@@ -166,7 +188,6 @@ a:visited { color: $endfield-cyan; }
 .rs-component,
 .topic-list {
   background: transparent; 
-  // [修复] 边框颜色适配
   border: 1px solid var(--primary-low);
   box-shadow: none; 
   margin-bottom: 24px;
@@ -185,17 +206,13 @@ a:visited { color: $endfield-cyan; }
   &::before { display: none; } 
 }
 
-// [核心修复点] 侧边栏标题
+// 侧边栏标题
 .sidebar-section-header, 
 .rs-component h3 {
   border-bottom: 1px solid var(--primary-low);
   padding: 10px 15px;
-  background: rgba(0, 212, 255, 0.05); // 极淡青色背景
-  
-  // [关键修改]：从 #fff 改为 var(--primary)
-  // 这样浅色模式下是深色字，深色模式下是浅色字
-  color: var(--primary) !important; 
-  
+  background: rgba(0, 212, 255, 0.05); 
+  color: var(--primary) !important; // 适配深浅色
   font-weight: 700;
   text-transform: uppercase;
   font-size: 0.9em;
@@ -218,16 +235,18 @@ a:visited { color: $endfield-cyan; }
   
   .cooked {
     blockquote {
-      background: var(--primary-very-low); // 适配背景
+      background: var(--primary-very-low); 
       border-left: 4px solid $endfield-cyan;
-      color: var(--primary); // 适配文字
+      color: var(--primary); 
     }
     pre code {
-      background: #1e1e1e; // 代码块保持深色
+      background: #1e1e1e; 
       border: 1px solid #333;
       color: $endfield-cyan;
       border-radius: 0;
     }
+    // 替代原 JS 的 decorateCooked 功能
+    p { transition: all 0.3s ease; }
   }
 }
 
@@ -260,20 +279,4 @@ a:visited { color: $endfield-cyan; }
 }
 .select-kit .select-kit-row.is-highlighted {
     background-color: rgba(0, 212, 255, 0.05) !important;
-}
-
-// common/common.scss 追加到文件末尾
-
-// 替代原 JS 的 decorateCooked 功能，性能提升 100倍
-.cooked p {
-  transition: all 0.3s ease;
-}
-// ============================================
-// 性能优化替代方案 (CSS Replace JS)
-// ============================================
-
-// 替代原 JS 的 decorateCooked 功能，给帖子段落添加过渡动画
-// 性能消耗几乎为 0
-.cooked p {
-  transition: all 0.3s ease;
 }
