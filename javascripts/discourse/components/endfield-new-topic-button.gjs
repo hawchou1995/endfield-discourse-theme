@@ -44,4 +44,3 @@ export default class EndfieldNewTopicButton extends Component {
   </template>
 }
 
-{{! Force refresh }}
