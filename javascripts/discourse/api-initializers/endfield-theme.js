@@ -34,25 +34,4 @@ export default apiInitializer("0.8", (api) => {
     addPageLoadAnimation();
   });
 
-  // ============================================
-  // 自定义装饰器 (decorateCooked)
-  // ============================================
-  api.decorateCooked(
-    (elem) => {
-      // 🛠️ 【核心修复】兼容性处理
-      // Discourse 可能会传入 jQuery 对象或原生 DOM 节点
-      // 如果是 jQuery 对象 (elem.jquery 存在)，则取第一个元素转为原生节点
-      const domNode = elem.jquery ? elem[0] : elem;
 
-      // 防御性编程：如果节点无效，直接返回，防止报错
-      if (!domNode) return;
-
-      // 现在 domNode 必定是原生元素，可以安全使用 querySelectorAll
-      const paragraphs = domNode.querySelectorAll('p');
-      paragraphs.forEach((p) => {
-        p.style.transition = 'all 0.3s ease';
-      });
-    },
-    { onlyStream: true }
-  );
-});
