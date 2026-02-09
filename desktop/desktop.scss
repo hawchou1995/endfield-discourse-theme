@@ -152,24 +152,25 @@ html.desktop-view .navigation-controls {
   }
 }
 
-// =======================================================
-// 3. 列表交互增强 (Dynamic Hover Effect)
-// 核心效果：从左向右平滑填满
-// =======================================================
+// ============================================
+// 列表交互增强 - 鲜明动态填充版 (Vivid Dynamic Fill)
+// ============================================
 
 .topic-list tbody tr {
   position: relative;
   
-  // 定义背景：初始宽度为0的线性渐变
-  // 使用 var(--primary-very-low) 作为高亮色
-  background-image: linear-gradient(to right, var(--primary-very-low), var(--primary-very-low));
+  // 1. 定义背景：使用主题强调色(蓝色)的低透明度版本
+  // opacity 为 0.15 (15%)，这通常足够鲜明但不会影响文字阅读
+  // 无论亮色/暗色模式，这个蓝色背景都会比较突出
+  background-image: linear-gradient(to right, rgba(var(--tertiary-rgb), 0.15), rgba(var(--tertiary-rgb), 0.15));
+  
   background-repeat: no-repeat;
   background-size: 0% 100%; // 初始状态：宽度0
   
   // 动画曲线：模拟机械启动感
   transition: background-size 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.1s ease;
   
-  // 预留左侧光条位置，防止跳动
+  // 预留左侧光条位置
   border-left: 0; 
   box-shadow: inset 0 0 0 var(--tertiary); 
 
@@ -177,13 +178,13 @@ html.desktop-view .navigation-controls {
     // 悬停状态：背景宽度撑满
     background-size: 100% 100% !important; 
     
-    // 左侧亮起 4px 宽的蓝色光条
+    // 左侧亮起 4px 宽的实心蓝色光条
     box-shadow: inset 4px 0 0 var(--tertiary) !important;
     
     cursor: pointer;
   }
   
-  // 确保单元格背景透明，否则会挡住 tr 的背景动画
+  // 确保单元格背景透明
   td {
     background-color: transparent !important;
   }
