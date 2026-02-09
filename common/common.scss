@@ -1,30 +1,34 @@
 // ============================================
-// 《明日方舟·终末地》Discourse主题 - 核心样式 V2.1
+// 《明日方舟·终末地》 (Endspace Style) - 核心样式
 // ============================================
 
-$endfield-blue: #00D4FF;
-$endfield-orange: #FF6B35; 
+// [强制定义颜色变量]
+$endfield-cyan: #00D4FF;  // 终端青
+$endfield-orange: #FF6B35; // 警示橙
+$endfield-dark-bg: #12151A; // 深色背景
 
 // 1. 全局基础
 body {
   background-color: var(--secondary);
-  // 技术网格背景
+  // 网格背景
   background-image: 
-    linear-gradient(90deg, var(--primary-very-low) 1px, transparent 1px),
-    linear-gradient(180deg, var(--primary-very-low) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255,255,255,0.03) 1px, transparent 1px);
   background-size: 40px 40px; 
   background-attachment: fixed;
   
-  // [新增] 优化字体栈，优先使用工业感无衬线字体
-  font-family: "Roboto", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  // [字体] Endspace 风格等宽/工业字体
+  font-family: "JetBrains Mono", "Roboto Mono", "Segoe UI", sans-serif;
 }
 
+// 链接颜色：强制青色
 a {
-  color: var(--tertiary);
+  color: $endfield-cyan;
   transition: all 0.2s ease;
   &:hover {
-    color: var(--tertiary-hover);
+    color: lighten($endfield-cyan, 10%);
     text-decoration: none;
+    text-shadow: 0 0 8px rgba(0, 212, 255, 0.6); // 发光效果
   }
 }
 
@@ -50,38 +54,37 @@ a {
   position: relative;
   
   &.btn-primary {
-    background: var(--tertiary);
-    color: var(--secondary);
+    background: $endfield-cyan;
+    color: #000; // 青色背景配黑色文字对比度更高
     &:hover {
-      background: var(--tertiary-hover);
+      background: lighten($endfield-cyan, 10%);
       transform: translateX(2px);
     }
-    &::after { // 装饰性小方块
+    &::after { 
       content: '';
       position: absolute;
       bottom: 0; right: 0; width: 5px; height: 5px;
-      background: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.8);
     }
   }
   
   &.btn-default {
-    background: var(--primary-low);
+    background: transparent;
     color: var(--primary);
-    border: 1px solid var(--primary-low-mid);
-    &:hover { background: var(--primary-low-mid); }
+    border: 1px solid rgba(255,255,255,0.2);
+    &:hover { 
+        background: rgba(255,255,255,0.05); 
+        border-color: $endfield-cyan;
+        color: $endfield-cyan;
+    }
   }
 }
 
-// 3. 导航栏 (HUD 风格 + 磨砂玻璃)
+// 3. 导航栏 (HUD 风格)
 .d-header {
-  // [修改] 增加透明度以配合模糊效果
-  background: rgba(var(--header_background_rgb), 0.85); 
-  // 如果没有rgb变量，可能会回退到默认色，建议在 about.json 确保 header_background 设置
-  
-  border-bottom: 2px solid var(--tertiary);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  
-  // [新增] 磨砂玻璃效果
+  background: rgba(18, 21, 26, 0.9); // 强制深色半透明
+  border-bottom: 2px solid $endfield-cyan; // 青色底边
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   
@@ -89,32 +92,34 @@ a {
     content: '';
     position: absolute;
     top: 0; left: 0; width: 100%; height: 2px;
-    background: linear-gradient(90deg, $endfield-blue, transparent 20%, transparent 80%, $endfield-blue);
+    background: linear-gradient(90deg, $endfield-cyan, transparent 20%, transparent 80%, $endfield-cyan);
   }
 
   .title {
     font-weight: 800;
     letter-spacing: -0.5px;
+    color: #fff;
   }
   
   .icons .icon {
+    color: #fff;
     border: 1px solid transparent;
     &:hover {
-      background: var(--primary-low);
-      border: 1px solid var(--tertiary);
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid $endfield-cyan;
       border-radius: 0;
+      .d-icon { color: $endfield-cyan; }
     }
   }
 }
 
-// [新增] 搜索框发光优化
+// 搜索框发光：强制青色
 .search-menu .search-input:focus, 
 .d-header .search-input:focus {
     outline: none;
-    border: 1px solid var(--tertiary) !important;
-    // 锐利的蓝色光晕
+    border: 1px solid $endfield-cyan !important;
     box-shadow: 0 0 8px rgba(0, 212, 255, 0.4), inset 0 0 5px rgba(0, 212, 255, 0.2) !important; 
-    background-color: var(--secondary) !important;
+    background-color: rgba(0,0,0,0.3) !important;
     transition: all 0.2s ease;
 }
 
@@ -122,13 +127,13 @@ a {
 .topic-list {
   border-radius: 0; 
   thead th {
-    border-bottom: 2px solid var(--primary-low-mid);
-    color: var(--primary-medium);
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+    color: #aaa;
     font-size: 0.85em;
     text-transform: uppercase;
   }
   tbody tr {
-    border-bottom: 1px solid var(--primary-low);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
   }
   .main-link { font-weight: 600; }
   .badge-category-bg { border-radius: 2px; }
@@ -137,85 +142,78 @@ a {
 .sidebar-section, 
 .rs-component,
 .topic-list {
-  background: var(--secondary);
-  border: 1px solid var(--primary-low);
-  box-shadow: 4px 4px 0 var(--primary-low);
+  background: rgba(255,255,255,0.02); // 极淡的背景
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: none; // 移除硬阴影，改用发光边框效果(可选)
   margin-bottom: 24px;
   position: relative;
   
-  &::before { // 橙色装饰角
-    content: '';
-    position: absolute;
-    top: -1px; left: -1px; width: 10px; height: 10px;
-    border-top: 2px solid $endfield-orange;
-    border-left: 2px solid $endfield-orange;
-    z-index: 1;
-  }
+  // [新增] 角标装饰 (Endspace 特征)
+  background-image: 
+    linear-gradient(to right, $endfield-cyan 2px, transparent 2px),
+    linear-gradient(to bottom, $endfield-cyan 2px, transparent 2px),
+    linear-gradient(to left, $endfield-cyan 2px, transparent 2px),
+    linear-gradient(to top, $endfield-cyan 2px, transparent 2px);
+  background-position: top left, top left, bottom right, bottom right;
+  background-size: 8px 8px;
+  background-repeat: no-repeat;
+  
+  &::before { display: none; } // 移除旧的橙色角，改用上面的青色四角
 }
 
 .sidebar-section-header, 
 .rs-component h3 {
-  border-bottom: 1px solid var(--primary-low);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
   padding: 10px 15px;
-  background: var(--primary-very-low);
-  color: var(--primary);
+  background: rgba(0, 212, 255, 0.05);
+  color: #fff;
   font-weight: 700;
   text-transform: uppercase;
   font-size: 0.9em;
   letter-spacing: 1px;
-  border-left: 4px solid var(--tertiary); 
+  border-left: 4px solid $endfield-cyan; 
 }
 
 // 5. 帖子详情
 .topic-post {
-  border-left: 1px solid var(--primary-low);
+  border-left: 1px solid rgba(255,255,255,0.1);
   &:first-of-type { border-left: 3px solid $endfield-orange; }
   
   .topic-avatar {
     border-top: none;
     .avatar {
       border-radius: 4px;
-      border: 2px solid var(--primary-low);
+      border: 2px solid rgba(255,255,255,0.1);
     }
   }
   
   .cooked {
     blockquote {
-      background: var(--primary-very-low);
-      border-left: 4px solid var(--tertiary);
-      color: var(--primary);
-      &::before { color: var(--tertiary); }
+      background: rgba(0, 212, 255, 0.05);
+      border-left: 4px solid $endfield-cyan;
+      color: #ddd;
     }
     pre code {
-      background: #1e1e1e;
-      color: #d4d4d4;
-      border-radius: 4px;
+      background: #000;
+      border: 1px solid #333;
+      color: $endfield-cyan;
+      border-radius: 0;
     }
   }
 }
 
-// 6. 其他
-#search-button {
-  background: transparent;
-  &:hover { background: var(--primary-low); }
-}
-.search-menu .search-context {
-  background: var(--secondary);
-  border: 1px solid var(--tertiary);
-}
-
-// [新增] 工业风格滚动条
+// 6. 滚动条 (Endspace 青色风格)
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-    background: var(--secondary);
+    width: 6px;
+    height: 6px;
+    background: #111;
 }
 ::-webkit-scrollbar-thumb {
-    background-color: var(--tertiary); 
-    border-radius: 0; // 强制直角
-    &:hover { background-color: var(--tertiary-hover); }
+    background-color: $endfield-cyan; 
+    border-radius: 0; 
+    &:hover { background-color: #fff; }
 }
 ::-webkit-scrollbar-track {
-    background: var(--primary-very-low);
-    border-left: 1px solid var(--primary-low);
+    background: #222;
+    border-left: 1px solid #333;
 }
