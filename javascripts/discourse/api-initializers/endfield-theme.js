@@ -34,4 +34,4 @@ export default apiInitializer("0.8", (api) => {
     addPageLoadAnimation();
   });
 
-
+}); // <--- 关键：这里必须有这个闭合括号，之前报错就是因为缺了这个
