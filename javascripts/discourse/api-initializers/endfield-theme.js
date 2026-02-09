@@ -1,37 +1,36 @@
 import { apiInitializer } from "discourse/lib/api";
 
 export default apiInitializer("0.8", (api) => {
-  // ============================================
-  // 主题初始化日志
-  // ============================================
-  console.log("Endfield Theme initialized");
+  console.log("Endfield Theme: Core Systems Online");
 
   // ============================================
-  // 页面加载动画逻辑
+  // 1. 页面加载动画 (Header Slide-in)
   // ============================================
-  const addPageLoadAnimation = () => {
-    // 使用 requestAnimationFrame 确保 DOM 已准备好
+  const playHeaderAnimation = () => {
     requestAnimationFrame(() => {
-      const content = document.querySelector('.d-header');
-      if (content) {
-        content.style.opacity = '0';
-        content.style.transform = 'translateY(-20px)';
-        content.style.transition = 'all 0.5s ease';
+      const header = document.querySelector('.d-header');
+      if (header) {
+        // 重置状态以支持页面切换时的重复播放
+        header.style.transition = 'none';
+        header.style.opacity = '0';
+        header.style.transform = 'translateY(-20px)';
         
-        setTimeout(() => {
-          content.style.opacity = '1';
-          content.style.transform = 'translateY(0)';
-        }, 100);
+        // 强制重绘
+        void header.offsetWidth;
+
+        // 播放动画
+        header.style.transition = 'all 0.5s cubic-bezier(0.22, 0.61, 0.36, 1)';
+        header.style.opacity = '1';
+        header.style.transform = 'translateY(0)';
       }
     });
   };
 
   // ============================================
-  // 监听页面切换
+  // 2. 全局调度 (Scheduler)
   // ============================================
   api.onPageChange((url) => {
-    console.log("Endfield Theme: Page changed to", url);
-    addPageLoadAnimation();
+    // 仅播放头部动画，不再触碰标签云
+    playHeaderAnimation();
   });
-
-}); // <--- 关键：这里必须有这个闭合括号，之前报错就是因为缺了这个
+});
