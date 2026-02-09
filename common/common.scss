@@ -305,3 +305,25 @@ a:visited { color: $endfield-cyan; }
     z-index: 2; // 提升角标层级
   }
 }
+
+// ============================================
+// 修复话题底部统计数据被切角遮挡的问题
+// ============================================
+
+.topic-map__stats .btn {
+  // [关键] 移除切角，让内容完整显示
+  clip-path: none !important;
+  
+  // 恢复圆角 (可选，如果你喜欢直角可以设为 0)
+  border-radius: 4px !important;
+  
+  // 移除为了切角而设定的背景色，保持透明或原样
+  // (通常统计按钮是透明背景，如果 Endfield 主题给它加了背景色导致突兀，这里可以重置)
+  background: transparent !important; 
+  border: none !important;
+  
+  // 确保数字颜色正确
+  .number, .topic-map__stat-label {
+      color: var(--primary-high-or-secondary-low) !important;
+  }
+}
