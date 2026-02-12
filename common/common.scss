@@ -453,3 +453,56 @@ a:visited { color: $endfield-cyan; }
     }
   }
 }
+
+// ============================================
+// 8. 顶栏标签 (Tag Box) 深度美化 & 浅色适配
+// ============================================
+
+.discourse-tag.box {
+  // [核心] 强制覆盖默认样式，统一战术外观
+  border-radius: 0 !important; // 切角
+  border: 1px solid transparent; // 预留边框
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  
+  // 基础状态（适配浅色/深色）
+  // 浅色模式下：背景变浅，文字深
+  // 深色模式下：背景变深，文字浅
+  background-color: var(--primary-very-low) !important;
+  color: var(--primary) !important;
+  border-color: var(--primary-low) !important;
+  
+  transition: all 0.2s ease;
+
+  // 图标颜色修正
+  .d-icon {
+    color: inherit !important; // 跟随文字颜色
+    opacity: 0.7;
+  }
+
+  // 悬停状态
+  &:hover {
+    background-color: $endfield-cyan !important;
+    color: #000 !important; // 悬停变黑字
+    border-color: $endfield-cyan !important;
+    text-decoration: none;
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
+    
+    .d-icon { opacity: 1; }
+  }
+}
+
+// 针对带有特定颜色样式的标签 (如精华神帖)
+// 我们保留它的颜色作为左侧边框或文字颜色，而不是背景，这样更干净
+.discourse-tag.box.discourse-tag--tag-icons-style {
+  // 使用 --color1 变量作为边框色
+  border-left: 3px solid var(--color1, var(--tertiary)) !important;
+  padding-left: 8px !important;
+  
+  // 如果你希望文字也带颜色（非悬停时）
+  // color: var(--color1, var(--primary)) !important; 
+  
+  // 或者是保持背景色但加个遮罩？
+  // 推荐保持上面的“干净版”：淡色背景 + 彩色左边框
+}
