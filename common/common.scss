@@ -329,7 +329,7 @@ a:visited { color: $endfield-cyan; }
 }
 
 // ============================================
-// Endfield 导航系统 (Tactical Control Bar)
+// Endfield 导航系统 (Tactical Control Bar) - V2.0
 // ============================================
 
 .navigation-container {
@@ -350,18 +350,20 @@ a:visited { color: $endfield-cyan; }
     background: $endfield-cyan; // 高亮色
   }
 
-  // 2. 分类面包屑 (下拉菜单)
+  // 2. 分类面包屑 (Category Dropdowns)
   .category-breadcrumb {
     .select-kit.combobox {
       .select-kit-header {
-        background: rgba(18, 21, 26, 0.6); // 深色玻璃背景
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        // [优化] 自适应背景：使用变量适配深浅色
+        background: var(--secondary); 
+        border: 1px solid var(--primary-low);
         border-radius: 0 !important; // 强制直角
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         
         .name {
           font-weight: 700;
           letter-spacing: 0.5px;
-          color: #eee; // 浅色文字
+          color: var(--primary); // 自适应文字颜色
         }
       }
 
@@ -369,20 +371,21 @@ a:visited { color: $endfield-cyan; }
       &.is-expanded .select-kit-header,
       .select-kit-header:hover {
         border-color: $endfield-cyan;
-        background: rgba(0, 212, 255, 0.05);
+        background: rgba(0, 212, 255, 0.05); // 极淡的青色背景
         .d-icon { color: $endfield-cyan; }
+        .name { color: var(--primary); }
       }
     }
   }
 
-  // 3. 导航药丸 (最新, 热门...)
+  // 3. 导航药丸 (Latest, Hot, etc.)
   .nav-pills {
     & > li > a {
-      border: 1px solid transparent; // 预留边框位
+      border: 1px solid transparent; 
       border-radius: 0 !important; // 锐利边缘
       padding: 6px 12px;
       margin-right: 4px;
-      font-family: "JetBrains Mono", monospace; // 战术字体
+      font-family: "JetBrains Mono", monospace; 
       font-size: 0.9em;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -391,9 +394,9 @@ a:visited { color: $endfield-cyan; }
       
       // 默认悬停
       &:hover {
-        background: rgba(255, 255, 255, 0.05);
+        background: var(--primary-low);
         color: var(--primary);
-        border-color: rgba(255, 255, 255, 0.2);
+        border-color: var(--primary-low);
       }
     }
 
@@ -420,7 +423,7 @@ a:visited { color: $endfield-cyan; }
     }
   }
 
-  // 4. 右侧控制区 (新建话题按钮)
+  // 4. 右侧控制区 (Create Topic Button)
   .navigation-controls {
     .btn {
       border-radius: 0;
