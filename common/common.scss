@@ -445,3 +445,30 @@ a:visited { color: $endfield-cyan; }
     }
   }
 }
+
+// ============================================
+// 11. 修复话题底部统计数据被切角遮挡的问题
+// ============================================
+
+.topic-map__stats .btn {
+  // [核心修复] 强制移除切角，让文字完整显示
+  clip-path: none !important;
+  
+  // 恢复正常布局
+  border-radius: 4px !important; // 微圆角或设为 0 (直角)
+  background: transparent !important; // 移除背景色，保持干净
+  border: none !important; // 移除边框
+  padding: 5px 10px !important; // 增加一点内边距，防止太挤
+  
+  // 悬停效果微调
+  &:hover {
+    background: var(--primary-low) !important;
+    transform: none !important; // 禁用位移效果
+    box-shadow: none !important;
+  }
+  
+  // 确保文字颜色正确
+  .number, .topic-map__stat-label {
+      color: var(--primary-high-or-secondary-low);
+  }
+}
