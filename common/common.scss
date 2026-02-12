@@ -273,15 +273,19 @@ a:visited { color: $endfield-cyan; }
 .discourse-tag {
     color: $endfield-cyan !important; 
 }
+
 .badge-notification {
+    // 默认样式 (用于数字角标，如未读数)：保持橙底白字
     background-color: $endfield-orange !important; 
     color: #fff !important;
-}
-.select-kit .select-kit-row.is-selected {
-    background-color: rgba(0, 212, 255, 0.1) !important;
-}
-.select-kit .select-kit-row.is-highlighted {
-    background-color: rgba(0, 212, 255, 0.05) !important;
+
+    // [修复] 针对“新话题”小圆点的特殊处理
+    &.new-topic {
+        background-color: transparent !important; /* 去掉橙色背景 */
+        color: $endfield-cyan !important;         /* 将圆点改为终端青色，保持风格统一 */
+        // color: #00aeff !important;             /* 如果你更喜欢原来的蓝色，用这行 */
+        padding: 0 !important;                    /* 移除多余内边距 */
+    }
 }
 
 // ============================================
