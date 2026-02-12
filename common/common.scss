@@ -327,3 +327,119 @@ a:visited { color: $endfield-cyan; }
       color: var(--primary-high-or-secondary-low) !important;
   }
 }
+
+// ============================================
+// Endfield 导航系统 (Tactical Control Bar)
+// ============================================
+
+.navigation-container {
+  // 1. 容器样式：HUD 导轨
+  position: relative;
+  margin-bottom: 15px;
+  padding: 10px 0;
+  border-bottom: 2px solid rgba(0, 212, 255, 0.15); // 淡青色导轨
+  
+  // 左侧装饰性“端盖”
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 20px;
+    height: 4px;
+    background: $endfield-cyan; // 高亮色
+  }
+
+  // 2. 分类面包屑 (下拉菜单)
+  .category-breadcrumb {
+    .select-kit.combobox {
+      .select-kit-header {
+        background: rgba(18, 21, 26, 0.6); // 深色玻璃背景
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 0 !important; // 强制直角
+        
+        .name {
+          font-weight: 700;
+          letter-spacing: 0.5px;
+          color: #eee; // 浅色文字
+        }
+      }
+
+      // 悬停/展开状态
+      &.is-expanded .select-kit-header,
+      .select-kit-header:hover {
+        border-color: $endfield-cyan;
+        background: rgba(0, 212, 255, 0.05);
+        .d-icon { color: $endfield-cyan; }
+      }
+    }
+  }
+
+  // 3. 导航药丸 (最新, 热门...)
+  .nav-pills {
+    & > li > a {
+      border: 1px solid transparent; // 预留边框位
+      border-radius: 0 !important; // 锐利边缘
+      padding: 6px 12px;
+      margin-right: 4px;
+      font-family: "JetBrains Mono", monospace; // 战术字体
+      font-size: 0.9em;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary-medium);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      
+      // 默认悬停
+      &:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--primary);
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    // 激活状态 (Selected)
+    & > li.active > a,
+    & > li > a.active {
+      background: $endfield-cyan !important; // 激活背景
+      color: #000 !important; // 青底黑字
+      border-color: $endfield-cyan;
+      font-weight: 800;
+      
+      // 小切角装饰
+      clip-path: polygon(
+        0 0, 
+        100% 0, 
+        100% calc(100% - 6px), 
+        calc(100% - 6px) 100%, 
+        0 100%
+      );
+      
+      &:hover {
+        background: lighten($endfield-cyan, 10%) !important;
+      }
+    }
+  }
+
+  // 4. 右侧控制区 (新建话题按钮)
+  .navigation-controls {
+    .btn {
+      border-radius: 0;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    // 让“新建话题”按钮更显眼
+    #create-topic {
+      background: $endfield-orange; // 主操作色
+      color: #fff;
+      border: none;
+      
+      &:hover {
+        background: lighten($endfield-orange, 10%);
+        box-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
+      }
+      
+      .d-icon { color: #fff; }
+    }
+  }
+}
