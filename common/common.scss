@@ -1,11 +1,11 @@
 /* ============================================
-   Font: JetBrains Mono (Loli.net Mirror)
-   [优化] 引入更多字重 (400-800) 以解决“单薄”问题
+   Fonts: Rajdhani (Tech/Sci-Fi) + Noto Sans SC (Solid Chinese)
+   [优化] 更加硬核、得劲儿的字体组合
    ============================================ */
-@import url('https://fonts.loli.net/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.loli.net/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Rajdhani:wght@500;600;700&display=swap');
 
 // ============================================
-// 《明日方舟·终末地》 (Endspace Style) - 核心样式 V4.1 (Heavy Duty)
+// 《明日方舟·终末地》 (Endspace Style) - 核心样式 V5.0 (Font Overhaul)
 // ============================================
 
 // [强制定义颜色变量]
@@ -41,18 +41,19 @@ body {
   background-size: 40px 40px; 
   background-attachment: fixed;
   
-  font-family: "JetBrains Mono", Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace, sans-serif;
+  // [核心] 字体大换血：Rajdhani (英文/数字) + Noto Sans SC (中文)
+  font-family: "Rajdhani", "Noto Sans SC", "Microsoft YaHei", sans-serif;
   
-  // [核心修复] 全局字体增重
-  font-weight: 500; // 默认使用中等字重，拒绝细体
-  -webkit-font-smoothing: antialiased; // 让字体边缘更清晰锐利
+  // 默认字重加粗，拒绝软绵绵
+  font-weight: 500; 
+  -webkit-font-smoothing: antialiased;
 }
 
 // 链接颜色
 a {
   color: $endfield-cyan;
   transition: all 0.2s ease;
-  font-weight: 600; // 链接稍微加粗
+  font-weight: 600; 
   &:hover {
     color: lighten($endfield-cyan, 10%);
     text-decoration: none;
@@ -79,7 +80,8 @@ a:visited { color: $endfield-cyan; }
   @include endfield-cut-corner;
   border: none;
   text-transform: uppercase;
-  font-weight: 700; // 按钮文字加粗
+  font-family: "Rajdhani", "Noto Sans SC", sans-serif; // 按钮使用硬核字体
+  font-weight: 700; 
   letter-spacing: 0.5px;
   position: relative;
   
@@ -126,9 +128,12 @@ a:visited { color: $endfield-cyan; }
 
   // Logo
   .title a, #site-text-logo {
-    font-weight: 800; // Logo 特粗
-    letter-spacing: -0.5px;
+    font-family: "Rajdhani", "Noto Sans SC", sans-serif; // Logo 字体
+    font-weight: 800 !important; // 特粗
+    letter-spacing: 0px; // Rajdhani 紧凑才好看
     color: #fff !important; 
+    font-size: 1.2em; // 稍微加大
+    text-transform: uppercase;
   }
   
   // 图标
@@ -147,8 +152,15 @@ a:visited { color: $endfield-cyan; }
 
   // 帖子标题
   .extra-info-wrapper {
-    .topic-link { color: #fff !important; font-weight: 700; }
-    .badge-wrapper.bullet span.badge-category { color: #e0e0e0 !important; font-weight: 600; }
+    .topic-link { 
+        color: #fff !important; 
+        font-family: "Rajdhani", "Noto Sans SC", sans-serif;
+        font-weight: 700; 
+    }
+    .badge-wrapper.bullet span.badge-category { 
+        color: #e0e0e0 !important; 
+        font-weight: 600; 
+    }
   }
 
   // 登录按钮
@@ -171,6 +183,7 @@ a:visited { color: $endfield-cyan; }
     box-shadow: 0 0 8px rgba(0, 212, 255, 0.4), inset 0 0 5px rgba(0, 212, 255, 0.2) !important; 
     background-color: rgba(0,0,0,0.3) !important;
     color: #fff !important; 
+    font-family: "Rajdhani", "Noto Sans SC", sans-serif;
     font-weight: 600;
     transition: all 0.2s ease;
 }
@@ -181,16 +194,20 @@ a:visited { color: $endfield-cyan; }
   thead th {
     border-bottom: 2px solid var(--primary-low);
     color: var(--primary-medium); 
-    font-size: 0.85em;
+    font-size: 0.9em;
     text-transform: uppercase;
-    font-weight: 700; // 表头加粗
+    font-family: "Rajdhani", "Noto Sans SC", sans-serif;
+    font-weight: 700; 
+    letter-spacing: 1px;
   }
   tbody tr {
     border-bottom: 1px solid var(--primary-low);
   }
   .main-link { 
+      font-family: "Noto Sans SC", sans-serif; // 中文标题用思源黑体
       font-weight: 700 !important; // 话题标题加粗
-      font-size: 1.05em; // 稍微加大一点
+      font-size: 1.1em; // 加大
+      letter-spacing: 0.2px;
   }
   .badge-category-bg { border-radius: 2px; }
 }
@@ -222,10 +239,11 @@ a:visited { color: $endfield-cyan; }
   padding: 10px 15px;
   background: rgba(0, 212, 255, 0.05); 
   color: var(--primary) !important; 
+  font-family: "Rajdhani", "Noto Sans SC", sans-serif;
   font-weight: 800 !important; // 侧边栏标题特粗
   text-transform: uppercase;
-  font-size: 0.9em;
-  letter-spacing: 1px;
+  font-size: 1em;
+  letter-spacing: 1.5px; // 宽间距增加科技感
   border-left: 4px solid $endfield-cyan; 
 }
 
@@ -243,7 +261,8 @@ a:visited { color: $endfield-cyan; }
   }
   
   .cooked {
-    font-weight: 500; // 正文内容加粗
+    font-weight: 500; // 正文内容中等粗细，易读且有力
+    line-height: 1.6;
     
     blockquote {
       background: var(--primary-very-low); 
@@ -255,6 +274,7 @@ a:visited { color: $endfield-cyan; }
       border: 1px solid #333;
       color: $endfield-cyan;
       border-radius: 0;
+      font-family: "JetBrains Mono", monospace; // 代码块保留等宽字体
       font-weight: 500;
     }
     p { transition: all 0.3s ease; }
@@ -280,13 +300,15 @@ a:visited { color: $endfield-cyan; }
 // 7. 特殊组件
 .discourse-tag {
     color: $endfield-cyan !important; 
-    font-weight: 600;
+    font-family: "Rajdhani", "Noto Sans SC", sans-serif;
+    font-weight: 700;
 }
 
 // 通知角标
 .badge-notification {
     background-color: $endfield-orange !important; 
     color: #fff !important;
+    font-family: "Rajdhani", sans-serif;
     font-weight: 700;
 
     // 新话题小蓝点
@@ -321,6 +343,7 @@ a:visited { color: $endfield-cyan; }
   
   .number, .topic-map__stat-label {
       color: var(--primary-high-or-secondary-low) !important;
+      font-family: "Rajdhani", "Noto Sans SC", sans-serif;
       font-weight: 600;
   }
 }
@@ -335,8 +358,8 @@ a:visited { color: $endfield-cyan; }
   background-color: var(--secondary) !important;
   color: var(--primary) !important;
   
-  font-family: "JetBrains Mono", monospace;
-  font-weight: 700 !important; // 标签文字加粗到 700
+  font-family: "Rajdhani", "Noto Sans SC", sans-serif;
+  font-weight: 700 !important; 
   letter-spacing: 0.5px;
   padding: 4px 8px !important; 
   transition: all 0.2s ease;
@@ -388,6 +411,7 @@ a:visited { color: $endfield-cyan; }
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     
     .name {
+      font-family: "Rajdhani", "Noto Sans SC", sans-serif;
       font-weight: 800 !important; // 分类名特粗
       letter-spacing: 0.5px;
       color: var(--primary) !important; 
@@ -412,16 +436,16 @@ a:visited { color: $endfield-cyan; }
     border-radius: 0 !important; 
     padding: 6px 12px;
     margin-right: 4px;
-    font-family: "JetBrains Mono", monospace; 
-    font-size: 0.9em;
+    font-family: "Rajdhani", "Noto Sans SC", sans-serif; // 战术字体
+    font-size: 1em; // 加大字号
     text-transform: uppercase;
     letter-spacing: 0.5px;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     
     // [High-Contrast Fix] 未选中状态
     color: var(--primary) !important; 
-    font-weight: 600 !important; // 导航按钮加粗
-    opacity: 0.85; // 提高不透明度，让它更实
+    font-weight: 700 !important; // 加粗
+    opacity: 0.85; 
     background: var(--primary-very-low); 
 
     &:hover {
@@ -438,7 +462,7 @@ a:visited { color: $endfield-cyan; }
     background: $endfield-cyan !important; 
     color: #000 !important; 
     border-color: $endfield-cyan;
-    font-weight: 800 !important; // 激活状态特粗
+    font-weight: 800 !important; // 激活特粗
     opacity: 1;
     clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
     
@@ -451,14 +475,15 @@ a:visited { color: $endfield-cyan; }
   .navigation-controls .btn {
     border-radius: 0;
     text-transform: uppercase;
-    font-weight: 700;
+    font-family: "Rajdhani", "Noto Sans SC", sans-serif;
+    font-weight: 800; // 特粗
   }
   
   .navigation-controls #create-topic {
     background: $endfield-orange; 
     color: #fff;
     border: none;
-    font-weight: 800; // 发帖按钮特粗
+    font-weight: 800; 
     &:hover {
       background: lighten($endfield-orange, 10%);
       box-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
