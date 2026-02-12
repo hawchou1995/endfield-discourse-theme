@@ -4,7 +4,7 @@
 @import url('https://fonts.loli.net/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Rajdhani:wght@500;600;700&display=swap');
 
 // ============================================
-// 《明日方舟·终末地》 (Endspace Style) - V5.1 Final Fix
+// 《明日方舟·终末地》 (Endspace Style) - V5.2 Icon Fix
 // ============================================
 
 $endfield-cyan: #00D4FF; 
@@ -209,7 +209,7 @@ a:visited { color: $endfield-cyan; }
 
 // ============================================
 // 8. 顶栏标签 (Tag Box)
-// [修复 2] 标签图标可见度修复
+// [修复 2] 悬停时：青色底 + 黑色字 + 橙色图标 (青橙撞色)
 // ============================================
 .discourse-tag.box {
   border-radius: 0 !important; border: 1px solid var(--primary-low) !important;
@@ -219,19 +219,21 @@ a:visited { color: $endfield-cyan; }
 
   .d-icon { color: var(--primary-medium) !important; opacity: 0.8; }
 
-  // [Fix] 悬停状态：实心青底 + 黑字 + 黑图标
+  // [Fix] 悬停状态
   &:hover {
-    background-color: $endfield-cyan !important;
-    color: #000 !important; 
+    background-color: $endfield-cyan !important; // 背景：青色
+    color: #000 !important;                      // 文字：黑色
     border-color: $endfield-cyan !important;
     text-decoration: none;
     box-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
     
-    // 强制所有 SVG 图标变黑
-    .d-icon, .tag-icon svg { 
-        color: #000 !important; 
-        fill: #000 !important; /* 针对某些 path 填充的图标 */
+    // [关键] 强制图标变为 终端橙色，形成强烈对比
+    .d-icon, .tag-icon svg, .tag-icon use { 
+        color: $endfield-orange !important; 
+        fill: $endfield-orange !important; 
+        stroke: $endfield-orange !important;
         opacity: 1; 
+        filter: drop-shadow(0 0 2px rgba(0,0,0,0.5)); // 给橙色图标加一点阴影，防与青色融合
     }
   }
 }
@@ -243,8 +245,6 @@ a:visited { color: $endfield-cyan; }
 
 // ============================================
 // 9. Endfield 导航系统 (Tactical Nav)
-// [修复 1] 下拉框悬停可见度
-// [修复 3] 下拉列表间距压缩
 // ============================================
 .navigation-container {
   position: relative; margin-bottom: 15px; padding: 10px 0; border-bottom: 2px solid rgba(0, 212, 255, 0.15); 
@@ -258,43 +258,26 @@ a:visited { color: $endfield-cyan; }
         .d-icon { color: var(--primary-medium); }
       }
 
-      // [Fix] 悬停/展开：实心青底 + 黑字
       &.is-expanded .select-kit-header,
       .select-kit-header:hover {
         border-color: $endfield-cyan !important;
-        background: $endfield-cyan !important; // 实心背景，解决深色模式看不清
+        background: $endfield-cyan !important; 
         box-shadow: 0 0 8px rgba(0, 212, 255, 0.4) !important;
         .d-icon { color: #000 !important; }
         .name { color: #000 !important; } 
       }
     }
     
-    // [Fix] 修复 3：压缩下拉列表间距，提高信息密度
     .select-kit-body {
         border-radius: 0 !important;
         border: 1px solid $endfield-cyan;
         box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        
-        .select-kit-collection {
-            padding: 5px 0; // 减少上下内边距
-        }
-        
+        .select-kit-collection { padding: 5px 0; }
         .select-kit-row {
-            padding: 4px 10px; // 压缩行高
-            border-radius: 0;
-            font-family: "Rajdhani", "Noto Sans SC", sans-serif;
-            font-weight: 600;
-            
-            // 下拉项悬停
-            &.is-highlighted, &:hover {
-                background: rgba(0, 212, 255, 0.1);
-                color: $endfield-cyan;
-            }
-            &.is-selected {
-                background: rgba(0, 212, 255, 0.2);
-                color: $endfield-cyan;
-                font-weight: 800;
-            }
+            padding: 4px 10px; border-radius: 0;
+            font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 600;
+            &.is-highlighted, &:hover { background: rgba(0, 212, 255, 0.1); color: $endfield-cyan; }
+            &.is-selected { background: rgba(0, 212, 255, 0.2); color: $endfield-cyan; font-weight: 800; }
         }
     }
   }
