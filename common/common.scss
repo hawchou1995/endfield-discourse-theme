@@ -1,10 +1,11 @@
 /* ============================================
-   Font: JetBrains Mono (Loli.net Mirror for China)
+   Font: JetBrains Mono (Loli.net Mirror)
+   [优化] 引入更多字重 (400-800) 以解决“单薄”问题
    ============================================ */
-@import url('https://fonts.loli.net/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+@import url('https://fonts.loli.net/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
 
 // ============================================
-// 《明日方舟·终末地》 (Endspace Style) - 核心样式 V4.0 (Final)
+// 《明日方舟·终末地》 (Endspace Style) - 核心样式 V4.1 (Heavy Duty)
 // ============================================
 
 // [强制定义颜色变量]
@@ -41,12 +42,17 @@ body {
   background-attachment: fixed;
   
   font-family: "JetBrains Mono", Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace, sans-serif;
+  
+  // [核心修复] 全局字体增重
+  font-weight: 500; // 默认使用中等字重，拒绝细体
+  -webkit-font-smoothing: antialiased; // 让字体边缘更清晰锐利
 }
 
 // 链接颜色
 a {
   color: $endfield-cyan;
   transition: all 0.2s ease;
+  font-weight: 600; // 链接稍微加粗
   &:hover {
     color: lighten($endfield-cyan, 10%);
     text-decoration: none;
@@ -73,13 +79,14 @@ a:visited { color: $endfield-cyan; }
   @include endfield-cut-corner;
   border: none;
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: 700; // 按钮文字加粗
   letter-spacing: 0.5px;
   position: relative;
   
   &.btn-primary {
     background: $endfield-cyan;
     color: #000; 
+    font-weight: 800; // 主按钮特粗
     &:hover {
       background: lighten($endfield-cyan, 10%);
       transform: translateX(2px);
@@ -119,7 +126,7 @@ a:visited { color: $endfield-cyan; }
 
   // Logo
   .title a, #site-text-logo {
-    font-weight: 800;
+    font-weight: 800; // Logo 特粗
     letter-spacing: -0.5px;
     color: #fff !important; 
   }
@@ -128,7 +135,7 @@ a:visited { color: $endfield-cyan; }
   .icons .icon {
     color: #fff !important; 
     border: 1px solid transparent;
-    clip-path: none !important; // 修复遮挡
+    clip-path: none !important; 
     
     &:hover {
       background: rgba(0, 212, 255, 0.1);
@@ -140,8 +147,8 @@ a:visited { color: $endfield-cyan; }
 
   // 帖子标题
   .extra-info-wrapper {
-    .topic-link { color: #fff !important; }
-    .badge-wrapper.bullet span.badge-category { color: #e0e0e0 !important; }
+    .topic-link { color: #fff !important; font-weight: 700; }
+    .badge-wrapper.bullet span.badge-category { color: #e0e0e0 !important; font-weight: 600; }
   }
 
   // 登录按钮
@@ -164,6 +171,7 @@ a:visited { color: $endfield-cyan; }
     box-shadow: 0 0 8px rgba(0, 212, 255, 0.4), inset 0 0 5px rgba(0, 212, 255, 0.2) !important; 
     background-color: rgba(0,0,0,0.3) !important;
     color: #fff !important; 
+    font-weight: 600;
     transition: all 0.2s ease;
 }
 
@@ -175,11 +183,15 @@ a:visited { color: $endfield-cyan; }
     color: var(--primary-medium); 
     font-size: 0.85em;
     text-transform: uppercase;
+    font-weight: 700; // 表头加粗
   }
   tbody tr {
     border-bottom: 1px solid var(--primary-low);
   }
-  .main-link { font-weight: 600; }
+  .main-link { 
+      font-weight: 700 !important; // 话题标题加粗
+      font-size: 1.05em; // 稍微加大一点
+  }
   .badge-category-bg { border-radius: 2px; }
 }
 
@@ -210,7 +222,7 @@ a:visited { color: $endfield-cyan; }
   padding: 10px 15px;
   background: rgba(0, 212, 255, 0.05); 
   color: var(--primary) !important; 
-  font-weight: 700;
+  font-weight: 800 !important; // 侧边栏标题特粗
   text-transform: uppercase;
   font-size: 0.9em;
   letter-spacing: 1px;
@@ -231,6 +243,8 @@ a:visited { color: $endfield-cyan; }
   }
   
   .cooked {
+    font-weight: 500; // 正文内容加粗
+    
     blockquote {
       background: var(--primary-very-low); 
       border-left: 4px solid $endfield-cyan;
@@ -241,6 +255,7 @@ a:visited { color: $endfield-cyan; }
       border: 1px solid #333;
       color: $endfield-cyan;
       border-radius: 0;
+      font-weight: 500;
     }
     p { transition: all 0.3s ease; }
   }
@@ -265,14 +280,16 @@ a:visited { color: $endfield-cyan; }
 // 7. 特殊组件
 .discourse-tag {
     color: $endfield-cyan !important; 
+    font-weight: 600;
 }
 
 // 通知角标
 .badge-notification {
     background-color: $endfield-orange !important; 
     color: #fff !important;
+    font-weight: 700;
 
-    // [修复] 新话题小蓝点
+    // 新话题小蓝点
     &.new-topic {
         background-color: transparent !important;
         color: $endfield-cyan !important; 
@@ -288,7 +305,7 @@ a:visited { color: $endfield-cyan; }
   }
 }
 
-// [修复] 话题底部统计数据
+// 话题底部统计数据
 .topic-map__stats .btn {
   clip-path: none !important;
   border-radius: 4px !important;
@@ -304,30 +321,24 @@ a:visited { color: $endfield-cyan; }
   
   .number, .topic-map__stat-label {
       color: var(--primary-high-or-secondary-low) !important;
+      font-weight: 600;
   }
 }
 
 // ============================================
-// 8. [核心修复] 顶栏标签 (Tag Box) 深度美化
-//    解决浅色背景下“脏脏的”问题
+// 8. 顶栏标签 (Tag Box) 深度美化
 // ============================================
 
 .discourse-tag.box {
-  // 强制重置样式
   border-radius: 0 !important;
   border: 1px solid var(--primary-low) !important;
-  
-  // [核心] 背景色跟随主题（浅色时为白，深色时为深灰）
-  // 这样保证了标签背景永远是干净的
   background-color: var(--secondary) !important;
-  
-  // [核心] 文字颜色跟随主题（浅色时为黑，深色时为白）
   color: var(--primary) !important;
   
   font-family: "JetBrains Mono", monospace;
-  font-weight: 600;
+  font-weight: 700 !important; // 标签文字加粗到 700
   letter-spacing: 0.5px;
-  padding: 4px 8px !important; // 稍微紧凑一点
+  padding: 4px 8px !important; 
   transition: all 0.2s ease;
 
   .d-icon {
@@ -335,10 +346,9 @@ a:visited { color: $endfield-cyan; }
     opacity: 0.8;
   }
 
-  // 悬停效果：高亮青色
   &:hover {
     background-color: $endfield-cyan !important;
-    color: #000 !important; // 悬停强制黑字
+    color: #000 !important; 
     border-color: $endfield-cyan !important;
     text-decoration: none;
     box-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
@@ -347,10 +357,7 @@ a:visited { color: $endfield-cyan; }
   }
 }
 
-// 针对带有特定颜色样式的标签 (如精华帖)
-// 我们只保留左侧边框颜色，保持背景干净
 .discourse-tag.box.discourse-tag--tag-icons-style {
-  // 使用标签自带的 color 变量作为左边框
   border-left: 3px solid var(--color1, var(--tertiary)) !important;
   background-color: var(--secondary) !important; 
   color: var(--primary) !important;
@@ -381,9 +388,9 @@ a:visited { color: $endfield-cyan; }
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     
     .name {
-      font-weight: 700;
+      font-weight: 800 !important; // 分类名特粗
       letter-spacing: 0.5px;
-      color: var(--primary) !important; // 强制主色
+      color: var(--primary) !important; 
     }
     
     .d-icon { color: var(--primary-medium); }
@@ -413,10 +420,10 @@ a:visited { color: $endfield-cyan; }
     
     // [High-Contrast Fix] 未选中状态
     color: var(--primary) !important; 
-    opacity: 0.75; 
+    font-weight: 600 !important; // 导航按钮加粗
+    opacity: 0.85; // 提高不透明度，让它更实
     background: var(--primary-very-low); 
 
-    // 默认悬停
     &:hover {
       background: var(--primary-low);
       color: var(--primary) !important;
@@ -431,7 +438,7 @@ a:visited { color: $endfield-cyan; }
     background: $endfield-cyan !important; 
     color: #000 !important; 
     border-color: $endfield-cyan;
-    font-weight: 800;
+    font-weight: 800 !important; // 激活状态特粗
     opacity: 1;
     clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
     
@@ -451,6 +458,7 @@ a:visited { color: $endfield-cyan; }
     background: $endfield-orange; 
     color: #fff;
     border: none;
+    font-weight: 800; // 发帖按钮特粗
     &:hover {
       background: lighten($endfield-orange, 10%);
       box-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
