@@ -4,7 +4,7 @@
 @import url('https://fonts.loli.net/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
 // ============================================
-// 《明日方舟·终末地》 (Endspace Style) - 核心样式 V3.0 (Final)
+// 《明日方舟·终末地》 (Endspace Style) - 核心样式 V4.0 (Final)
 // ============================================
 
 // [强制定义颜色变量]
@@ -40,7 +40,6 @@ body {
   background-size: 40px 40px; 
   background-attachment: fixed;
   
-  // 字体栈：优先 JetBrains Mono，回退到系统等宽
   font-family: "JetBrains Mono", Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace, sans-serif;
 }
 
@@ -106,7 +105,6 @@ a:visited { color: $endfield-cyan; }
 }
 
 // 3. 导航栏 (Header HUD 风格)
-// [核心] 强制深色背景 + 强制白色文字 (Header 不随主题变色)
 .d-header {
   background: rgba(18, 21, 26, 0.95); 
   border-bottom: 2px solid $endfield-cyan; 
@@ -119,19 +117,18 @@ a:visited { color: $endfield-cyan; }
     background: linear-gradient(90deg, $endfield-cyan, transparent 20%, transparent 80%, $endfield-cyan);
   }
 
-  // 3.1 站点标题 (Logo)
+  // Logo
   .title a, #site-text-logo {
     font-weight: 800;
     letter-spacing: -0.5px;
     color: #fff !important; 
   }
   
-  // 3.2 图标
+  // 图标
   .icons .icon {
     color: #fff !important; 
     border: 1px solid transparent;
-    // 修复图标被切角遮挡的问题
-    clip-path: none !important; 
+    clip-path: none !important; // 修复遮挡
     
     &:hover {
       background: rgba(0, 212, 255, 0.1);
@@ -141,21 +138,17 @@ a:visited { color: $endfield-cyan; }
     }
   }
 
-  // 3.3 帖子标题 (滚动时显示)
+  // 帖子标题
   .extra-info-wrapper {
-    .topic-link {
-       color: #fff !important; 
-    }
-    .badge-wrapper.bullet span.badge-category {
-       color: #e0e0e0 !important; 
-    }
+    .topic-link { color: #fff !important; }
+    .badge-wrapper.bullet span.badge-category { color: #e0e0e0 !important; }
   }
 
-  // 3.4 顶栏按钮 (登录/注册)
+  // 登录按钮
   .header-buttons .btn {
       color: #fff !important;
       border-color: rgba(255,255,255,0.3);
-      clip-path: none !important; // 修复遮挡
+      clip-path: none !important;
       &:hover {
           border-color: $endfield-cyan;
           color: $endfield-cyan !important;
@@ -174,7 +167,7 @@ a:visited { color: $endfield-cyan; }
     transition: all 0.2s ease;
 }
 
-// 4. 话题列表 & 侧边栏容器
+// 4. 话题列表 & 侧边栏
 .topic-list {
   border-radius: 0; 
   thead th {
@@ -199,7 +192,6 @@ a:visited { color: $endfield-cyan; }
   margin-bottom: 24px;
   position: relative;
   
-  // 角标装饰
   background-image: 
     linear-gradient(to right, $endfield-cyan 2px, transparent 2px),
     linear-gradient(to bottom, $endfield-cyan 2px, transparent 2px),
@@ -212,7 +204,6 @@ a:visited { color: $endfield-cyan; }
   &::before { display: none; } 
 }
 
-// 侧边栏标题
 .sidebar-section-header, 
 .rs-component h3 {
   border-bottom: 1px solid var(--primary-low);
@@ -271,17 +262,17 @@ a:visited { color: $endfield-cyan; }
     border-left: 1px solid var(--primary-low);
 }
 
-// 7. 特殊组件 & 通用标签颜色
+// 7. 特殊组件
 .discourse-tag {
     color: $endfield-cyan !important; 
 }
 
-// 通知角标修复
+// 通知角标
 .badge-notification {
     background-color: $endfield-orange !important; 
     color: #fff !important;
 
-    // [修复] 新话题小蓝点：去背景，改青色
+    // [修复] 新话题小蓝点
     &.new-topic {
         background-color: transparent !important;
         color: $endfield-cyan !important; 
@@ -289,7 +280,7 @@ a:visited { color: $endfield-cyan; }
     }
 }
 
-// 8. 修复头像下拉菜单的角标
+// 头像下拉角标
 #toggle-current-user {
   overflow: visible !important; 
   .badge-notification {
@@ -297,26 +288,46 @@ a:visited { color: $endfield-cyan; }
   }
 }
 
+// [修复] 话题底部统计数据
+.topic-map__stats .btn {
+  clip-path: none !important;
+  border-radius: 4px !important;
+  background: transparent !important; 
+  border: none !important;
+  padding: 5px 10px !important;
+  
+  &:hover {
+    background: var(--primary-low) !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  
+  .number, .topic-map__stat-label {
+      color: var(--primary-high-or-secondary-low) !important;
+  }
+}
+
 // ============================================
-// 9. 顶栏标签 (Tag Box) 深度修复
+// 8. [核心修复] 顶栏标签 (Tag Box) 深度美化
 //    解决浅色背景下“脏脏的”问题
 // ============================================
 
 .discourse-tag.box {
-  // 强制重置样式，去除默认的背景干扰
+  // 强制重置样式
   border-radius: 0 !important;
   border: 1px solid var(--primary-low) !important;
   
-  // 核心：使用当前主题的背景色（浅色时为白，深色时为深灰）
+  // [核心] 背景色跟随主题（浅色时为白，深色时为深灰）
+  // 这样保证了标签背景永远是干净的
   background-color: var(--secondary) !important;
   
-  // 核心：文字颜色跟随主题（浅色时为黑，深色时为白）
+  // [核心] 文字颜色跟随主题（浅色时为黑，深色时为白）
   color: var(--primary) !important;
   
   font-family: "JetBrains Mono", monospace;
   font-weight: 600;
   letter-spacing: 0.5px;
-  padding: 4px 8px !important;
+  padding: 4px 8px !important; // 稍微紧凑一点
   transition: all 0.2s ease;
 
   .d-icon {
@@ -336,16 +347,17 @@ a:visited { color: $endfield-cyan; }
   }
 }
 
-// 针对带有特定颜色的标签 (如网盘、精华帖)
-// 只保留左侧边框颜色，保持背景干净
+// 针对带有特定颜色样式的标签 (如精华帖)
+// 我们只保留左侧边框颜色，保持背景干净
 .discourse-tag.box.discourse-tag--tag-icons-style {
-  // 使用标签自带的颜色变量作为左边框
+  // 使用标签自带的 color 变量作为左边框
   border-left: 3px solid var(--color1, var(--tertiary)) !important;
-  background-color: var(--secondary) !important; // 再次强制背景跟随主题
+  background-color: var(--secondary) !important; 
+  color: var(--primary) !important;
 }
 
 // ============================================
-// 10. Endfield 战术导航栏 (Tactical Nav)
+// 9. Endfield 导航系统 (Tactical Control Bar)
 // ============================================
 
 .navigation-container {
@@ -371,7 +383,7 @@ a:visited { color: $endfield-cyan; }
     .name {
       font-weight: 700;
       letter-spacing: 0.5px;
-      color: var(--primary) !important; 
+      color: var(--primary) !important; // 强制主色
     }
     
     .d-icon { color: var(--primary-medium); }
@@ -387,7 +399,7 @@ a:visited { color: $endfield-cyan; }
     .name { color: #000 !important; } 
   }
 
-  // 导航按钮 (最新/热门)
+  // 导航按钮
   .nav-pills > li > a {
     border: 1px solid transparent; 
     border-radius: 0 !important; 
@@ -428,7 +440,7 @@ a:visited { color: $endfield-cyan; }
     }
   }
 
-  // 右侧按钮 (新建话题)
+  // 右侧按钮
   .navigation-controls .btn {
     border-radius: 0;
     text-transform: uppercase;
@@ -443,32 +455,5 @@ a:visited { color: $endfield-cyan; }
       background: lighten($endfield-orange, 10%);
       box-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
     }
-  }
-}
-
-// ============================================
-// 11. 修复话题底部统计数据被切角遮挡的问题
-// ============================================
-
-.topic-map__stats .btn {
-  // [核心修复] 强制移除切角，让文字完整显示
-  clip-path: none !important;
-  
-  // 恢复正常布局
-  border-radius: 4px !important; // 微圆角或设为 0 (直角)
-  background: transparent !important; // 移除背景色，保持干净
-  border: none !important; // 移除边框
-  padding: 5px 10px !important; // 增加一点内边距，防止太挤
-  
-  // 悬停效果微调
-  &:hover {
-    background: var(--primary-low) !important;
-    transform: none !important; // 禁用位移效果
-    box-shadow: none !important;
-  }
-  
-  // 确保文字颜色正确
-  .number, .topic-map__stat-label {
-      color: var(--primary-high-or-secondary-low);
   }
 }
