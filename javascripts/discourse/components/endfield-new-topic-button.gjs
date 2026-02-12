@@ -9,7 +9,7 @@ export default class EndfieldNewTopicButton extends Component {
   @service currentUser;
 
   get showButton() {
-    // 优化：检查用户是否存在且有发帖权限
+    // 优化：不仅检查用户是否存在，还检查是否有发帖权限
     return this.currentUser && this.currentUser.can_create_topic;
   }
 
