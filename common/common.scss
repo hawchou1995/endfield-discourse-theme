@@ -506,3 +506,99 @@ a:visited { color: $endfield-cyan; }
   // 或者是保持背景色但加个遮罩？
   // 推荐保持上面的“干净版”：淡色背景 + 彩色左边框
 }
+
+// ============================================
+// Endfield 导航系统 (Tactical Control Bar) - V2.1 (High-Vis Fix)
+// ============================================
+
+.navigation-container {
+  position: relative;
+  margin-bottom: 15px;
+  padding: 10px 0;
+  border-bottom: 2px solid rgba(0, 212, 255, 0.15); 
+  
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; width: 20px; height: 4px;
+    background: $endfield-cyan; 
+  }
+
+  // 分类下拉框
+  .category-breadcrumb .select-kit.combobox .select-kit-header {
+    background: var(--secondary); 
+    border: 1px solid var(--primary-low);
+    border-radius: 0 !important; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    
+    .name {
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--primary) !important; // 强制主色
+    }
+    
+    .d-icon { color: var(--primary-medium); }
+  }
+
+  // 分类下拉框悬停
+  .category-breadcrumb .select-kit.combobox.is-expanded .select-kit-header,
+  .category-breadcrumb .select-kit.combobox .select-kit-header:hover {
+    border-color: $endfield-cyan !important;
+    background: rgba(0, 212, 255, 0.1) !important;
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.2) !important;
+    .d-icon { color: darken($endfield-cyan, 10%) !important; }
+    .name { color: #000 !important; } // 悬停黑字
+  }
+
+  // 导航按钮
+  .nav-pills > li > a {
+    border: 1px solid transparent; 
+    border-radius: 0 !important; 
+    padding: 6px 12px;
+    margin-right: 4px;
+    font-family: "JetBrains Mono", monospace; 
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--primary-medium);
+    transition: all 0.2s ease;
+    
+    // 默认悬停
+    &:hover {
+      background: var(--primary-low);
+      color: var(--primary);
+      border-color: var(--primary-low);
+    }
+  }
+
+  // 激活状态
+  .nav-pills > li.active > a,
+  .nav-pills > li > a.active {
+    background: $endfield-cyan !important; 
+    color: #000 !important; 
+    border-color: $endfield-cyan;
+    font-weight: 800;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+    
+    &:hover {
+      background: lighten($endfield-cyan, 10%) !important;
+    }
+  }
+
+  // 右侧按钮
+  .navigation-controls .btn {
+    border-radius: 0;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  
+  .navigation-controls #create-topic {
+    background: $endfield-orange; 
+    color: #fff;
+    border: none;
+    &:hover {
+      background: lighten($endfield-orange, 10%);
+      box-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
+    }
+  }
+}
