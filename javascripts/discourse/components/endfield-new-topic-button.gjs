@@ -2,30 +2,28 @@ import Component from "@glimmer/component";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import DButton from "discourse/components/d-button";
-import Composer from "discourse/models/composer"; // 引入 Composer 模型以使用常量
 
 export default class EndfieldNewTopicButton extends Component {
   @service router;
   @service composer;
   @service currentUser;
 
-  // 优化：不仅检查用户是否存在，还检查是否有发帖权限
   get showButton() {
+    // 优化：检查用户是否存在且有发帖权限
     return this.currentUser && this.currentUser.can_create_topic;
   }
 
   @action
   createTopic() {
     const route = this.router.currentRoute;
-    // 使用可选链 (?.) 安全访问属性
     const category = route?.attributes?.category;
     const tag = route?.attributes?.tag;
 
     this.composer.open({
-      action: Composer.CREATE_TOPIC, // 使用官方常量代替硬编码字符串
-      draftKey: Composer.DRAFT,      // 使用官方常量
+      action: "createTopic",
+      draftKey: "new_topic",
       categoryId: category?.id,
-      tags: tag?.id,                 // Discourse 的 tag 对象通常都有 id
+      tags: tag?.id,
     });
   }
 
