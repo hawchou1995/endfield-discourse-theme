@@ -335,29 +335,30 @@ a:visited { color: $endfield-cyan; }
 // ============================================
 
 .badge-notification.new-topic {
-  // [核心] 强制改为终端青色，覆盖默认的紫色
-  color: #00D4FF !important; 
+  // [核心修复] 必须设置背景色！因为这个点就是靠背景色画出来的
+  background-color: $endfield-cyan !important; 
   
-  // 确保没有背景色（去掉了可能存在的橙色或蓝色背景）
-  background-color: transparent !important; 
-  background: transparent !important;
+  // 确保文字（通常是空格）不可见，不干扰圆点形状
+  color: transparent !important; 
   
-  // 移除内边距，让它只是一个小点
+  // 强制圆形尺寸
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  
+  // 布局微调
   padding: 0 !important;
-  margin-left: 5px !important; // 稍微拉开一点间距
+  margin: 0 5px !important; 
+  display: inline-block !important;
+  vertical-align: middle !important;
   
-  // 确保字号适中
-  font-size: 1.2em !important;
-  
-  // 移除边框和阴影
+  // 移除边框，添加青色荧光
   border: none !important;
-  box-shadow: none !important;
+  box-shadow: 0 0 4px $endfield-cyan !important;
   
-  // 防止被链接样式干扰
-  text-decoration: none !important;
-  
-  // 针对伪元素（如果是通过 ::before 生成的圆点）
+  // 清除可能存在的伪元素干扰
   &::before, &::after {
-      color: #00D4FF !important;
+      content: none !important;
+      display: none !important;
   }
 }
