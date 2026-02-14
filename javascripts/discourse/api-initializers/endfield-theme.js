@@ -4,50 +4,50 @@ export default apiInitializer("0.11", (api) => {
   console.log("Endfield Theme: Core Systems Online");
 
   // ============================================
-  // 1. 终末地加载动画：进度满 -> 橙色闪屏 -> 淡出
+  // 1. 终末地垂直加载动画：下落满血 -> 橙屏闪切 -> 界面淡入
   // ============================================
   const dismissLoader = () => {
     const loader = document.getElementById('endfield-loader');
     if (loader && !loader.dataset.dismissed) {
       loader.dataset.dismissed = "true"; 
       
+      // 停止随机跳动
       if (window.__efLoaderInterval) clearInterval(window.__efLoaderInterval);
       
       const bar = document.getElementById('ef-bar');
+      const pctBox = document.getElementById('ef-pct-box');
       const pctText = document.getElementById('ef-pct');
-      const textEl = document.getElementById('ef-text');
       const orangeFlash = document.getElementById('ef-orange-flash');
       
-      // 阶段 1: 强制加载到 100%
-      if (bar) bar.style.width = '100%';
+      // 阶段 1: 强制加载到底部 100%
+      if (bar) bar.style.height = '100%';
+      if (pctBox) pctBox.style.top = '100%';
       if (pctText) pctText.innerText = '100%';
-      if (textEl) textEl.innerText = 'SYSTEM READY';
 
-      // 阶段 2: 触发橙色闪屏 (延迟一下让 100% 的视觉停留一瞬间)
+      // 阶段 2: 延迟极短时间后，触发全屏橙色闪变
       setTimeout(() => {
         if (orangeFlash) {
-          orangeFlash.style.opacity = '1'; // 瞬间全屏变橙色
+          orangeFlash.style.opacity = '1';
         }
         
-        // 阶段 3: 整体淡出，露出真正的论坛页面
+        // 阶段 3: 整体淡出，销毁节点
         setTimeout(() => {
           loader.style.opacity = '0';
           loader.style.pointerEvents = 'none';
-          
-          setTimeout(() => loader.remove(), 600); // 彻底销毁
-        }, 400); // 橙色屏幕停留 0.4 秒
+          setTimeout(() => loader.remove(), 600);
+        }, 300); // 橙色屏幕停留极短时间
         
-      }, 150); // 100% 进度条停留 0.15 秒
+      }, 150); // 100% 状态停留 0.15 秒
     }
   };
 
-  // 监听路由改变，一旦页面准备好就移除加载屏
+  // 监听路由改变，一旦页面准备好就结束加载
   api.onPageChange(() => {
     dismissLoader();
   });
   
-  // 兜底保护：防止由于网络问题卡死，强制 3 秒后执行退场
-  setTimeout(dismissLoader, 3000);
+  // 兜底保护：网络卡顿时，最长等待 3.5 秒强制进站
+  setTimeout(dismissLoader, 3500);
 
   // ============================================
   // 2. 页面加载动画 (Header Slide-in)
