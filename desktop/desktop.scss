@@ -1,11 +1,11 @@
 // =======================================================
-// 1. 布局核心修正 (智能切换版 + 顶栏联动 + 侧边栏悬停折叠)
+// 1. 布局核心修正 (智能切换版 + 侧边栏悬停折叠)
 // =======================================================
 
 // 调用 settings.yml 中定义的变量
 $fluid-width: unquote($topic_list_width); 
 
-// 1.1 破除 Discourse 最外层限制
+// 1.1 破除最外层限制
 #main.wrap {
     max-width: 100% !important;
     width: 100% !important;
@@ -22,80 +22,80 @@ $fluid-width: unquote($topic_list_width);
 }
 
 // ---------------------------------------------------
-// [核心] 智能布局切换逻辑 (根据后台设置)
+// [核心] 智能布局切换逻辑
 // ---------------------------------------------------
 @if $sidebar_stick_to_edge == "true" {
-    // 【模式 A：绝对贴边 & 侧边栏悬停折叠】
+    // 【模式 A：绝对贴边 & 侧边栏折叠特效】
     
-    // 侧边栏绝对贴左边缘
     .sidebar-wrapper, .d-sidebar {
         margin-left: 0 !important;
     }
     
     html.desktop-view {
-      // 1. 设置侧边栏的极窄占位空间 (固定 64px)
-      // 这样侧边栏就不会把话题列表挤得太远
+      // 1. 侧边栏物理占位槽：固定 64px，死死贴住左边
       .sidebar-wrapper {
         width: 64px !important;
         min-width: 64px !important;
         flex-basis: 64px !important;
+        position: relative; // 为内部的 absolute 容器做定位基准
         z-index: 100;
-        transition: width 0.3s ease;
       }
 
-      // 2. 侧边栏实际容器 (默认 64px，隐藏文字；悬停 240px 展开)
+      // 2. 侧边栏真实容器 (拉窗帘的轨道)
       .sidebar-wrapper .sidebar-container {
-        width: 64px !important;
-        overflow-x: hidden !important; 
-        overflow-y: auto !important;
-        white-space: nowrap !important; // 强制文字不换行
+        position: absolute !important; // 悬浮覆盖，绝对不挤压主列表
+        top: 0; left: 0;
+        width: 64px !important; // 默认闭合宽度
+        height: 100% !important;
         background-color: var(--secondary) !important; 
         border-right: 1px solid var(--primary-low) !important;
-        transition: width 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.3s ease !important;
         
-        // 折叠时隐藏滚动条，保持纯图标极其清爽
+        overflow-x: hidden !important; 
+        overflow-y: auto !important;
+        
+        transition: width 0.25s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.25s ease !important;
+        z-index: 100;
+        
+        // 折叠时隐藏滚动条，保持纯净
         &::-webkit-scrollbar { width: 0px; background: transparent; }
         
-        // 强制内部元素保持全宽，防止文字被压缩导致错位
-        .sidebar-section-wrapper, .sidebar-section, .endfield-sidebar-new-topic-button-container {
-          width: 240px !important;
+        // 3. 【解决被挤成一坨屎的核心】强制所有子元素保持展开时的宽度！
+        & > * {
+          width: 260px !important; // Discourse 默认侧边栏宽度约 260px
           box-sizing: border-box;
+          flex-shrink: 0; // 绝对不准收缩！
         }
 
-        // 调整内置的系统图标对齐，使其在 64px 的空间下完美居中
-        .sidebar-section-link-wrapper {
-          padding-left: 20px !important; 
+        // 4. 对齐内部图标，让它们在 64px 的视野里完美居中 (32px位置)
+        .sidebar-section-link-wrapper .sidebar-section-link {
+          padding-left: 24px !important; 
         }
-        .sidebar-section-header-wrapper {
-          padding-left: 20px !important;
+        .sidebar-section-header-wrapper .sidebar-section-header {
+          padding-left: 24px !important;
         }
-      }
 
-      // 3. 悬停展开效果：宽度变 240px 并增加阴影悬浮感
-      .sidebar-wrapper:hover .sidebar-container {
-        width: 240px !important;
-        box-shadow: 5px 0 20px rgba(0, 0, 0, 0.5) !important;
-        // 展开时恢复滚动条
-        &::-webkit-scrollbar { width: 6px; background: var(--secondary); }
-        &::-webkit-scrollbar-thumb { background-color: var(--tertiary); }
-      }
-      
-      // 4. 发帖按钮的内部对齐，保证折叠时 "+" 图标居中
-      .endfield-sidebar-new-topic-button-container {
-        padding-left: 10px !important; 
-        padding-right: 10px !important;
-      }
-      
-      .endfield-sidebar-create-btn {
-        justify-content: flex-start !important; 
-        padding-left: 14px !important; // 10px(外)+14px(内) = 24px, 完美居中
-        
-        // 当侧边栏仅有 64px 时，按钮右侧的文字和切角被遮挡，看似是一个纯方形色块。
-        // 悬浮展开时才会展现完整的形状和文字，极致优雅！
+        // 5. 修复发帖按钮
+        .endfield-sidebar-new-topic-button-container {
+          padding-left: 10px !important; 
+          padding-right: 10px !important;
+        }
+        .endfield-sidebar-create-btn {
+          justify-content: flex-start !important; 
+          padding-left: 14px !important; // 10px + 14px = 24px, 完美对齐上面的图标
+          .btn-content { gap: 12px; }
+        }
+
+        // 6. 悬停展开特效！
+        &:hover {
+          width: 260px !important;
+          box-shadow: 4px 0 25px rgba(0, 0, 0, 0.6) !important; // 终末地风厚重阴影
+          &::-webkit-scrollbar { width: 6px; background: var(--secondary); }
+          &::-webkit-scrollbar-thumb { background-color: var(--tertiary); }
+        }
       }
     }
     
-    // 总容器 100% 撑满，不给 margin
+    // 话题列表总容器
     #main-outlet-wrapper {
         max-width: 100% !important;
         width: 100% !important;
@@ -105,10 +105,7 @@ $fluid-width: unquote($topic_list_width);
     }
     
     // 话题列表单独居中平分剩余空间
-    body.archetype-list,
-    body.navigation-topics,
-    body.navigation-categories,
-    body.tags-page {
+    body.archetype-list, body.navigation-topics, body.navigation-categories, body.tags-page {
         #main-outlet {
             max-width: $fluid-width !important; 
             width: 100% !important;
@@ -117,22 +114,17 @@ $fluid-width: unquote($topic_list_width);
         }
     }
 
-    // 顶栏 100% 拉满，实现 Logo 和右侧图标绝对贴边
+    // 顶栏 100% 拉满，绝对贴边
     .d-header > .wrap {
         max-width: 100% !important;
         width: 100% !important;
         margin-inline: 0 !important;
         padding-inline: 20px !important; 
-        
-        .contents {
-            max-width: 100% !important;
-            margin-inline: 0 !important;
-        }
+        .contents { max-width: 100% !important; margin-inline: 0 !important; }
     }
 
 } @else {
-    // 【模式 B：居中收缩模式 (保持原样)】
-    // 将包含侧边栏+话题列表的“总容器”居中
+    // 【模式 B：居中收缩模式】
     #main-outlet-wrapper {
         max-width: $fluid-width !important; 
         width: 100% !important;
@@ -140,75 +132,39 @@ $fluid-width: unquote($topic_list_width);
         padding-inline: 0 !important;
         box-sizing: border-box;
     }
-
-    // 话题列表占满自身空间即可
     #main-outlet {
         max-width: 100% !important; 
         width: 100% !important;
         margin-inline: 0 !important; 
     }
-
-    // 顶栏宽度与整体宽度保持一致，上下对齐
     .d-header > .wrap {
         max-width: $fluid-width !important;
         width: 100% !important;
         margin-inline: auto !important;
         padding-inline: 0 !important;
-        
-        .contents {
-            max-width: 100% !important;
-            margin-inline: 0 !important;
-        }
+        .contents { max-width: 100% !important; margin-inline: 0 !important; }
     }
 }
 // ---------------------------------------------------
 
-// 重置内部限制
+// 内部元素强制 100%
 #main-outlet-wrapper #main-outlet > *:not(.experimental-screen):not(.activate-account) {
     max-width: 100% !important; 
     width: 100% !important;
     margin-inline: 0 !important; 
 }
 
-#main-outlet {
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-    padding: 0 !important;
-}
-
-.topic-list {
-    width: 100% !important;
-    display: table !important;
-}
-
-// 导航栏适配
-.list-controls {
-    max-width: 100% !important;
-    margin-inline: 0 !important;
-    .navigation-container { max-width: 100% !important; }
-}
-
-.d-right-sidebar,
-.tc-right-sidebar-wrapper {
-    flex-shrink: 0 !important;
-}
+#main-outlet { flex: 1 1 auto !important; min-width: 0 !important; padding: 0 !important; }
+.topic-list { width: 100% !important; display: table !important; }
+.list-controls { max-width: 100% !important; margin-inline: 0 !important; .navigation-container { max-width: 100% !important; } }
+.d-right-sidebar, .tc-right-sidebar-wrapper { flex-shrink: 0 !important; }
 
 // 移动端布局保护
 @media screen and (max-width: 767px) {
   #main.wrap { padding-inline: 0 !important; }
-  .d-layout, .d-header > .wrap {
-      width: 100% !important;
-      max-width: 100% !important;
-  }
-  #main-outlet-wrapper {
-     max-width: 100% !important;
-     padding-inline: 10px !important;
-  }
-  #main-outlet {
-     max-width: 100% !important;
-     display: block !important; 
-     margin-inline: 0 !important;
-  }
+  .d-layout, .d-header > .wrap { width: 100% !important; max-width: 100% !important; }
+  #main-outlet-wrapper { max-width: 100% !important; padding-inline: 10px !important; }
+  #main-outlet { max-width: 100% !important; display: block !important; margin-inline: 0 !important; }
 }
 
 // =======================================================
@@ -216,24 +172,13 @@ $fluid-width: unquote($topic_list_width);
 // =======================================================
 
 html.desktop-view .navigation-controls {
-  .topic-list-layout-trigger,
-  #create-topic,
-  .create-topic {
-    display: none !important;
-  }
+  .topic-list-layout-trigger, #create-topic, .create-topic { display: none !important; }
 }
 
 .endfield-sidebar-new-topic-button-container {
-  margin-top: 20px; 
-  margin-bottom: 20px;
-  padding: 0 10px;
-  box-sizing: border-box;
-  width: 100%;
+  margin-top: 20px; margin-bottom: 20px; padding: 0 10px; box-sizing: border-box; width: 100%;
 }
-
-.sidebar-wrapper .sidebar-navigation {
-  padding-top: 10px;
-}
+.sidebar-wrapper .sidebar-navigation { padding-top: 10px; }
 
 // 自定义发帖按钮
 .endfield-sidebar-create-btn {
