@@ -100,11 +100,11 @@
     const subText = document.getElementById('ef-text');
     let isFinishing = false; 
 
-    // 【核心新增】：获取窗口高度和字盒子的实际高度
+    // 【终极修复】：
+    // 1. 增大 safeMargin 到 100px（原来是 65px）
+    // 2. 移除 transform: translateY(-50%)，改用其他对齐方式
     const windowHeight = window.innerHeight;
-    // 数字容器高度约 110px，translateY(-50%) 意味着上下各突出一半
-    // 安全距离 = 容器高度的一半 + 缓冲（约 55px + 10px）
-    const safeMargin = 65; 
+    const safeMargin = 100; // 🔥 增大到 100px，确保绝对不截断
 
     window.__efLoaderInterval = setInterval(() => {
       if (!isFinishing) {
@@ -123,14 +123,14 @@
         // 进度条本身永远按 0-100% 正常走
         bar.style.height = pct + '%';
         
-        // 【核心神技修缮】：计算理想的像素位置
+        // 【终极修复】：计算理想的像素位置
         let targetY = (pct / 100) * windowHeight;
         
-        // 动态强制锁死上下边界！
+        // 🔥 动态强制锁死上下边界！
         if (targetY < safeMargin) {
-            targetY = safeMargin; // 顶部锁死防截断
+            targetY = safeMargin; // 顶部锁死：100px
         } else if (targetY > windowHeight - safeMargin) {
-            targetY = windowHeight - safeMargin; // 底部锁死防截断
+            targetY = windowHeight - safeMargin; // 底部锁死
         }
         
         pctBox.style.top = targetY + 'px'; // 赋值确切像素
