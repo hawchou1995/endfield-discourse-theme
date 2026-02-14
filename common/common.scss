@@ -362,3 +362,13 @@ a:visited { color: $endfield-cyan; }
       display: none !important;
   }
 }
+
+// ============================================
+// 12. 隐藏 Discourse 默认加载动画
+// ============================================
+
+// 隐藏原版的省略号或转圈动画，让底端保持干净
+#main-outlet.wrap > .spinner,
+.preload-text {
+    display: none !important;
+}
