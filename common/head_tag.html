@@ -2,7 +2,7 @@
   #endfield-loader {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
-    background-color: #12151A; /* 终末地深色背景 */
+    background-color: #12151A;
     background-image: 
       linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
       linear-gradient(180deg, rgba(255,255,255,0.03) 1px, transparent 1px);
@@ -12,7 +12,6 @@
     font-family: "Rajdhani", "JetBrains Mono", sans-serif;
   }
   
-  /* 橙色全屏闪屏层 */
   #ef-orange-flash {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background-color: #FF6B35;
@@ -21,7 +20,6 @@
     pointer-events: none;
   }
 
-  /* 左侧轨道底槽：加宽到 14px */
   .ef-rail {
     position: absolute;
     top: 0; left: 0;
@@ -32,7 +30,6 @@
     border-right: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  /* 橙色填充条 */
   .ef-fill {
     position: absolute;
     top: 0; left: 0;
@@ -40,65 +37,42 @@
     height: 0%; 
     background: #FF6B35;
     box-shadow: 0 0 15px rgba(255, 107, 53, 0.8);
-    transition: height 0.05s linear; /* 匹配刷新频率，极度丝滑 */
+    transition: height 0.05s linear; 
   }
 
-  /* 新版排版：竖线 + 百分比 + 文字 */
   .ef-pct-container {
     position: absolute;
-    top: 0%; 
-    left: 28px; /* 远离加粗的轨道 */
-    transform: translateY(-50%); /* 确保准心对齐进度条边缘 */
+    top: 0px; /* 改为 px，交由 JS 动态精准控制 */
+    left: 28px; 
+    transform: translateY(-50%); /* 保持垂直居中对齐 */
     transition: top 0.05s linear;
     z-index: 5;
     display: flex;
-    flex-direction: column; /* 纵向排列 */
+    flex-direction: column; 
     align-items: flex-start;
   }
 
-  /* 顶部的竖线 */
   .ef-pct-line-v {
-    width: 4px;
-    height: 24px;
-    background: #FF6B35;
-    margin-left: 4px;
-    margin-bottom: 4px;
+    width: 4px; height: 24px; background: #FF6B35;
+    margin-left: 4px; margin-bottom: 4px;
     box-shadow: 0 0 8px rgba(255, 107, 53, 0.8);
   }
 
-  /* 超大号百分比数字 */
   .ef-pct-num {
-    font-size: 54px;
-    font-weight: 800;
-    color: #FF6B35;
-    letter-spacing: 2px;
-    text-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
+    font-size: 54px; font-weight: 800; color: #FF6B35;
+    letter-spacing: 2px; text-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
     line-height: 0.9;
   }
 
-  /* 底部的装配文字 */
   .ef-pct-subtext {
-    font-size: 14px;
-    color: #FF6B35;
-    font-weight: 700;
-    letter-spacing: 4px;
-    margin-top: 6px;
-    margin-left: 4px;
-    opacity: 0.9;
+    font-size: 14px; color: #FF6B35; font-weight: 700;
+    letter-spacing: 4px; margin-top: 6px; margin-left: 4px; opacity: 0.9;
   }
 
-  /* 居中的暗纹装饰字 */
   .ef-bg-text {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 4vw;
-    color: rgba(255, 255, 255, 0.02);
-    font-weight: 900;
-    letter-spacing: 20px;
-    pointer-events: none;
-    white-space: nowrap;
-    user-select: none;
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    font-size: 4vw; color: rgba(255, 255, 255, 0.02); font-weight: 900;
+    letter-spacing: 20px; pointer-events: none; white-space: nowrap; user-select: none;
   }
 </style>
 
@@ -126,30 +100,40 @@
     const subText = document.getElementById('ef-text');
     let isFinishing = false; 
 
+    // 【核心新增】：获取窗口高度和字盒子的实际高度
+    const windowHeight = window.innerHeight;
+    // 假设渲染前拿不到，给一个安全的硬编码估计值（54px字+24px线+14px字+边距约 110px）
+    // translateY(-50%) 意味着上下各突出一半，所以安全距离取一半再多给一点缓冲
+    const safeMargin = 65; 
+
     window.__efLoaderInterval = setInterval(() => {
       if (!isFinishing) {
-        // [正常阶段] 缓慢增长，最高卡在 85% 等待页面加载完成
         pct += Math.floor(Math.random() * 4) + 1; 
         if (pct >= 85) pct = 85; 
       } else {
-        // [退场阶段] 页面已加载完，进度条开启加速狂飙！
         pct += 8;
         if (pct >= 100) {
           pct = 100;
           clearInterval(window.__efLoaderInterval);
-          triggerOutro(); // 直到跑到 100% 才允许触发退场闪屏！
+          triggerOutro(); 
         }
       }
 
-      // 同步渲染 UI
       if (bar && pctBox && pctText) {
+        // 进度条本身永远按 0-100% 正常走
         bar.style.height = pct + '%';
         
-        // 【核心神技修缮】
-        // 使用 CSS clamp 锁定数字面板的上下限，上距顶端留 80px，下距底端留 100px
-        // 进度条会继续拉长，但文字组到了安全区边界就会被“卡住”防溢出！
-        pctBox.style.top = `clamp(80px, ${pct}%, calc(100% - 100px))`;
+        // 【核心神技修缮】：计算理想的像素位置
+        let targetY = (pct / 100) * windowHeight;
         
+        // 动态强制锁死上下边界！
+        if (targetY < safeMargin) {
+            targetY = safeMargin; // 顶部锁死防截断
+        } else if (targetY > windowHeight - safeMargin) {
+            targetY = windowHeight - safeMargin; // 底部锁死防截断
+        }
+        
+        pctBox.style.top = targetY + 'px'; // 赋值确切像素
         pctText.innerText = pct + '%';
       }
     }, 40); 
