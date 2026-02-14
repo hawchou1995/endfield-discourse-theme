@@ -6,4 +6,4 @@ topic_list_width:
 sidebar_stick_to_edge:
   default: true
   type: bool
-  description: "【布局切换】左侧导航栏是否紧贴屏幕左边缘？(勾选: 紧贴屏幕边缘；不勾选: 紧贴中间的话题列表)"
+  description: "【布局切换】左侧导航栏和顶栏是否紧贴屏幕边缘？(勾选: 绝对贴边；不勾选: 居中收缩)"
