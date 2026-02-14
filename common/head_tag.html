@@ -1,87 +1,105 @@
 <style>
   #endfield-loader {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0; left: 0; width: 100vw; height: 100vh;
     background-color: #12151A; /* 终末地深色背景 */
     background-image: 
       linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
       linear-gradient(180deg, rgba(255,255,255,0.03) 1px, transparent 1px);
     background-size: 40px 40px;
     z-index: 9999999; /* 确保在最顶层 */
-    transition: opacity 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: opacity 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
     font-family: "Rajdhani", "JetBrains Mono", sans-serif;
   }
   
   /* 橙色全屏闪屏层 */
   #ef-orange-flash {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-color: #FF6B35; /* 终末地警示橙 */
-    opacity: 0;
-    z-index: 1;
-    transition: opacity 0.3s ease-in-out;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #FF6B35;
+    opacity: 0; z-index: 10;
+    transition: opacity 0.15s ease-out; /* 快速闪切 */
+    pointer-events: none;
   }
 
-  /* 左侧进度条容器 */
-  .ef-loader-ui {
+  /* 左侧轨道底槽 (完全贴边) */
+  .ef-rail {
     position: absolute;
-    left: 8%;
-    bottom: 15%;
-    width: 350px;
-    max-width: 80%;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .ef-loader-title {
-    font-size: 12px;
-    color: rgba(255,255,255,0.5);
-    margin-bottom: 6px;
-    letter-spacing: 1px;
-    font-weight: 600;
+    top: 0; left: 0;
+    width: 8px; /* 细长轨道 */
+    height: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    z-index: 5;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .ef-loader-text {
-    display: flex;
-    justify-content: space-between;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    margin-bottom: 12px;
-    text-transform: uppercase;
-    color: #fff;
-  }
-  
-  .ef-loader-bar-bg {
+  /* 从上到下的橙色填充条 */
+  .ef-fill {
+    position: absolute;
+    top: 0; left: 0;
     width: 100%;
-    height: 3px;
-    background: rgba(255, 255, 255, 0.2);
-    position: relative;
-    overflow: hidden;
+    height: 0%; /* JS 动态控制 */
+    background: #FF6B35;
+    box-shadow: 0 0 15px rgba(255, 107, 53, 0.8);
+    transition: height 0.08s linear; /* 平滑跟随 */
   }
-  
-  .ef-loader-bar-fill {
+
+  /* 跟随的百分比指示器容器 */
+  .ef-pct-container {
     position: absolute;
-    top: 0; left: 0; height: 100%;
-    width: 0%;
-    background: #fff;
-    box-shadow: 0 0 10px rgba(255,255,255,0.8); 
-    transition: width 0.1s linear;
+    top: 0%; /* JS 动态控制，与 height 同步 */
+    left: 8px; /* 紧贴进度条右侧 */
+    transform: translateY(-50%); /* 准心对齐进度条末端边缘 */
+    transition: top 0.08s linear;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+  }
+
+  /* 指向数字的横线标识 */
+  .ef-pct-line {
+    width: 20px;
+    height: 2px;
+    background: #FF6B35;
+    margin-right: 12px;
+    box-shadow: 0 0 5px #FF6B35;
+  }
+
+  /* 百分比数字 */
+  .ef-pct-num {
+    font-size: 36px;
+    font-weight: 800;
+    color: #FF6B35;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+    line-height: 1;
+  }
+
+  /* 居中的暗纹装饰字 */
+  .ef-bg-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4vw;
+    color: rgba(255, 255, 255, 0.02);
+    font-weight: 900;
+    letter-spacing: 20px;
+    pointer-events: none;
+    white-space: nowrap;
+    user-select: none;
   }
 </style>
 
 <div id="endfield-loader">
   <div id="ef-orange-flash"></div>
-  <div class="ef-loader-ui">
-    <div class="ef-loader-title">SYSTEM BOOTING // ENDFIELD OS</div>
-    <div class="ef-loader-text">
-      <span id="ef-text">LOADING...</span>
-      <span id="ef-pct">0%</span>
-    </div>
-    <div class="ef-loader-bar-bg">
-      <div class="ef-loader-bar-fill" id="ef-bar"></div>
-    </div>
+  <div class="ef-bg-text">ENDFIELD INITIALIZING</div>
+  
+  <div class="ef-rail">
+    <div class="ef-fill" id="ef-bar"></div>
+  </div>
+  
+  <div class="ef-pct-container" id="ef-pct-box">
+    <div class="ef-pct-line"></div>
+    <div class="ef-pct-num" id="ef-pct">0%</div>
   </div>
 </div>
 
@@ -89,28 +107,19 @@
   (function() {
     let pct = 0;
     const bar = document.getElementById('ef-bar');
+    const pctBox = document.getElementById('ef-pct-box');
     const pctText = document.getElementById('ef-pct');
-    const textEl = document.getElementById('ef-text');
-    
-    const texts = ["INITIALIZING...", "LOADING CORE MODULES...", "ESTABLISHING LINK..."];
-    let textIdx = 0;
 
+    // 独立循环，控制垂直下落跳动
     window.__efLoaderInterval = setInterval(() => {
-      // 模拟加载跳动
-      pct += Math.floor(Math.random() * 12) + 2;
+      pct += Math.floor(Math.random() * 8) + 1; // 随机跳动 1~8
+      if (pct >= 99) pct = 99; // 卡在 99% 等待系统就绪
       
-      if (pct >= 99) {
-        pct = 99; // 卡在 99% 等待真实页面加载完毕
-      }
-      
-      if (bar && pctText) {
-        bar.style.width = pct + '%';
+      if (bar && pctBox && pctText) {
+        bar.style.height = pct + '%'; // 控制进度条高度
+        pctBox.style.top = pct + '%'; // 控制文字 Y 轴位置，紧跟进度条底部
         pctText.innerText = pct + '%';
       }
-      
-      if (pct > 30 && textIdx === 0) { textIdx++; if(textEl) textEl.innerText = texts[textIdx]; }
-      if (pct > 70 && textIdx === 1) { textIdx++; if(textEl) textEl.innerText = texts[textIdx]; }
-      
-    }, 120);
+    }, 50); // 高频刷新，下落更丝滑
   })();
 </script>
