@@ -1,74 +1,175 @@
 // =======================================================
-// 1. 布局核心修正 (稳定不折叠版)
+// 1. 布局核心修正 (双模式智能切换版 - 稳定不折叠)
 // =======================================================
 
+// 调用 settings.yml 中定义的变量
 $fluid-width: unquote($topic_list_width); 
 
-#main.wrap { max-width: 100% !important; width: 100% !important; padding-left: 0 !important; padding-right: 0 !important; }
-.d-layout { width: 100% !important; max-width: 100% !important; margin-inline: 0 !important; padding-inline: 0 !important; overflow: visible !important; }
-
-@if $sidebar_stick_to_edge == "true" {
-    .sidebar-wrapper, .d-sidebar { margin-left: 0 !important; }
-    #main-outlet-wrapper { max-width: 100% !important; width: 100% !important; margin-inline: 0 !important; padding-inline: 0 !important; box-sizing: border-box; }
-    body.archetype-list, body.navigation-topics, body.navigation-categories, body.tags-page { #main-outlet { max-width: $fluid-width !important; width: 100% !important; margin-left: auto !important; margin-right: auto !important; } }
-    .d-header > .wrap { max-width: 100% !important; width: 100% !important; margin-inline: 0 !important; padding-inline: 24px !important; .contents { max-width: 100% !important; margin-inline: 0 !important; } }
-} @else {
-    #main-outlet-wrapper { max-width: $fluid-width !important; width: 100% !important; margin-inline: auto !important; padding-inline: 0 !important; box-sizing: border-box; }
-    #main-outlet { max-width: 100% !important; width: 100% !important; margin-inline: 0 !important; }
-    .d-header > .wrap { max-width: $fluid-width !important; width: 100% !important; margin-inline: auto !important; padding-inline: 0 !important; .contents { max-width: 100% !important; margin-inline: 0 !important; } }
+// 1.1 破除 Discourse 最外层限制
+#main.wrap {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-left: 0 !important; 
+    padding-right: 0 !important; 
 }
 
-#main-outlet-wrapper #main-outlet > *:not(.experimental-screen):not(.activate-account) { max-width: 100% !important; width: 100% !important; margin-inline: 0 !important; }
+.d-layout {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-inline: 0 !important; 
+    padding-inline: 0 !important;
+    overflow: visible !important;
+}
+
+// ---------------------------------------------------
+// [核心] 智能布局切换逻辑 (稳定版)
+// ---------------------------------------------------
+@if $sidebar_stick_to_edge == "true" {
+    // 【模式 A：绝对贴边，正常展开不折叠】
+    .sidebar-wrapper, .d-sidebar { margin-left: 0 !important; }
+    
+    #main-outlet-wrapper {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin-inline: 0 !important;
+        padding-inline: 0 !important;
+        box-sizing: border-box;
+    }
+    
+    body.archetype-list, body.navigation-topics, body.navigation-categories, body.tags-page {
+        #main-outlet {
+            max-width: $fluid-width !important; 
+            width: 100% !important;
+            margin-left: auto !important;  
+            margin-right: auto !important; 
+        }
+    }
+
+    .d-header > .wrap {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin-inline: 0 !important;
+        padding-inline: 24px !important; 
+        .contents { max-width: 100% !important; margin-inline: 0 !important; }
+    }
+
+} @else {
+    // 【模式 B：居中收缩模式】
+    #main-outlet-wrapper {
+        max-width: $fluid-width !important; 
+        width: 100% !important;
+        margin-inline: auto !important; 
+        padding-inline: 0 !important;
+        box-sizing: border-box;
+    }
+    
+    #main-outlet {
+        max-width: 100% !important; 
+        width: 100% !important;
+        margin-inline: 0 !important; 
+    }
+    
+    .d-header > .wrap {
+        max-width: $fluid-width !important;
+        width: 100% !important;
+        margin-inline: auto !important;
+        padding-inline: 0 !important;
+        .contents { max-width: 100% !important; margin-inline: 0 !important; }
+    }
+}
+// ---------------------------------------------------
+
+// 强制内部内容撑满分配空间
+#main-outlet-wrapper #main-outlet > *:not(.experimental-screen):not(.activate-account) {
+    max-width: 100% !important; 
+    width: 100% !important;
+    margin-inline: 0 !important; 
+}
+
 #main-outlet { flex: 1 1 auto !important; min-width: 0 !important; padding: 0 !important; }
-
-// 【核心修复】：移除了 `table-layout: fixed`，恢复 Discourse 默认表格宽度分配机制，右侧不再出现巨大空隙！
 .topic-list { width: 100% !important; display: table !important; }
-
 .list-controls { max-width: 100% !important; margin-inline: 0 !important; .navigation-container { max-width: 100% !important; } }
 .d-right-sidebar, .tc-right-sidebar-wrapper { flex-shrink: 0 !important; }
 
 @media screen and (max-width: 767px) {
-  #main.wrap { padding-inline: 0 !important; } .d-layout, .d-header > .wrap { width: 100% !important; max-width: 100% !important; }
-  #main-outlet-wrapper { max-width: 100% !important; padding-inline: 10px !important; } #main-outlet { max-width: 100% !important; display: block !important; margin-inline: 0 !important; }
+  #main.wrap { padding-inline: 0 !important; }
+  .d-layout, .d-header > .wrap { width: 100% !important; max-width: 100% !important; }
+  #main-outlet-wrapper { max-width: 100% !important; padding-inline: 10px !important; }
+  #main-outlet { max-width: 100% !important; display: block !important; margin-inline: 0 !important; }
 }
 
 // =======================================================
 // 2. 界面元素管理
 // =======================================================
 
-html.desktop-view .navigation-controls { .topic-list-layout-trigger, #create-topic, .create-topic { display: none !important; } }
-.endfield-sidebar-new-topic-button-container { margin-top: 20px; margin-bottom: 20px; padding: 0 10px; box-sizing: border-box; width: 100%; }
+html.desktop-view .navigation-controls {
+  .topic-list-layout-trigger, #create-topic, .create-topic { display: none !important; }
+}
+
+.endfield-sidebar-new-topic-button-container {
+  margin-top: 20px; margin-bottom: 20px; padding: 0 10px; box-sizing: border-box; width: 100%;
+}
 .sidebar-wrapper .sidebar-navigation { padding-top: 10px; }
 
 .endfield-sidebar-create-btn {
-  width: 100%; height: 48px; display: flex; align-items: center; justify-content: center; font-size: 1.1em; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; background: #FF6B35 !important; color: #fff !important; border: none; border-radius: 0; clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px)); transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1); box-shadow: 0 4px 0 #cc4e22;
+  width: 100%; height: 48px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.1em; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+  background: #FF6B35 !important; color: #fff !important; border: none; border-radius: 0;
+  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1); box-shadow: 0 4px 0 #cc4e22;
+
   .btn-content { display: flex; align-items: center; gap: 10px; }
-  .btn-decor-corner { position: absolute; bottom: 3px; right: 3px; width: 8px; height: 8px; background: rgba(0,0,0,0.2); clip-path: polygon(100% 0, 0 100%, 100% 100%); }
-  &:hover { background: #ff8c61 !important; transform: translateY(-2px); box-shadow: 0 6px 0 #cc4e22; .btn-content { transform: scale(1.05); } }
-  &:active { transform: translateY(2px); box-shadow: 0 2px 0 #cc4e22; background: #e55a2b !important; }
+  .btn-decor-corner {
+    position: absolute; bottom: 3px; right: 3px; width: 8px; height: 8px;
+    background: rgba(0,0,0,0.2); clip-path: polygon(100% 0, 0 100%, 100% 100%);
+  }
+
+  &:hover {
+    background: #ff8c61 !important; transform: translateY(-2px); box-shadow: 0 6px 0 #cc4e22;
+    .btn-content { transform: scale(1.05); }
+  }
+  &:active {
+    transform: translateY(2px); box-shadow: 0 2px 0 #cc4e22; background: #e55a2b !important;
+  }
 }
 
 // =======================================================
-// 3. 【无损神技】话题列表交互增强 (点击跳转 + 零破坏准星光效)
+// 3. 列表交互增强 (全行点击 + 进度条 + 准星)
 // =======================================================
 
 .topic-list tbody tr {
+  position: relative; // 必须保留：这是让整个卡片可点击的基础！
   border-left: 0; 
-  transition: background-color 0.2s ease;
+  box-shadow: inset 0 0 0 rgba(255, 107, 53, 0); 
   
-  // 保护链接点击层级
+  // 进度条光效背景，默认 0%
+  background-image: linear-gradient(to right, rgba(255, 107, 53, 0.15), rgba(255, 107, 53, 0.15));
+  background-repeat: no-repeat; 
+  background-size: 0% 100%; 
+  transition: background-size 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.1s ease;
+  
+  // 【全行点击复活！】
+  // 核心技巧：放在外部而不是 :hover 里，避免触发高度重算！
+  .main-link a.title::after {
+      content: "";
+      position: absolute;
+      top: 0; bottom: 0; left: 0; right: 0; 
+      z-index: 1; 
+  }
+  
+  // 保护头像、分类和标签的点击不被遮挡
   .posters a, .badge-wrapper, .discourse-tag { position: relative; z-index: 2; }
   
-  // 透明化单元格背景，以展示行背景
   td { background-color: transparent !important; }
 
   &:hover {
     cursor: pointer;
-    background-color: rgba(255, 107, 53, 0.1) !important; // 整行呈现警示橙微光
-    box-shadow: inset 4px 0 0 #FF6B35 !important; // 左侧发光粗条
+    // 横向进度条瞬间铺满！
+    background-size: 100% 100% !important; 
+    box-shadow: inset 4px 0 0 #FF6B35 !important; 
   }
   
-  // 【核心技巧】：利用本行第一个和最后一个单元格的内侧绘制四角准星，绝对不会打破表格行高！
+  // 首尾单元格四角准星
   &:hover td:first-child {
     background-image: 
       linear-gradient(to right, #FF6B35 2px, transparent 2px),
