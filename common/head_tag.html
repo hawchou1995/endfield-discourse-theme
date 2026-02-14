@@ -3,15 +3,24 @@
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
     background-color: #12151A;
-    background-image: 
+    background-image:
       linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
       linear-gradient(180deg, rgba(255,255,255,0.03) 1px, transparent 1px);
     background-size: 40px 40px;
     z-index: 9999999;
     transition: opacity 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
     font-family: "Rajdhani", "JetBrains Mono", sans-serif;
+
+    /* 关键：避免内部元素因为溢出被裁切 */
+    overflow: visible;
   }
-  
+
+  /* iOS 刘海安全区变量（不支持就回退为 0） */
+  :root{
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+  }
+
   #ef-orange-flash {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background-color: #FF6B35;
@@ -23,7 +32,7 @@
   .ef-rail {
     position: absolute;
     top: 0; left: 0;
-    width: 14px; 
+    width: 14px;
     height: 100%;
     background: rgba(255, 255, 255, 0.05);
     z-index: 5;
@@ -34,22 +43,23 @@
     position: absolute;
     top: 0; left: 0;
     width: 100%;
-    height: 0%; 
+    height: 0%;
     background: #FF6B35;
     box-shadow: 0 0 15px rgba(255, 107, 53, 0.8);
-    transition: height 0.05s linear; 
+    transition: height 0.05s linear;
   }
 
   .ef-pct-container {
     position: absolute;
-    top: 0px; /* 改为 px，交由 JS 动态精准控制 */
-    left: 28px; 
-    transform: translateY(-50%); /* 保持垂直居中对齐 */
+    top: 0px;            /* JS 会写成 px */
+    left: 28px;
+    transform: translateY(-50%); /* 保留：让 top 表示“中心点”更自然 */
     transition: top 0.05s linear;
     z-index: 5;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     align-items: flex-start;
+    will-change: top;
   }
 
   .ef-pct-line-v {
@@ -79,11 +89,11 @@
 <div id="endfield-loader">
   <div id="ef-orange-flash"></div>
   <div class="ef-bg-text">ENDFIELD INITIALIZING</div>
-  
+
   <div class="ef-rail">
     <div class="ef-fill" id="ef-bar"></div>
   </div>
-  
+
   <div class="ef-pct-container" id="ef-pct-box">
     <div class="ef-pct-line-v"></div>
     <div class="ef-pct-num" id="ef-pct">0%</div>
@@ -92,73 +102,110 @@
 </div>
 
 <script>
-  (function() {
-    let pct = 0;
-    const bar = document.getElementById('ef-bar');
-    const pctBox = document.getElementById('ef-pct-box');
-    const pctText = document.getElementById('ef-pct');
-    const subText = document.getElementById('ef-text');
-    let isFinishing = false; 
+  (function () {
+    const loader = document.getElementById("endfield-loader");
+    const orangeFlash = document.getElementById("ef-orange-flash");
+    const bar = document.getElementById("ef-bar");
+    const pctBox = document.getElementById("ef-pct-box");
+    const pctText = document.getElementById("ef-pct");
+    const subText = document.getElementById("ef-text");
 
-    // 【终极修复】：
-    // 1. 增大 safeMargin 到 100px（原来是 65px）
-    // 2. 移除 transform: translateY(-50%)，改用其他对齐方式
-    const windowHeight = window.innerHeight;
-    const safeMargin = 100; // 🔥 增大到 100px，确保绝对不截断
+    if (!loader || !bar || !pctBox || !pctText) return;
+
+    // 防止重复注入导致多个 interval 叠加
+    if (window.__efLoaderInterval) clearInterval(window.__efLoaderInterval);
+
+    let pct = 0;
+    let isFinishing = false;
+
+    function clamp(v, min, max) {
+      return Math.max(min, Math.min(max, v));
+    }
+
+    function getSafeInsetsPx() {
+      const rootStyle = getComputedStyle(document.documentElement);
+      const sat = parseFloat(rootStyle.getPropertyValue("--sat")) || 0;
+      const sab = parseFloat(rootStyle.getPropertyValue("--sab")) || 0;
+      return { top: sat, bottom: sab };
+    }
+
+    /**
+     * 核心：用“中心点”定位（配合 translateY(-50%)），并按真实高度 clamp
+     * 这样 0% 时也会把中心点至少推到 halfHeight+topInset+buffer，绝不会被截断
+     */
+    function updatePctBoxPosition(pctValue) {
+      const vh = loader.getBoundingClientRect().height;
+      const boxH = pctBox.getBoundingClientRect().height;
+      const half = boxH / 2;
+
+      const inset = getSafeInsetsPx();
+      const buffer = 8; // 额外缓冲，防止贴边视觉不适
+
+      // 理想中心点：0% => 0, 100% => vh
+      let centerY = (pctValue / 100) * vh;
+
+      const minCenter = half + inset.top + buffer;
+      const maxCenter = vh - half - inset.bottom - buffer;
+
+      // 极端小屏：避免 min > max 造成抖动
+      if (minCenter > maxCenter) {
+        centerY = vh / 2;
+      } else {
+        centerY = clamp(centerY, minCenter, maxCenter);
+      }
+
+      pctBox.style.top = centerY + "px";
+    }
+
+    function render() {
+      bar.style.height = pct + "%";
+      pctText.textContent = pct + "%";
+      updatePctBoxPosition(pct);
+    }
+
+    // 初始立刻布局一次，避免首帧 0% 被切
+    render();
+
+    // 字体加载完后高度可能变化，重新布局一次（这是很多方案失败的根因）
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(render).catch(function(){});
+    }
+
+    window.addEventListener("resize", render, { passive: true });
 
     window.__efLoaderInterval = setInterval(() => {
       if (!isFinishing) {
-        pct += Math.floor(Math.random() * 4) + 1; 
-        if (pct >= 85) pct = 85; 
+        pct += Math.floor(Math.random() * 4) + 1;
+        if (pct >= 85) pct = 85;
       } else {
         pct += 8;
         if (pct >= 100) {
           pct = 100;
+          render();
           clearInterval(window.__efLoaderInterval);
-          triggerOutro(); 
+          triggerOutro();
+          return;
         }
       }
+      render();
+    }, 40);
 
-      if (bar && pctBox && pctText) {
-        // 进度条本身永远按 0-100% 正常走
-        bar.style.height = pct + '%';
-        
-        // 【终极修复】：计算理想的像素位置
-        let targetY = (pct / 100) * windowHeight;
-        
-        // 🔥 动态强制锁死上下边界！
-        if (targetY < safeMargin) {
-            targetY = safeMargin; // 顶部锁死：100px
-        } else if (targetY > windowHeight - safeMargin) {
-            targetY = windowHeight - safeMargin; // 底部锁死
-        }
-        
-        pctBox.style.top = targetY + 'px'; // 赋值确切像素
-        pctText.innerText = pct + '%';
-      }
-    }, 40); 
-
-    window.efFinishLoading = function() {
+    window.efFinishLoading = function () {
       if (isFinishing) return;
       isFinishing = true;
-      if (subText) subText.innerText = "SYSTEM READY";
+      if (subText) subText.textContent = "SYSTEM READY";
     };
 
     function triggerOutro() {
-      const loader = document.getElementById('endfield-loader');
-      const orangeFlash = document.getElementById('ef-orange-flash');
-      
       setTimeout(() => {
-        if (orangeFlash) orangeFlash.style.opacity = '1';
-        
+        if (orangeFlash) orangeFlash.style.opacity = "1";
+
         setTimeout(() => {
-          if (loader) {
-            loader.style.opacity = '0';
-            loader.style.pointerEvents = 'none';
-            setTimeout(() => loader.remove(), 600);
-          }
-        }, 200); 
-      }, 50); 
+          loader.style.opacity = "0";
+          loader.style.pointerEvents = "none";
+          setTimeout(() => loader.remove(), 600);
+        }, 200);
+      }, 50);
     }
   })();
 </script>
