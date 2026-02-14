@@ -20,7 +20,10 @@ $fluid-width: unquote($topic_list_width);
 
 #main-outlet-wrapper #main-outlet > *:not(.experimental-screen):not(.activate-account) { max-width: 100% !important; width: 100% !important; margin-inline: 0 !important; }
 #main-outlet { flex: 1 1 auto !important; min-width: 0 !important; padding: 0 !important; }
-.topic-list { width: 100% !important; display: table !important; table-layout: fixed !important; }
+
+// 【核心修复】：移除了 `table-layout: fixed`，恢复 Discourse 默认表格宽度分配机制，右侧不再出现巨大空隙！
+.topic-list { width: 100% !important; display: table !important; }
+
 .list-controls { max-width: 100% !important; margin-inline: 0 !important; .navigation-container { max-width: 100% !important; } }
 .d-right-sidebar, .tc-right-sidebar-wrapper { flex-shrink: 0 !important; }
 
@@ -46,73 +49,45 @@ html.desktop-view .navigation-controls { .topic-list-layout-trigger, #create-top
 }
 
 // =======================================================
-// 3. 【终极神技】纯净版无重排准星特效 (Zero-Reflow Target Lock)
-// 放弃任何 pseudo elements，纯用 9 层背景叠加，绝对不破坏行高！
+// 3. 【无损神技】话题列表交互增强 (点击跳转 + 零破坏准星光效)
 // =======================================================
 
 .topic-list tbody tr {
-  position: relative;
   border-left: 0; 
-  box-shadow: inset 0 0 0 rgba(255, 107, 53, 0); 
-  
-  // 透明化单元格背景，让 tr 的背景显露
-  td { background-color: transparent !important; }
-
-  // 默认状态：8个角全透明，第9层橙色光效宽度为 0%
-  background-image: 
-    linear-gradient(to right, transparent 2px, transparent 2px),
-    linear-gradient(to bottom, transparent 2px, transparent 2px),
-    linear-gradient(to left, transparent 2px, transparent 2px),
-    linear-gradient(to bottom, transparent 2px, transparent 2px),
-    linear-gradient(to right, transparent 2px, transparent 2px),
-    linear-gradient(to top, transparent 2px, transparent 2px),
-    linear-gradient(to left, transparent 2px, transparent 2px),
-    linear-gradient(to top, transparent 2px, transparent 2px),
-    linear-gradient(to right, rgba(255, 107, 53, 0.15), rgba(255, 107, 53, 0.15));
-    
-  background-position: 
-    top left, top left,
-    top right, top right,
-    bottom left, bottom left,
-    bottom right, bottom right,
-    left top;
-    
-  background-repeat: no-repeat;
-  
-  background-size: 
-    8px 8px, 8px 8px, 
-    8px 8px, 8px 8px, 
-    8px 8px, 8px 8px, 
-    8px 8px, 8px 8px, 
-    0% 100%; 
-    
-  transition: background-size 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.1s ease, background-image 0s;
-
-  &:hover {
-    cursor: pointer;
-    box-shadow: inset 4px 0 0 #FF6B35 !important;
-    
-    // 悬停状态：瞬间把前8层变成橙色，第9层依然是光效背景
-    background-image: 
-      linear-gradient(to right, #FF6B35 2px, transparent 2px),
-      linear-gradient(to bottom, #FF6B35 2px, transparent 2px),
-      linear-gradient(to left, #FF6B35 2px, transparent 2px),
-      linear-gradient(to bottom, #FF6B35 2px, transparent 2px),
-      linear-gradient(to right, #FF6B35 2px, transparent 2px),
-      linear-gradient(to top, #FF6B35 2px, transparent 2px),
-      linear-gradient(to left, #FF6B35 2px, transparent 2px),
-      linear-gradient(to top, #FF6B35 2px, transparent 2px),
-      linear-gradient(to right, rgba(255, 107, 53, 0.15), rgba(255, 107, 53, 0.15));
-
-    // 过渡状态：让第9层光效宽度拉到 100%
-    background-size: 
-      8px 8px, 8px 8px, 
-      8px 8px, 8px 8px, 
-      8px 8px, 8px 8px, 
-      8px 8px, 8px 8px, 
-      100% 100% !important; 
-  }
+  transition: background-color 0.2s ease;
   
   // 保护链接点击层级
   .posters a, .badge-wrapper, .discourse-tag { position: relative; z-index: 2; }
+  
+  // 透明化单元格背景，以展示行背景
+  td { background-color: transparent !important; }
+
+  &:hover {
+    cursor: pointer;
+    background-color: rgba(255, 107, 53, 0.1) !important; // 整行呈现警示橙微光
+    box-shadow: inset 4px 0 0 #FF6B35 !important; // 左侧发光粗条
+  }
+  
+  // 【核心技巧】：利用本行第一个和最后一个单元格的内侧绘制四角准星，绝对不会打破表格行高！
+  &:hover td:first-child {
+    background-image: 
+      linear-gradient(to right, #FF6B35 2px, transparent 2px),
+      linear-gradient(to bottom, #FF6B35 2px, transparent 2px),
+      linear-gradient(to right, #FF6B35 2px, transparent 2px),
+      linear-gradient(to top, #FF6B35 2px, transparent 2px);
+    background-position: top left, top left, bottom left, bottom left;
+    background-size: 8px 8px;
+    background-repeat: no-repeat;
+  }
+  
+  &:hover td:last-child {
+    background-image: 
+      linear-gradient(to left, #FF6B35 2px, transparent 2px),
+      linear-gradient(to bottom, #FF6B35 2px, transparent 2px),
+      linear-gradient(to left, #FF6B35 2px, transparent 2px),
+      linear-gradient(to top, #FF6B35 2px, transparent 2px);
+    background-position: top right, top right, bottom right, bottom right;
+    background-size: 8px 8px;
+    background-repeat: no-repeat;
+  }
 }
