@@ -102,8 +102,8 @@
 
     // 【核心新增】：获取窗口高度和字盒子的实际高度
     const windowHeight = window.innerHeight;
-    // 假设渲染前拿不到，给一个安全的硬编码估计值（54px字+24px线+14px字+边距约 110px）
-    // translateY(-50%) 意味着上下各突出一半，所以安全距离取一半再多给一点缓冲
+    // 数字容器高度约 110px，translateY(-50%) 意味着上下各突出一半
+    // 安全距离 = 容器高度的一半 + 缓冲（约 55px + 10px）
     const safeMargin = 65; 
 
     window.__efLoaderInterval = setInterval(() => {
