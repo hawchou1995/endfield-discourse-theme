@@ -4,7 +4,7 @@
 @import url('https://fonts.loli.net/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Rajdhani:wght@500;600;700&display=swap');
 
 // ============================================
-// 《明日方舟·终末地》 (Endspace Style) - V5.5 纯净版
+// 《明日方舟·终末地》 (Endspace Style) - V6.0 最终觉醒版
 // ============================================
 
 $endfield-cyan: #00D4FF; 
@@ -174,10 +174,6 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
 .d-header .icons .icon, .d-header .header-buttons .btn { clip-path: none !important; border-radius: 0 !important; }
 #toggle-current-user { overflow: visible !important; .badge-notification { position: absolute; z-index: 99 !important; } }
 
-// 14. 数据流文本装饰 (Terminal Text Accent)
-.badge-category-name::before, .sidebar-section-header-text::before, .navigation-container .nav-pills > li > a::before { content: "// "; color: $endfield-cyan; opacity: 0.6; font-family: "JetBrains Mono", monospace; font-weight: 900; margin-right: 4px; letter-spacing: -1px; }
-.navigation-container .nav-pills > li.active > a::before { color: #000; opacity: 1; }
-
-// 15. 全局渲染性能优化 (Hardware Acceleration)
+// 14. 全局渲染性能优化
 .topic-list tbody tr, .btn, .sidebar-wrapper .sidebar-container, .discourse-tag.box { will-change: transform, box-shadow, opacity; transform: translateZ(0); backface-visibility: hidden; }
 @media screen and (max-width: 767px) { .d-header { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; } .topic-list tbody tr { box-shadow: none !important; } }
