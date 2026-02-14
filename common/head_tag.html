@@ -1,42 +1,62 @@
-
 <style>
   #endfield-loader {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
     background-color: #12151A; /* 终末地深色背景 */
     background-image: 
-      linear-gradient(90deg, rgba(125,125,125,0.05) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(125,125,125,0.05) 1px, transparent 1px);
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(255,255,255,0.03) 1px, transparent 1px);
     background-size: 40px 40px;
     z-index: 9999999; /* 确保在最顶层 */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     transition: opacity 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
     font-family: "Rajdhani", "JetBrains Mono", sans-serif;
-    color: #00D4FF;
   }
   
-  .ef-loader-container {
+  /* 橙色全屏闪屏层 */
+  #ef-orange-flash {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #FF6B35; /* 终末地警示橙 */
+    opacity: 0;
+    z-index: 1;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  /* 左侧进度条容器 */
+  .ef-loader-ui {
+    position: absolute;
+    left: 8%;
+    bottom: 15%;
     width: 350px;
     max-width: 80%;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
   }
   
+  .ef-loader-title {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
   .ef-loader-text {
     display: flex;
     justify-content: space-between;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
     letter-spacing: 2px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     text-transform: uppercase;
+    color: #fff;
   }
   
   .ef-loader-bar-bg {
     width: 100%;
-    height: 4px;
-    background: rgba(0, 212, 255, 0.15);
+    height: 3px;
+    background: rgba(255, 255, 255, 0.2);
     position: relative;
     overflow: hidden;
   }
@@ -45,36 +65,27 @@
     position: absolute;
     top: 0; left: 0; height: 100%;
     width: 0%;
-    background: #00D4FF;
-    box-shadow: 0 0 12px #00D4FF; /* 进度条发光 */
+    background: #fff;
+    box-shadow: 0 0 10px rgba(255,255,255,0.8); 
     transition: width 0.1s linear;
-  }
-  
-  .ef-loader-decor {
-    font-size: 11px;
-    color: rgba(0, 212, 255, 0.5);
-    margin-top: 10px;
-    text-align: right;
-    font-weight: 600;
-    letter-spacing: 1px;
   }
 </style>
 
 <div id="endfield-loader">
-  <div class="ef-loader-container">
+  <div id="ef-orange-flash"></div>
+  <div class="ef-loader-ui">
+    <div class="ef-loader-title">SYSTEM BOOTING // ENDFIELD OS</div>
     <div class="ef-loader-text">
-      <span id="ef-text">SYSTEM BOOTING...</span>
+      <span id="ef-text">LOADING...</span>
       <span id="ef-pct">0%</span>
     </div>
     <div class="ef-loader-bar-bg">
       <div class="ef-loader-bar-fill" id="ef-bar"></div>
     </div>
-    <div class="ef-loader-decor">ENDFIELD OS v2.0</div>
   </div>
 </div>
 
 <script>
-  // 假进度条跳动逻辑（因为无法真实获知资源加载情况，我们用随机数模拟科幻感）
   (function() {
     let pct = 0;
     const bar = document.getElementById('ef-bar');
@@ -85,12 +96,11 @@
     let textIdx = 0;
 
     window.__efLoaderInterval = setInterval(() => {
-      // 随机跳动进度，增加真实感
+      // 模拟加载跳动
       pct += Math.floor(Math.random() * 12) + 2;
       
-      // 卡在 99%，等待 Discourse 完全加载完毕
       if (pct >= 99) {
-        pct = 99; 
+        pct = 99; // 卡在 99% 等待真实页面加载完毕
       }
       
       if (bar && pctText) {
@@ -98,10 +108,9 @@
         pctText.innerText = pct + '%';
       }
       
-      // 根据进度改变文本提示
       if (pct > 30 && textIdx === 0) { textIdx++; if(textEl) textEl.innerText = texts[textIdx]; }
       if (pct > 70 && textIdx === 1) { textIdx++; if(textEl) textEl.innerText = texts[textIdx]; }
       
-    }, 150);
+    }, 120);
   })();
 </script>
