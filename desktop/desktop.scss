@@ -1,11 +1,10 @@
 // =======================================================
-// 1. 布局核心修正 (智能切换版 + 侧边栏悬停折叠)
+// 1. 布局核心修正 (双模式智能切换版)
 // =======================================================
 
-// 调用 settings.yml 中定义的变量
 $fluid-width: unquote($topic_list_width); 
 
-// 1.1 破除最外层限制
+// 破除 Discourse 最外层限制
 #main.wrap {
     max-width: 100% !important;
     width: 100% !important;
@@ -21,74 +20,77 @@ $fluid-width: unquote($topic_list_width);
     overflow: visible !important;
 }
 
-// ---------------------------------------------------
-// [核心] 智能布局切换逻辑
-// ---------------------------------------------------
 @if $sidebar_stick_to_edge == "true" {
     // 【模式 A：绝对贴边 & 侧边栏折叠特效】
     
+    // 彻底消除侧边栏左侧预设边距
     .sidebar-wrapper, .d-sidebar {
         margin-left: 0 !important;
     }
     
     html.desktop-view {
-      // 1. 侧边栏物理占位槽：固定 64px，死死贴住左边
+      // 1. 侧边栏物理占位：固定在左侧 64px
       .sidebar-wrapper {
+        --d-sidebar-width: 64px !important;
         width: 64px !important;
         min-width: 64px !important;
         flex-basis: 64px !important;
-        position: relative; // 为内部的 absolute 容器做定位基准
+        flex-shrink: 0 !important;
+        position: relative;
         z-index: 100;
       }
 
-      // 2. 侧边栏真实容器 (拉窗帘的轨道)
-      .sidebar-wrapper .sidebar-container {
-        position: absolute !important; // 悬浮覆盖，绝对不挤压主列表
+      // 2. 侧边栏实际悬浮容器 (实现抽屉滑轨动画)
+      .sidebar-container {
+        position: absolute !important;
         top: 0; left: 0;
-        width: 64px !important; // 默认闭合宽度
         height: 100% !important;
+        width: 64px !important; // 折叠时宽度
         background-color: var(--secondary) !important; 
         border-right: 1px solid var(--primary-low) !important;
         
         overflow-x: hidden !important; 
         overflow-y: auto !important;
-        
+        z-index: 105;
         transition: width 0.25s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.25s ease !important;
-        z-index: 100;
         
-        // 折叠时隐藏滚动条，保持纯净
+        // 隐藏折叠时的滚动条
         &::-webkit-scrollbar { width: 0px; background: transparent; }
         
-        // 3. 【解决被挤成一坨屎的核心】强制所有子元素保持展开时的宽度！
-        & > * {
-          width: 260px !important; // Discourse 默认侧边栏宽度约 260px
+        // 3. 【防挤成一坨屎的核心】
+        // 强制把里面的所有区块死死锁在 260px，绝对禁止 Flex 挤压！
+        .endfield-sidebar-new-topic-button-container,
+        .sidebar-sections,
+        .sidebar-footer-wrapper {
+          width: 260px !important;
+          min-width: 260px !important;
           box-sizing: border-box;
-          flex-shrink: 0; // 绝对不准收缩！
+          flex-shrink: 0 !important; 
         }
 
-        // 4. 对齐内部图标，让它们在 64px 的视野里完美居中 (32px位置)
-        .sidebar-section-link-wrapper .sidebar-section-link {
-          padding-left: 24px !important; 
-        }
-        .sidebar-section-header-wrapper .sidebar-section-header {
-          padding-left: 24px !important;
+        // 4. 对齐优化：让图标在 64px 视野里完美居中
+        .sidebar-section-link-wrapper .sidebar-section-link,
+        .sidebar-section-header-wrapper .sidebar-section-header,
+        .sidebar-footer-container {
+          padding-left: 20px !important; 
         }
 
-        // 5. 修复发帖按钮
         .endfield-sidebar-new-topic-button-container {
           padding-left: 10px !important; 
           padding-right: 10px !important;
         }
+
+        // 确保发帖按钮的 SVG 刚好露出在中间
         .endfield-sidebar-create-btn {
           justify-content: flex-start !important; 
-          padding-left: 14px !important; // 10px + 14px = 24px, 完美对齐上面的图标
+          padding-left: 14px !important; 
           .btn-content { gap: 12px; }
         }
 
-        // 6. 悬停展开特效！
+        // 5. 悬停展开特效
         &:hover {
           width: 260px !important;
-          box-shadow: 4px 0 25px rgba(0, 0, 0, 0.6) !important; // 终末地风厚重阴影
+          box-shadow: 4px 0 25px rgba(0, 0, 0, 0.5) !important;
           &::-webkit-scrollbar { width: 6px; background: var(--secondary); }
           &::-webkit-scrollbar-thumb { background-color: var(--tertiary); }
         }
@@ -114,12 +116,12 @@ $fluid-width: unquote($topic_list_width);
         }
     }
 
-    // 顶栏 100% 拉满，绝对贴边
+    // 顶栏拉满，实现绝对贴边
     .d-header > .wrap {
         max-width: 100% !important;
         width: 100% !important;
         margin-inline: 0 !important;
-        padding-inline: 20px !important; 
+        padding-inline: 24px !important; 
         .contents { max-width: 100% !important; margin-inline: 0 !important; }
     }
 
@@ -147,7 +149,7 @@ $fluid-width: unquote($topic_list_width);
 }
 // ---------------------------------------------------
 
-// 内部元素强制 100%
+// 重置内部限制
 #main-outlet-wrapper #main-outlet > *:not(.experimental-screen):not(.activate-account) {
     max-width: 100% !important; 
     width: 100% !important;
