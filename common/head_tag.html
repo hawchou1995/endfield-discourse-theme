@@ -43,9 +43,7 @@
     transition: height 0.05s linear; /* 匹配刷新频率，极度丝滑 */
   }
 
-  /* ==================== 
-     新版排版：竖线 + 百分比 + 文字
-     ==================== */
+  /* 新版排版：竖线 + 百分比 + 文字 */
   .ef-pct-container {
     position: absolute;
     top: 0%; 
@@ -126,7 +124,7 @@
     const pctBox = document.getElementById('ef-pct-box');
     const pctText = document.getElementById('ef-pct');
     const subText = document.getElementById('ef-text');
-    let isFinishing = false; // 是否进入退场加速阶段
+    let isFinishing = false; 
 
     window.__efLoaderInterval = setInterval(() => {
       if (!isFinishing) {
@@ -146,19 +144,22 @@
       // 同步渲染 UI
       if (bar && pctBox && pctText) {
         bar.style.height = pct + '%';
-        pctBox.style.top = pct + '%';
+        
+        // 【核心神技修缮】
+        // 使用 CSS clamp 锁定数字面板的上下限，上距顶端留 80px，下距底端留 100px
+        // 进度条会继续拉长，但文字组到了安全区边界就会被“卡住”防溢出！
+        pctBox.style.top = `clamp(80px, ${pct}%, calc(100% - 100px))`;
+        
         pctText.innerText = pct + '%';
       }
-    }, 40); // 40ms 高频刷新，确保视觉如丝般顺滑
+    }, 40); 
 
-    // 暴露给 Discourse 主题的全局方法：通知进度条可以加速结束了
     window.efFinishLoading = function() {
       if (isFinishing) return;
       isFinishing = true;
       if (subText) subText.innerText = "SYSTEM READY";
     };
 
-    // 触发满屏橙色闪瞎眼并淡出
     function triggerOutro() {
       const loader = document.getElementById('endfield-loader');
       const orangeFlash = document.getElementById('ef-orange-flash');
@@ -172,7 +173,7 @@
             loader.style.pointerEvents = 'none';
             setTimeout(() => loader.remove(), 600);
           }
-        }, 200); // 橙光停留
+        }, 200); 
       }, 50); 
     }
   })();
