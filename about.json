@@ -38,5 +38,12 @@
       "hover": "EBF0F5"
     }
   },
-  "learn_more": "https://meta.discourse.org/t/191567"
+  "learn_more": "https://meta.discourse.org/t/191567",
+  "settings": {
+    "topic_list_width": {
+      "type": "string",
+      "default": "86%",
+      "description": "话题列表及主内容区域的宽度。支持百分比(如 86%, 90%)或像素(如 1400px)。"
+    }
+  }
 }
