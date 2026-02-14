@@ -27,7 +27,7 @@ $fluid-width: unquote($topic_list_width);
 @if $sidebar_stick_to_edge == "true" {
     // 【模式 A：绝对贴边，正常展开不折叠】
     
-    // 彻底消除侧边栏左侧预设边距，使其贴死屏幕左侧
+    // 彻底消除侧边栏左侧预设边距
     .sidebar-wrapper, .d-sidebar {
         margin-left: 0 !important;
     }
@@ -41,7 +41,7 @@ $fluid-width: unquote($topic_list_width);
         box-sizing: border-box;
     }
     
-    // 话题列表单独居中，平分侧边栏右侧的剩余空间
+    // 话题列表单独居中
     body.archetype-list, body.navigation-topics, body.navigation-categories, body.tags-page {
         #main-outlet {
             max-width: $fluid-width !important; 
@@ -63,7 +63,6 @@ $fluid-width: unquote($topic_list_width);
 } @else {
     // 【模式 B：居中收缩模式】
     
-    // 将包含侧边栏+话题列表的总容器居中
     #main-outlet-wrapper {
         max-width: $fluid-width !important; 
         width: 100% !important;
@@ -72,14 +71,12 @@ $fluid-width: unquote($topic_list_width);
         box-sizing: border-box;
     }
     
-    // 话题列表占满自身空间
     #main-outlet {
         max-width: 100% !important; 
         width: 100% !important;
         margin-inline: 0 !important; 
     }
     
-    // 顶栏宽度与整体宽度保持一致
     .d-header > .wrap {
         max-width: $fluid-width !important;
         width: 100% !important;
@@ -98,7 +95,8 @@ $fluid-width: unquote($topic_list_width);
 }
 
 #main-outlet { flex: 1 1 auto !important; min-width: 0 !important; padding: 0 !important; }
-.topic-list { width: 100% !important; display: table !important; }
+// 强制表格布局固定，防止子元素绝对定位拉崩表格高度！
+.topic-list { width: 100% !important; display: table !important; table-layout: fixed !important; }
 .list-controls { max-width: 100% !important; margin-inline: 0 !important; .navigation-container { max-width: 100% !important; } }
 .d-right-sidebar, .tc-right-sidebar-wrapper { flex-shrink: 0 !important; }
 
@@ -118,7 +116,7 @@ html.desktop-view .navigation-controls {
   .topic-list-layout-trigger, #create-topic, .create-topic { display: none !important; }
 }
 
-// 自定义发帖按钮 (公共样式)
+// 自定义发帖按钮
 .endfield-sidebar-new-topic-button-container {
   margin-top: 20px; margin-bottom: 20px; padding: 0 10px; box-sizing: border-box; width: 100%;
 }
@@ -159,6 +157,8 @@ html.desktop-view .navigation-controls {
 
   &:hover {
     background-size: 100% 100% !important; box-shadow: inset 4px 0 0 #FF6B35 !important; cursor: pointer;
+    
+    // 【剧毒代码已被彻底移除，再也不会撑爆行高了！】
   }
   
   .posters a, .badge-wrapper, .discourse-tag { position: relative; z-index: 2; }
