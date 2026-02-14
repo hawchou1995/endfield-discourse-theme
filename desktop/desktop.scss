@@ -1,166 +1,118 @@
 // =======================================================
-// 1. 布局核心修正 (双模式智能切换版 - 稳定不折叠)
+// 1. 布局核心修正 (稳定不折叠版)
 // =======================================================
 
-// 调用 settings.yml 中定义的变量
 $fluid-width: unquote($topic_list_width); 
 
-// 1.1 破除 Discourse 最外层限制
-#main.wrap {
-    max-width: 100% !important;
-    width: 100% !important;
-    padding-left: 0 !important; 
-    padding-right: 0 !important; 
-}
+#main.wrap { max-width: 100% !important; width: 100% !important; padding-left: 0 !important; padding-right: 0 !important; }
+.d-layout { width: 100% !important; max-width: 100% !important; margin-inline: 0 !important; padding-inline: 0 !important; overflow: visible !important; }
 
-.d-layout {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin-inline: 0 !important; 
-    padding-inline: 0 !important;
-    overflow: visible !important;
-}
-
-// ---------------------------------------------------
-// [核心] 智能布局切换逻辑 (稳定版)
-// ---------------------------------------------------
 @if $sidebar_stick_to_edge == "true" {
-    // 【模式 A：绝对贴边，正常展开不折叠】
-    
-    // 彻底消除侧边栏左侧预设边距
-    .sidebar-wrapper, .d-sidebar {
-        margin-left: 0 !important;
-    }
-    
-    // 话题列表总容器拉满全屏
-    #main-outlet-wrapper {
-        max-width: 100% !important;
-        width: 100% !important;
-        margin-inline: 0 !important;
-        padding-inline: 0 !important;
-        box-sizing: border-box;
-    }
-    
-    // 话题列表单独居中
-    body.archetype-list, body.navigation-topics, body.navigation-categories, body.tags-page {
-        #main-outlet {
-            max-width: $fluid-width !important; 
-            width: 100% !important;
-            margin-left: auto !important;  
-            margin-right: auto !important; 
-        }
-    }
-
-    // 顶栏拉满，实现绝对贴边
-    .d-header > .wrap {
-        max-width: 100% !important;
-        width: 100% !important;
-        margin-inline: 0 !important;
-        padding-inline: 24px !important; 
-        .contents { max-width: 100% !important; margin-inline: 0 !important; }
-    }
-
+    .sidebar-wrapper, .d-sidebar { margin-left: 0 !important; }
+    #main-outlet-wrapper { max-width: 100% !important; width: 100% !important; margin-inline: 0 !important; padding-inline: 0 !important; box-sizing: border-box; }
+    body.archetype-list, body.navigation-topics, body.navigation-categories, body.tags-page { #main-outlet { max-width: $fluid-width !important; width: 100% !important; margin-left: auto !important; margin-right: auto !important; } }
+    .d-header > .wrap { max-width: 100% !important; width: 100% !important; margin-inline: 0 !important; padding-inline: 24px !important; .contents { max-width: 100% !important; margin-inline: 0 !important; } }
 } @else {
-    // 【模式 B：居中收缩模式】
-    
-    #main-outlet-wrapper {
-        max-width: $fluid-width !important; 
-        width: 100% !important;
-        margin-inline: auto !important; 
-        padding-inline: 0 !important;
-        box-sizing: border-box;
-    }
-    
-    #main-outlet {
-        max-width: 100% !important; 
-        width: 100% !important;
-        margin-inline: 0 !important; 
-    }
-    
-    .d-header > .wrap {
-        max-width: $fluid-width !important;
-        width: 100% !important;
-        margin-inline: auto !important;
-        padding-inline: 0 !important;
-        .contents { max-width: 100% !important; margin-inline: 0 !important; }
-    }
-}
-// ---------------------------------------------------
-
-// 强制内部内容撑满分配空间
-#main-outlet-wrapper #main-outlet > *:not(.experimental-screen):not(.activate-account) {
-    max-width: 100% !important; 
-    width: 100% !important;
-    margin-inline: 0 !important; 
+    #main-outlet-wrapper { max-width: $fluid-width !important; width: 100% !important; margin-inline: auto !important; padding-inline: 0 !important; box-sizing: border-box; }
+    #main-outlet { max-width: 100% !important; width: 100% !important; margin-inline: 0 !important; }
+    .d-header > .wrap { max-width: $fluid-width !important; width: 100% !important; margin-inline: auto !important; padding-inline: 0 !important; .contents { max-width: 100% !important; margin-inline: 0 !important; } }
 }
 
+#main-outlet-wrapper #main-outlet > *:not(.experimental-screen):not(.activate-account) { max-width: 100% !important; width: 100% !important; margin-inline: 0 !important; }
 #main-outlet { flex: 1 1 auto !important; min-width: 0 !important; padding: 0 !important; }
-// 强制表格布局固定，防止子元素绝对定位拉崩表格高度！
 .topic-list { width: 100% !important; display: table !important; table-layout: fixed !important; }
 .list-controls { max-width: 100% !important; margin-inline: 0 !important; .navigation-container { max-width: 100% !important; } }
 .d-right-sidebar, .tc-right-sidebar-wrapper { flex-shrink: 0 !important; }
 
-// 移动端布局保护
 @media screen and (max-width: 767px) {
-  #main.wrap { padding-inline: 0 !important; }
-  .d-layout, .d-header > .wrap { width: 100% !important; max-width: 100% !important; }
-  #main-outlet-wrapper { max-width: 100% !important; padding-inline: 10px !important; }
-  #main-outlet { max-width: 100% !important; display: block !important; margin-inline: 0 !important; }
+  #main.wrap { padding-inline: 0 !important; } .d-layout, .d-header > .wrap { width: 100% !important; max-width: 100% !important; }
+  #main-outlet-wrapper { max-width: 100% !important; padding-inline: 10px !important; } #main-outlet { max-width: 100% !important; display: block !important; margin-inline: 0 !important; }
 }
 
 // =======================================================
 // 2. 界面元素管理
 // =======================================================
 
-html.desktop-view .navigation-controls {
-  .topic-list-layout-trigger, #create-topic, .create-topic { display: none !important; }
-}
-
-// 自定义发帖按钮
-.endfield-sidebar-new-topic-button-container {
-  margin-top: 20px; margin-bottom: 20px; padding: 0 10px; box-sizing: border-box; width: 100%;
-}
+html.desktop-view .navigation-controls { .topic-list-layout-trigger, #create-topic, .create-topic { display: none !important; } }
+.endfield-sidebar-new-topic-button-container { margin-top: 20px; margin-bottom: 20px; padding: 0 10px; box-sizing: border-box; width: 100%; }
 .sidebar-wrapper .sidebar-navigation { padding-top: 10px; }
 
 .endfield-sidebar-create-btn {
-  width: 100%; height: 48px; display: flex; align-items: center; justify-content: center;
-  font-size: 1.1em; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
-  background: #FF6B35 !important; color: #fff !important; border: none; border-radius: 0;
-  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
-  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1); box-shadow: 0 4px 0 #cc4e22;
-
+  width: 100%; height: 48px; display: flex; align-items: center; justify-content: center; font-size: 1.1em; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; background: #FF6B35 !important; color: #fff !important; border: none; border-radius: 0; clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px)); transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1); box-shadow: 0 4px 0 #cc4e22;
   .btn-content { display: flex; align-items: center; gap: 10px; }
-  .btn-decor-corner {
-    position: absolute; bottom: 3px; right: 3px; width: 8px; height: 8px;
-    background: rgba(0,0,0,0.2); clip-path: polygon(100% 0, 0 100%, 100% 100%);
-  }
-
-  &:hover {
-    background: #ff8c61 !important; transform: translateY(-2px); box-shadow: 0 6px 0 #cc4e22;
-    .btn-content { transform: scale(1.05); }
-  }
-  &:active {
-    transform: translateY(2px); box-shadow: 0 2px 0 #cc4e22; background: #e55a2b !important;
-  }
+  .btn-decor-corner { position: absolute; bottom: 3px; right: 3px; width: 8px; height: 8px; background: rgba(0,0,0,0.2); clip-path: polygon(100% 0, 0 100%, 100% 100%); }
+  &:hover { background: #ff8c61 !important; transform: translateY(-2px); box-shadow: 0 6px 0 #cc4e22; .btn-content { transform: scale(1.05); } }
+  &:active { transform: translateY(2px); box-shadow: 0 2px 0 #cc4e22; background: #e55a2b !important; }
 }
 
 // =======================================================
-// 3. 列表交互增强 (点击跳转 + 橙色光效)
+// 3. 【终极神技】纯净版无重排准星特效 (Zero-Reflow Target Lock)
+// 放弃任何 pseudo elements，纯用 9 层背景叠加，绝对不破坏行高！
 // =======================================================
 
 .topic-list tbody tr {
   position: relative;
-  background-image: linear-gradient(to right, rgba(255, 107, 53, 0.15), rgba(255, 107, 53, 0.15));
-  background-repeat: no-repeat; background-size: 0% 100%; 
-  transition: background-size 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.1s ease;
-  border-left: 0; box-shadow: inset 0 0 0 rgba(255, 107, 53, 0); 
+  border-left: 0; 
+  box-shadow: inset 0 0 0 rgba(255, 107, 53, 0); 
+  
+  // 透明化单元格背景，让 tr 的背景显露
+  td { background-color: transparent !important; }
+
+  // 默认状态：8个角全透明，第9层橙色光效宽度为 0%
+  background-image: 
+    linear-gradient(to right, transparent 2px, transparent 2px),
+    linear-gradient(to bottom, transparent 2px, transparent 2px),
+    linear-gradient(to left, transparent 2px, transparent 2px),
+    linear-gradient(to bottom, transparent 2px, transparent 2px),
+    linear-gradient(to right, transparent 2px, transparent 2px),
+    linear-gradient(to top, transparent 2px, transparent 2px),
+    linear-gradient(to left, transparent 2px, transparent 2px),
+    linear-gradient(to top, transparent 2px, transparent 2px),
+    linear-gradient(to right, rgba(255, 107, 53, 0.15), rgba(255, 107, 53, 0.15));
+    
+  background-position: 
+    top left, top left,
+    top right, top right,
+    bottom left, bottom left,
+    bottom right, bottom right,
+    left top;
+    
+  background-repeat: no-repeat;
+  
+  background-size: 
+    8px 8px, 8px 8px, 
+    8px 8px, 8px 8px, 
+    8px 8px, 8px 8px, 
+    8px 8px, 8px 8px, 
+    0% 100%; 
+    
+  transition: background-size 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.1s ease, background-image 0s;
 
   &:hover {
-    background-size: 100% 100% !important; box-shadow: inset 4px 0 0 #FF6B35 !important; cursor: pointer;
+    cursor: pointer;
+    box-shadow: inset 4px 0 0 #FF6B35 !important;
     
-    // 【剧毒代码已被彻底移除，再也不会撑爆行高了！】
+    // 悬停状态：瞬间把前8层变成橙色，第9层依然是光效背景
+    background-image: 
+      linear-gradient(to right, #FF6B35 2px, transparent 2px),
+      linear-gradient(to bottom, #FF6B35 2px, transparent 2px),
+      linear-gradient(to left, #FF6B35 2px, transparent 2px),
+      linear-gradient(to bottom, #FF6B35 2px, transparent 2px),
+      linear-gradient(to right, #FF6B35 2px, transparent 2px),
+      linear-gradient(to top, #FF6B35 2px, transparent 2px),
+      linear-gradient(to left, #FF6B35 2px, transparent 2px),
+      linear-gradient(to top, #FF6B35 2px, transparent 2px),
+      linear-gradient(to right, rgba(255, 107, 53, 0.15), rgba(255, 107, 53, 0.15));
+
+    // 过渡状态：让第9层光效宽度拉到 100%
+    background-size: 
+      8px 8px, 8px 8px, 
+      8px 8px, 8px 8px, 
+      8px 8px, 8px 8px, 
+      8px 8px, 8px 8px, 
+      100% 100% !important; 
   }
   
+  // 保护链接点击层级
   .posters a, .badge-wrapper, .discourse-tag { position: relative; z-index: 2; }
-  td { background-color: transparent !important; }
 }
