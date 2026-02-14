@@ -1,9 +1,11 @@
 // =======================================================
-// 1. 布局核心修正 (智能切换版 + 完美滑轨折叠)
+// 1. 布局核心修正 (双模式智能切换版 - 稳定不折叠)
 // =======================================================
 
+// 调用 settings.yml 中定义的变量
 $fluid-width: unquote($topic_list_width); 
 
+// 1.1 破除 Discourse 最外层限制
 #main.wrap {
     max-width: 100% !important;
     width: 100% !important;
@@ -19,143 +21,18 @@ $fluid-width: unquote($topic_list_width);
     overflow: visible !important;
 }
 
+// ---------------------------------------------------
+// [核心] 智能布局切换逻辑 (稳定版)
+// ---------------------------------------------------
 @if $sidebar_stick_to_edge == "true" {
-    // 【模式 A：绝对贴边 & 完美滑轨悬停特效】
+    // 【模式 A：绝对贴边，正常展开不折叠】
     
+    // 彻底消除侧边栏左侧预设边距，使其贴死屏幕左侧
     .sidebar-wrapper, .d-sidebar {
         margin-left: 0 !important;
     }
     
-    html.desktop-view {
-      // 1. 物理占位，死死锁定 64px
-      .sidebar-wrapper {
-        width: 64px !important;
-        min-width: 64px !important;
-        flex-basis: 64px !important;
-        flex-shrink: 0 !important;
-        position: relative;
-        z-index: 100;
-      }
-
-      // 2. 悬浮的真实侧边栏容器 (滑轨本体)
-      .sidebar-container {
-        position: absolute !important;
-        top: 0; left: 0;
-        height: 100% !important;
-        width: 64px !important; // 默认折叠宽度
-        background-color: var(--secondary) !important; 
-        border-right: 1px solid var(--primary-low) !important;
-        
-        overflow-x: hidden !important; 
-        overflow-y: hidden !important; // 折叠时隐藏滚动条保持清爽
-        
-        transition: width 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.3s ease !important;
-        z-index: 105;
-        display: flex !important;
-        flex-direction: column !important;
-
-        // 强制子区块填满容器，随容器自适应伸缩
-        .sidebar-sections,
-        .endfield-sidebar-new-topic-button-container,
-        .sidebar-footer-wrapper {
-          width: 100% !important;
-          box-sizing: border-box !important;
-        }
-
-        // 3. 完美折叠适配 - 发帖按钮
-        .endfield-sidebar-new-topic-button-container {
-          padding: 16px 8px !important; 
-        }
-        .endfield-sidebar-create-btn {
-          width: 100% !important;
-          height: 48px !important;
-          padding: 0 !important;
-          display: flex !important;
-          justify-content: flex-start !important;
-          overflow: hidden !important;
-          .btn-content {
-            width: 100% !important;
-            padding-left: 14px !important; // 居中核心：(48-20)/2 = 14px
-            display: flex !important;
-            align-items: center !important;
-            svg { flex: 0 0 20px !important; margin-right: 16px !important; }
-          }
-        }
-
-        // 4. 完美折叠适配 - 列表项与分类标题
-        .sidebar-section-link-wrapper { width: 100% !important; }
-        .sidebar-section-link,
-        .sidebar-section-header {
-          width: 100% !important;
-          padding: 8px 12px 8px 20px !important; // 居中核心：左侧20px + 图标24px = 44px
-          box-sizing: border-box !important;
-          display: flex !important;
-          align-items: center !important;
-          overflow: hidden !important;
-        }
-        .sidebar-section-header { padding-top: 12px !important; padding-bottom: 12px !important; }
-
-        .sidebar-section-link-prefix,
-        .sidebar-section-header-caret {
-          flex: 0 0 24px !important; // 图标区域死死固定 24px
-          display: flex !important;
-          justify-content: center !important;
-          align-items: center !important;
-          margin-right: 16px !important; // 给右侧文字留间距
-        }
-
-        // 5. 魔法核心：文字和操作按钮默认隐藏并左移，制造纯图标感
-        .sidebar-section-link-content-text,
-        .sidebar-section-header-text,
-        .sidebar-section-link-hover,
-        .sidebar-section-header-button,
-        .d-button-label,
-        .user-status-message {
-          opacity: 0 !important;
-          transform: translateX(-15px); // 隐藏时偏左
-          transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
-          white-space: nowrap !important;
-          pointer-events: none !important;
-        }
-
-        // 底部设置区域默认隐藏
-        .sidebar-footer-wrapper {
-          opacity: 0 !important;
-          visibility: hidden !important;
-          transition: opacity 0.2s ease !important;
-          margin-top: auto !important; // 自动推到最底部
-        }
-
-        // 6. 悬停展开特效！(终末地官网同款)
-        &:hover {
-          width: 250px !important; // 向右平滑展开
-          box-shadow: 10px 0 30px rgba(0, 0, 0, 0.4) !important; // 展开时带阴影
-          overflow-y: auto !important; // 恢复滚动能力
-          
-          &::-webkit-scrollbar { width: 4px; background: transparent; }
-          &::-webkit-scrollbar-thumb { background-color: var(--tertiary); }
-
-          // 文字平滑向右滑入并显现！
-          .sidebar-section-link-content-text,
-          .sidebar-section-header-text,
-          .sidebar-section-link-hover,
-          .sidebar-section-header-button,
-          .d-button-label,
-          .user-status-message {
-            opacity: 1 !important;
-            transform: translateX(0);
-            pointer-events: auto !important;
-          }
-
-          .sidebar-footer-wrapper {
-            opacity: 1 !important;
-            visibility: visible !important;
-          }
-        }
-      }
-    }
-    
-    // 话题列表容器
+    // 话题列表总容器拉满全屏
     #main-outlet-wrapper {
         max-width: 100% !important;
         width: 100% !important;
@@ -164,7 +41,7 @@ $fluid-width: unquote($topic_list_width);
         box-sizing: border-box;
     }
     
-    // 话题列表单独居中平分剩余空间
+    // 话题列表单独居中，平分侧边栏右侧的剩余空间
     body.archetype-list, body.navigation-topics, body.navigation-categories, body.tags-page {
         #main-outlet {
             max-width: $fluid-width !important; 
@@ -174,7 +51,7 @@ $fluid-width: unquote($topic_list_width);
         }
     }
 
-    // 顶栏拉满绝对贴边
+    // 顶栏拉满，实现绝对贴边
     .d-header > .wrap {
         max-width: 100% !important;
         width: 100% !important;
@@ -185,6 +62,8 @@ $fluid-width: unquote($topic_list_width);
 
 } @else {
     // 【模式 B：居中收缩模式】
+    
+    // 将包含侧边栏+话题列表的总容器居中
     #main-outlet-wrapper {
         max-width: $fluid-width !important; 
         width: 100% !important;
@@ -192,9 +71,20 @@ $fluid-width: unquote($topic_list_width);
         padding-inline: 0 !important;
         box-sizing: border-box;
     }
-    #main-outlet { max-width: 100% !important; width: 100% !important; margin-inline: 0 !important; }
+    
+    // 话题列表占满自身空间
+    #main-outlet {
+        max-width: 100% !important; 
+        width: 100% !important;
+        margin-inline: 0 !important; 
+    }
+    
+    // 顶栏宽度与整体宽度保持一致
     .d-header > .wrap {
-        max-width: $fluid-width !important; width: 100% !important; margin-inline: auto !important; padding-inline: 0 !important;
+        max-width: $fluid-width !important;
+        width: 100% !important;
+        margin-inline: auto !important;
+        padding-inline: 0 !important;
         .contents { max-width: 100% !important; margin-inline: 0 !important; }
     }
 }
