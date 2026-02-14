@@ -2,7 +2,7 @@
 // 1. 布局核心修正 (Horizon Layout Fix - 终极贴边版 + 后台配置)
 // =======================================================
 
-// [核心] 调用后台 about.json 中的设置变量！
+// 调用 settings.yml 中定义的变量
 $fluid-width: unquote($topic_list_width); 
 
 // 仅在列表页及相关页面生效
@@ -51,7 +51,6 @@ body.tags-page {
   }
 
   // 1.4 头部适配 (Header)
-  // 头部也需要同样的宽度和居中，以保证视觉平衡
   .d-header > .wrap {
       max-width: $fluid-width !important;
       width: 100% !important;
@@ -101,7 +100,7 @@ body.tags-page {
 }
 
 // =======================================================
-// 2. 界面元素管理
+// 2. 界面元素管理 (隐藏原版按钮，展示终末地按钮)
 // =======================================================
 
 html.desktop-view .navigation-controls {
@@ -212,11 +211,10 @@ html.desktop-view .navigation-controls {
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: 1; // 确保在最上层
+        z-index: 1; 
     }
   }
   
-  // 确保行内其他链接层级更高，可单独点击
   .posters a, .badge-wrapper, .discourse-tag {
       position: relative;
       z-index: 2; 
