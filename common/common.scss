@@ -306,26 +306,19 @@ a:visited { color: $endfield-cyan; }
 
 // ============================================
 // 10. [核心修复] 话题底部与时间轴按钮 (Topic/Timeline Buttons)
-// 解决悬停时图标不可见问题 -> 强制 青底黑字 + 黑图标
 // ============================================
 .timeline-controls,
 .timeline-footer-controls,
 #topic-footer-buttons,
 .topic-footer-main-buttons {
-  // 针对这些容器下的默认按钮 (排除掉 Create Reply 这个 primary 按钮)
   .btn-default:hover {
-    // 悬停背景变青色
     background-color: $endfield-cyan !important;
     border-color: $endfield-cyan !important;
-    
-    // 文字变黑
     color: #000 !important;
-    
-    // 强制所有内部图标变黑 (SVG/FontAwesome)
     .d-icon, .svg-icon {
         color: #000 !important;
         fill: #000 !important;
-        stroke: transparent; // 避免 stroke 干扰
+        stroke: transparent; 
     }
   }
 }
@@ -333,30 +326,18 @@ a:visited { color: $endfield-cyan; }
 // ============================================
 // 11. 修复新话题通知小圆点 (New Topic Dot)
 // ============================================
-
 .badge-notification.new-topic {
-  // [核心修复] 必须设置背景色！因为这个点就是靠背景色画出来的
   background-color: $endfield-cyan !important; 
-  
-  // 确保文字（通常是空格）不可见，不干扰圆点形状
   color: transparent !important; 
-  
-  // 强制圆形尺寸
   width: 8px !important;
   height: 8px !important;
   border-radius: 50% !important;
-  
-  // 布局微调
   padding: 0 !important;
   margin: 0 5px !important; 
   display: inline-block !important;
   vertical-align: middle !important;
-  
-  // 移除边框，添加青色荧光
   border: none !important;
   box-shadow: 0 0 4px $endfield-cyan !important;
-  
-  // 清除可能存在的伪元素干扰
   &::before, &::after {
       content: none !important;
       display: none !important;
@@ -366,9 +347,114 @@ a:visited { color: $endfield-cyan; }
 // ============================================
 // 12. 隐藏 Discourse 默认加载动画
 // ============================================
-
-// 隐藏原版的省略号或转圈动画，让底端保持干净
 #main-outlet.wrap > .spinner,
 .preload-text {
     display: none !important;
+}
+
+// ============================================
+// 13. 战术化切角头像 (Tactical Avatars) + 角标保护
+// ============================================
+img.avatar {
+  border-radius: 0 !important;
+  /* 终末地经典八边形切角 */
+  clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%);
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  
+  &:hover {
+     /* 悬停展开为方正，附加发光 */
+     clip-path: polygon(0 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 0);
+     transform: scale(1.05);
+     filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.5));
+  }
+}
+
+// 【防误伤护盾】确保切角不会切掉右上角通知角标
+.d-header .icons .icon,
+.d-header .header-buttons .btn {
+  clip-path: none !important; 
+  border-radius: 0 !important; 
+}
+
+#toggle-current-user {
+  overflow: visible !important; 
+  .badge-notification {
+    position: absolute; // 确保定位层级独立
+    z-index: 99 !important; // 提升角标到绝对上层
+  }
+}
+
+// ============================================
+// 14. 话题列表 HUD 准星锁定特效 (Target Lock)
+// ============================================
+.topic-list tbody tr:hover {
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 5;
+    /* 绘制四角战术准星 */
+    background: 
+      linear-gradient(to right, $endfield-orange 2px, transparent 2px) top left,
+      linear-gradient(to bottom, $endfield-orange 2px, transparent 2px) top left,
+      linear-gradient(to left, $endfield-orange 2px, transparent 2px) top right,
+      linear-gradient(to bottom, $endfield-orange 2px, transparent 2px) top right,
+      linear-gradient(to right, $endfield-orange 2px, transparent 2px) bottom left,
+      linear-gradient(to top, $endfield-orange 2px, transparent 2px) bottom left,
+      linear-gradient(to left, $endfield-orange 2px, transparent 2px) bottom right,
+      linear-gradient(to top, $endfield-orange 2px, transparent 2px) bottom right;
+    background-size: 8px 8px;
+    background-repeat: no-repeat;
+    animation: target-lock 0.2s ease-out forwards;
+  }
+}
+
+@keyframes target-lock {
+  0% { transform: scale(1.02); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+// ============================================
+// 15. 数据流文本装饰 (Terminal Text Accent)
+// ============================================
+.badge-category-name::before,
+.sidebar-section-header-text::before,
+.navigation-container .nav-pills > li > a::before {
+  content: "// ";
+  color: $endfield-cyan;
+  opacity: 0.6;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 900;
+  margin-right: 4px;
+  letter-spacing: -1px;
+}
+
+.navigation-container .nav-pills > li.active > a::before {
+  color: #000;
+  opacity: 1;
+}
+
+// ============================================
+// 16. 全局渲染性能优化 (Hardware Acceleration)
+// ============================================
+/* 开启硬件加速，防止滚动掉帧 */
+.topic-list tbody tr,
+.btn,
+.sidebar-wrapper .sidebar-container,
+.discourse-tag.box {
+  will-change: transform, box-shadow, opacity;
+  transform: translateZ(0); 
+  backface-visibility: hidden;
+}
+
+/* 移动端性能降级保护 */
+@media screen and (max-width: 767px) {
+  .d-header {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .topic-list tbody tr {
+    box-shadow: none !important;
+  }
 }
