@@ -4,7 +4,7 @@
 @import url('https://fonts.loli.net/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Rajdhani:wght@500;600;700&display=swap');
 
 // ============================================
-// 《明日方舟·终末地》 (Endspace Style) - V5.4 Final Stable
+// 《明日方舟·终末地》 (Endspace Style) - V5.5 纯净版
 // ============================================
 
 $endfield-cyan: #00D4FF; 
@@ -42,11 +42,7 @@ a {
   color: $endfield-cyan;
   transition: all 0.2s ease;
   font-weight: 600; 
-  &:hover {
-    color: lighten($endfield-cyan, 10%);
-    text-decoration: none;
-    text-shadow: none; 
-  }
+  &:hover { color: lighten($endfield-cyan, 10%); text-decoration: none; text-shadow: none; }
 }
 a:visited { color: $endfield-cyan; }
 
@@ -66,103 +62,45 @@ a:visited { color: $endfield-cyan; }
   position: relative;
   
   &.btn-primary {
-    background: $endfield-cyan;
-    color: #000; 
-    font-weight: 800;
-    &:hover {
-      background: lighten($endfield-cyan, 10%);
-      transform: translateX(2px);
-    }
-    &::after { 
-      content: ''; position: absolute; bottom: 0; right: 0; width: 5px; height: 5px;
-      background: rgba(255,255,255,0.8);
-    }
+    background: $endfield-cyan; color: #000; font-weight: 800;
+    &:hover { background: lighten($endfield-cyan, 10%); transform: translateX(2px); }
+    &::after { content: ''; position: absolute; bottom: 0; right: 0; width: 5px; height: 5px; background: rgba(255,255,255,0.8); }
   }
   
   &.btn-default {
-    background: transparent;
-    color: var(--primary);
-    border: 1px solid var(--primary-low);
-    &:hover { 
-        background: var(--primary-low); 
-        border-color: $endfield-cyan;
-        color: $endfield-cyan;
-    }
+    background: transparent; color: var(--primary); border: 1px solid var(--primary-low);
+    &:hover { background: var(--primary-low); border-color: $endfield-cyan; color: $endfield-cyan; }
   }
 }
 
 // 3. 导航栏 (HUD)
 .d-header {
-  background: rgba(18, 21, 26, 0.95); 
-  border-bottom: 2px solid $endfield-cyan; 
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-  
-  &::before { 
-    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-    background: linear-gradient(90deg, $endfield-cyan, transparent 20%, transparent 80%, $endfield-cyan);
-  }
-
-  .title a, #site-text-logo {
-    font-family: "Rajdhani", "Noto Sans SC", sans-serif; 
-    font-weight: 800 !important; letter-spacing: 0px; 
-    color: #fff !important; font-size: 1.2em; text-transform: uppercase;
-  }
-  
-  .icons .icon {
-    color: #fff !important; border: 1px solid transparent; clip-path: none !important; 
-    &:hover {
-      background: rgba(0, 212, 255, 0.1);
-      border: 1px solid $endfield-cyan;
-      border-radius: 0;
-      .d-icon { color: $endfield-cyan !important; }
-    }
-  }
-
-  .extra-info-wrapper {
-    .topic-link { color: #fff !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700; }
-    .badge-wrapper.bullet span.badge-category { color: #e0e0e0 !important; font-weight: 600; }
-  }
-
-  .header-buttons .btn {
-      color: #fff !important; border-color: rgba(255,255,255,0.3); clip-path: none !important;
-      &:hover { border-color: $endfield-cyan; color: $endfield-cyan !important; }
-  }
+  background: rgba(18, 21, 26, 0.95); border-bottom: 2px solid $endfield-cyan; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  &::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, $endfield-cyan, transparent 20%, transparent 80%, $endfield-cyan); }
+  .title a, #site-text-logo { font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800 !important; letter-spacing: 0px; color: #fff !important; font-size: 1.2em; text-transform: uppercase; }
+  .icons .icon { color: #fff !important; border: 1px solid transparent; clip-path: none !important; &:hover { background: rgba(0, 212, 255, 0.1); border: 1px solid $endfield-cyan; border-radius: 0; .d-icon { color: $endfield-cyan !important; } } }
+  .extra-info-wrapper { .topic-link { color: #fff !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700; } .badge-wrapper.bullet span.badge-category { color: #e0e0e0 !important; font-weight: 600; } }
+  .header-buttons .btn { color: #fff !important; border-color: rgba(255,255,255,0.3); clip-path: none !important; &:hover { border-color: $endfield-cyan; color: $endfield-cyan !important; } }
 }
 
-.search-menu .search-input:focus, 
-.d-header .search-input:focus {
-    outline: none;
-    border: 1px solid $endfield-cyan !important;
-    box-shadow: 0 0 8px rgba(0, 212, 255, 0.4), inset 0 0 5px rgba(0, 212, 255, 0.2) !important; 
-    background-color: rgba(0,0,0,0.3) !important;
-    color: #fff !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 600;
-    transition: all 0.2s ease;
+.search-menu .search-input:focus, .d-header .search-input:focus {
+    outline: none; border: 1px solid $endfield-cyan !important; box-shadow: 0 0 8px rgba(0, 212, 255, 0.4), inset 0 0 5px rgba(0, 212, 255, 0.2) !important; 
+    background-color: rgba(0,0,0,0.3) !important; color: #fff !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 600; transition: all 0.2s ease;
 }
 
 // 4. 话题列表
 .topic-list {
   border-radius: 0; 
-  thead th {
-    border-bottom: 2px solid var(--primary-low);
-    color: var(--primary-medium); font-size: 0.9em; text-transform: uppercase;
-    font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700; letter-spacing: 1px;
-  }
+  thead th { border-bottom: 2px solid var(--primary-low); color: var(--primary-medium); font-size: 0.9em; text-transform: uppercase; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700; letter-spacing: 1px; }
   tbody tr { border-bottom: 1px solid var(--primary-low); }
-  .main-link { 
-      font-family: "Noto Sans SC", sans-serif; font-weight: 700 !important; font-size: 1.1em; letter-spacing: 0.2px;
-  }
+  .main-link { font-family: "Noto Sans SC", sans-serif; font-weight: 700 !important; font-size: 1.1em; letter-spacing: 0.2px; }
   .badge-category-bg { border-radius: 2px; }
 }
 
 .sidebar-section, .rs-component, .topic-list {
   background: transparent; border: 1px solid var(--primary-low); box-shadow: none; margin-bottom: 24px; position: relative;
-  background-image: 
-    linear-gradient(to right, $endfield-cyan 2px, transparent 2px),
-    linear-gradient(to bottom, $endfield-cyan 2px, transparent 2px),
-    linear-gradient(to left, $endfield-cyan 2px, transparent 2px),
-    linear-gradient(to top, $endfield-cyan 2px, transparent 2px);
-  background-position: top left, top left, bottom right, bottom right;
-  background-size: 8px 8px; background-repeat: no-repeat;
+  background-image: linear-gradient(to right, $endfield-cyan 2px, transparent 2px), linear-gradient(to bottom, $endfield-cyan 2px, transparent 2px), linear-gradient(to left, $endfield-cyan 2px, transparent 2px), linear-gradient(to top, $endfield-cyan 2px, transparent 2px);
+  background-position: top left, top left, bottom right, bottom right; background-size: 8px 8px; background-repeat: no-repeat;
   &::before { display: none; } 
 }
 
@@ -174,17 +112,10 @@ a:visited { color: $endfield-cyan; }
 
 // 5. 帖子详情
 .topic-post {
-  border-left: 1px solid var(--primary-low);
-  &:first-of-type { border-left: 3px solid $endfield-orange; }
+  border-left: 1px solid var(--primary-low); &:first-of-type { border-left: 3px solid $endfield-orange; }
   .topic-avatar { border-top: none; .avatar { border-radius: 4px; border: 2px solid var(--primary-low); } }
-  .cooked {
-    font-weight: 500; line-height: 1.6;
-    blockquote { background: var(--primary-very-low); border-left: 4px solid $endfield-cyan; color: var(--primary); }
-    pre code {
-      background: #1e1e1e; border: 1px solid #333; color: $endfield-cyan; border-radius: 0;
-      font-family: "JetBrains Mono", monospace; font-weight: 500;
-    }
-    p { transition: all 0.3s ease; }
+  .cooked { font-weight: 500; line-height: 1.6; blockquote { background: var(--primary-very-low); border-left: 4px solid $endfield-cyan; color: var(--primary); }
+    pre code { background: #1e1e1e; border: 1px solid #333; color: $endfield-cyan; border-radius: 0; font-family: "JetBrains Mono", monospace; font-weight: 500; } p { transition: all 0.3s ease; }
   }
 }
 
@@ -195,267 +126,58 @@ a:visited { color: $endfield-cyan; }
 
 // 7. 特殊组件
 .discourse-tag { color: $endfield-cyan !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700; }
-.badge-notification {
-    background-color: $endfield-orange !important; color: #fff !important; font-family: "Rajdhani", sans-serif; font-weight: 700;
-    &.new-topic { background-color: transparent !important; color: $endfield-cyan !important; padding: 0 !important; }
-}
+.badge-notification { background-color: $endfield-orange !important; color: #fff !important; font-family: "Rajdhani", sans-serif; font-weight: 700; &.new-topic { background-color: transparent !important; color: $endfield-cyan !important; padding: 0 !important; } }
 #toggle-current-user { overflow: visible !important; .badge-notification { z-index: 2; } }
 
-.topic-map__stats .btn {
-  clip-path: none !important; border-radius: 4px !important; background: transparent !important; border: none !important; padding: 5px 10px !important;
-  &:hover { background: var(--primary-low) !important; transform: none !important; box-shadow: none !important; }
-  .number, .topic-map__stat-label { color: var(--primary-high-or-secondary-low) !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 600; }
-}
+.topic-map__stats .btn { clip-path: none !important; border-radius: 4px !important; background: transparent !important; border: none !important; padding: 5px 10px !important; &:hover { background: var(--primary-low) !important; transform: none !important; box-shadow: none !important; } .number, .topic-map__stat-label { color: var(--primary-high-or-secondary-low) !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 600; } }
 
-// ============================================
 // 8. 顶栏标签 (Tag Box)
-// ============================================
 .discourse-tag.box {
-  border-radius: 0 !important; border: 1px solid var(--primary-low) !important;
-  background-color: var(--secondary) !important; color: var(--primary) !important;
-  font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700 !important; 
-  letter-spacing: 0.5px; padding: 4px 8px !important; transition: all 0.2s ease;
-
+  border-radius: 0 !important; border: 1px solid var(--primary-low) !important; background-color: var(--secondary) !important; color: var(--primary) !important;
+  font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700 !important; letter-spacing: 0.5px; padding: 4px 8px !important; transition: all 0.2s ease;
   .d-icon { color: var(--primary-medium) !important; opacity: 0.8; }
-
-  &:hover {
-    background-color: $endfield-cyan !important;
-    color: #000 !important; 
-    border-color: $endfield-cyan !important;
-    text-decoration: none;
-    box-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
-    
-    .d-icon, .tag-icon svg, .tag-icon use { 
-        color: $endfield-orange !important; 
-        fill: $endfield-orange !important; 
-        stroke: $endfield-orange !important;
-        opacity: 1; 
-        filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
-    }
+  &:hover { background-color: $endfield-cyan !important; color: #000 !important; border-color: $endfield-cyan !important; text-decoration: none; box-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
+    .d-icon, .tag-icon svg, .tag-icon use { color: $endfield-orange !important; fill: $endfield-orange !important; stroke: $endfield-orange !important; opacity: 1; filter: drop-shadow(0 0 2px rgba(0,0,0,0.5)); }
   }
 }
+.discourse-tag.box.discourse-tag--tag-icons-style { border-left: 3px solid var(--color1, var(--tertiary)) !important; background-color: var(--secondary) !important; color: var(--primary) !important; }
 
-.discourse-tag.box.discourse-tag--tag-icons-style {
-  border-left: 3px solid var(--color1, var(--tertiary)) !important;
-  background-color: var(--secondary) !important; color: var(--primary) !important;
-}
-
-// ============================================
 // 9. Endfield 导航系统 (Tactical Nav)
-// ============================================
 .navigation-container {
-  position: relative; margin-bottom: 15px; padding: 10px 0; border-bottom: 2px solid rgba(0, 212, 255, 0.15); 
-  &::before { content: ''; position: absolute; bottom: -2px; left: 0; width: 20px; height: 4px; background: $endfield-cyan; }
-
+  position: relative; margin-bottom: 15px; padding: 10px 0; border-bottom: 2px solid rgba(0, 212, 255, 0.15); &::before { content: ''; position: absolute; bottom: -2px; left: 0; width: 20px; height: 4px; background: $endfield-cyan; }
   .category-breadcrumb {
-    .select-kit.combobox {
-      .select-kit-header {
-        background: var(--secondary); border: 1px solid var(--primary-low); border-radius: 0 !important; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        .name { font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800 !important; letter-spacing: 0.5px; color: var(--primary) !important; }
-        .d-icon { color: var(--primary-medium); }
-      }
-
-      &.is-expanded .select-kit-header,
-      .select-kit-header:hover {
-        border-color: $endfield-cyan !important;
-        background: $endfield-cyan !important; 
-        box-shadow: 0 0 8px rgba(0, 212, 255, 0.4) !important;
-        .d-icon { color: #000 !important; }
-        .name { color: #000 !important; } 
-      }
+    .select-kit.combobox { .select-kit-header { background: var(--secondary); border: 1px solid var(--primary-low); border-radius: 0 !important; box-shadow: 0 2px 5px rgba(0,0,0,0.05); .name { font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800 !important; letter-spacing: 0.5px; color: var(--primary) !important; } .d-icon { color: var(--primary-medium); } }
+      &.is-expanded .select-kit-header, .select-kit-header:hover { border-color: $endfield-cyan !important; background: $endfield-cyan !important; box-shadow: 0 0 8px rgba(0, 212, 255, 0.4) !important; .d-icon { color: #000 !important; } .name { color: #000 !important; } }
     }
-    
-    .select-kit-body {
-        border-radius: 0 !important;
-        border: 1px solid $endfield-cyan;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        .select-kit-collection { padding: 5px 0; }
-        .select-kit-row {
-            padding: 4px 10px; border-radius: 0;
-            font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 600;
-            &.is-highlighted, &:hover { background: rgba(0, 212, 255, 0.1); color: $endfield-cyan; }
-            &.is-selected { background: rgba(0, 212, 255, 0.2); color: $endfield-cyan; font-weight: 800; }
-        }
+    .select-kit-body { border-radius: 0 !important; border: 1px solid $endfield-cyan; box-shadow: 0 4px 15px rgba(0,0,0,0.5); .select-kit-collection { padding: 5px 0; }
+        .select-kit-row { padding: 4px 10px; border-radius: 0; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 600; &.is-highlighted, &:hover { background: rgba(0, 212, 255, 0.1); color: $endfield-cyan; } &.is-selected { background: rgba(0, 212, 255, 0.2); color: $endfield-cyan; font-weight: 800; } }
     }
   }
-
-  .nav-pills > li > a {
-    border: 1px solid transparent; border-radius: 0 !important; padding: 6px 12px; margin-right: 4px;
-    font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-size: 1em; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    color: var(--primary) !important; font-weight: 700 !important; opacity: 0.85; background: var(--primary-very-low); 
-    &:hover { background: var(--primary-low); color: var(--primary) !important; opacity: 1; border-color: var(--primary-low); }
-  }
-
-  .nav-pills > li.active > a, .nav-pills > li > a.active {
-    background: $endfield-cyan !important; color: #000 !important; border-color: $endfield-cyan; font-weight: 800 !important; opacity: 1;
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
-    &:hover { background: lighten($endfield-cyan, 10%) !important; }
-  }
-
-  .navigation-controls {
-    .btn { border-radius: 0; text-transform: uppercase; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800; }
-    #create-topic {
-      background: $endfield-orange; color: #fff; border: none; font-weight: 800; 
-      &:hover { background: lighten($endfield-orange, 10%); box-shadow: 0 0 15px rgba(255, 107, 53, 0.4); }
-    }
-  }
+  .nav-pills > li > a { border: 1px solid transparent; border-radius: 0 !important; padding: 6px 12px; margin-right: 4px; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-size: 1em; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); color: var(--primary) !important; font-weight: 700 !important; opacity: 0.85; background: var(--primary-very-low); &:hover { background: var(--primary-low); color: var(--primary) !important; opacity: 1; border-color: var(--primary-low); } }
+  .nav-pills > li.active > a, .nav-pills > li > a.active { background: $endfield-cyan !important; color: #000 !important; border-color: $endfield-cyan; font-weight: 800 !important; opacity: 1; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%); &:hover { background: lighten($endfield-cyan, 10%) !important; } }
+  .navigation-controls { .btn { border-radius: 0; text-transform: uppercase; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800; } #create-topic { background: $endfield-orange; color: #fff; border: none; font-weight: 800; &:hover { background: lighten($endfield-orange, 10%); box-shadow: 0 0 15px rgba(255, 107, 53, 0.4); } } }
 }
 
-// ============================================
-// 10. [核心修复] 话题底部与时间轴按钮
-// ============================================
-.timeline-controls,
-.timeline-footer-controls,
-#topic-footer-buttons,
-.topic-footer-main-buttons {
-  .btn-default:hover {
-    background-color: $endfield-cyan !important;
-    border-color: $endfield-cyan !important;
-    color: #000 !important;
-    .d-icon, .svg-icon {
-        color: #000 !important;
-        fill: #000 !important;
-        stroke: transparent; 
-    }
-  }
+// 10. 话题底部与时间轴按钮
+.timeline-controls, .timeline-footer-controls, #topic-footer-buttons, .topic-footer-main-buttons {
+  .btn-default:hover { background-color: $endfield-cyan !important; border-color: $endfield-cyan !important; color: #000 !important; .d-icon, .svg-icon { color: #000 !important; fill: #000 !important; stroke: transparent; } }
 }
 
-// ============================================
-// 11. 修复新话题通知小圆点 (New Topic Dot)
-// ============================================
-.badge-notification.new-topic {
-  background-color: $endfield-cyan !important; 
-  color: transparent !important; 
-  width: 8px !important;
-  height: 8px !important;
-  border-radius: 50% !important;
-  padding: 0 !important;
-  margin: 0 5px !important; 
-  display: inline-block !important;
-  vertical-align: middle !important;
-  border: none !important;
-  box-shadow: 0 0 4px $endfield-cyan !important;
-  &::before, &::after {
-      content: none !important;
-      display: none !important;
-  }
-}
+// 11. 修复新话题通知小圆点
+.badge-notification.new-topic { background-color: $endfield-cyan !important; color: transparent !important; width: 8px !important; height: 8px !important; border-radius: 50% !important; padding: 0 !important; margin: 0 5px !important; display: inline-block !important; vertical-align: middle !important; border: none !important; box-shadow: 0 0 4px $endfield-cyan !important; &::before, &::after { content: none !important; display: none !important; } }
 
-// ============================================
 // 12. 隐藏 Discourse 默认加载动画
-// ============================================
-#main-outlet.wrap > .spinner,
-.preload-text {
-    display: none !important;
-}
+#main-outlet.wrap > .spinner, .preload-text { display: none !important; }
 
-// ============================================
-// 13. 战术化切角头像 (Tactical Avatars) + 角标保护
-// ============================================
-img.avatar {
-  border-radius: 0 !important;
-  /* 终末地经典八边形切角 */
-  clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%);
-  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-  
-  &:hover {
-     /* 悬停展开为方正，附加发光 */
-     clip-path: polygon(0 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 0);
-     transform: scale(1.05);
-     filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.5));
-  }
-}
+// 13. 战术化切角头像 + 角标保护
+img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%); transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); &:hover { clip-path: polygon(0 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 0); transform: scale(1.05); filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.5)); } }
+.d-header .icons .icon, .d-header .header-buttons .btn { clip-path: none !important; border-radius: 0 !important; }
+#toggle-current-user { overflow: visible !important; .badge-notification { position: absolute; z-index: 99 !important; } }
 
-// 【防误伤护盾】确保切角不会切掉右上角通知角标
-.d-header .icons .icon,
-.d-header .header-buttons .btn {
-  clip-path: none !important; 
-  border-radius: 0 !important; 
-}
+// 14. 数据流文本装饰 (Terminal Text Accent)
+.badge-category-name::before, .sidebar-section-header-text::before, .navigation-container .nav-pills > li > a::before { content: "// "; color: $endfield-cyan; opacity: 0.6; font-family: "JetBrains Mono", monospace; font-weight: 900; margin-right: 4px; letter-spacing: -1px; }
+.navigation-container .nav-pills > li.active > a::before { color: #000; opacity: 1; }
 
-#toggle-current-user {
-  overflow: visible !important; 
-  .badge-notification {
-    position: absolute; // 确保定位层级独立
-    z-index: 99 !important; // 提升角标到绝对上层
-  }
-}
-
-// ============================================
-// 14. 话题列表 HUD 准星锁定特效 (Target Lock)
-// [修复版] 已去除 transform 缩放，彻底解决行高异常跳动问题！
-// ============================================
-.topic-list tbody tr:hover {
-  &::before {
-    content: "";
-    position: absolute;
-    top: 1px; left: 1px; right: 1px; bottom: 1px;
-    pointer-events: none;
-    z-index: 5;
-    /* 绘制四角战术准星 */
-    background: 
-      linear-gradient(to right, $endfield-orange 2px, transparent 2px) top left,
-      linear-gradient(to bottom, $endfield-orange 2px, transparent 2px) top left,
-      linear-gradient(to left, $endfield-orange 2px, transparent 2px) top right,
-      linear-gradient(to bottom, $endfield-orange 2px, transparent 2px) top right,
-      linear-gradient(to right, $endfield-orange 2px, transparent 2px) bottom left,
-      linear-gradient(to top, $endfield-orange 2px, transparent 2px) bottom left,
-      linear-gradient(to left, $endfield-orange 2px, transparent 2px) bottom right,
-      linear-gradient(to top, $endfield-orange 2px, transparent 2px) bottom right;
-    background-size: 8px 8px;
-    background-repeat: no-repeat;
-    
-    /* 使用纯透明度过渡，绝对不影响表格行高与布局 */
-    opacity: 0;
-    transition: opacity 0.2s ease-out;
-  }
-  
-  /* 悬停时仅改变透明度 */
-  &::before {
-    opacity: 1;
-  }
-}
-
-// ============================================
-// 15. 数据流文本装饰 (Terminal Text Accent)
-// ============================================
-.badge-category-name::before,
-.sidebar-section-header-text::before,
-.navigation-container .nav-pills > li > a::before {
-  content: "// ";
-  color: $endfield-cyan;
-  opacity: 0.6;
-  font-family: "JetBrains Mono", monospace;
-  font-weight: 900;
-  margin-right: 4px;
-  letter-spacing: -1px;
-}
-
-.navigation-container .nav-pills > li.active > a::before {
-  color: #000;
-  opacity: 1;
-}
-
-// ============================================
-// 16. 全局渲染性能优化 (Hardware Acceleration)
-// ============================================
-/* 开启硬件加速，防止滚动掉帧 */
-.topic-list tbody tr,
-.btn,
-.sidebar-wrapper .sidebar-container,
-.discourse-tag.box {
-  will-change: transform, box-shadow, opacity;
-  transform: translateZ(0); 
-  backface-visibility: hidden;
-}
-
-/* 移动端性能降级保护 */
-@media screen and (max-width: 767px) {
-  .d-header {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
-  .topic-list tbody tr {
-    box-shadow: none !important;
-  }
-}
+// 15. 全局渲染性能优化 (Hardware Acceleration)
+.topic-list tbody tr, .btn, .sidebar-wrapper .sidebar-container, .discourse-tag.box { will-change: transform, box-shadow, opacity; transform: translateZ(0); backface-visibility: hidden; }
+@media screen and (max-width: 767px) { .d-header { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; } .topic-list tbody tr { box-shadow: none !important; } }
