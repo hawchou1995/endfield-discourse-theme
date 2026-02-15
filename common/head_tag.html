@@ -86,6 +86,24 @@
     letter-spacing: 20px;
     pointer-events: none; white-space: nowrap; user-select: none;
   }
+
+  /* 强制抹杀 Discourse 默认加载动画，在外部 CSS 加载前建立绝对物理拦截 */
+  #main-outlet > .spinner, 
+  #main-outlet.wrap > .spinner, 
+  #main-outlet-wrapper > .spinner,
+  #main > .spinner,
+  body > .spinner,
+  .d-app-body > .spinner,
+  #discourse-root > .spinner,
+  .fallback-spinner, 
+  .route-spinner,
+  .global-spinner,
+  #global-spinner,
+  .spinner-container { 
+    display: none !important; 
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
 </style>
 
 <script nonce="{{nonce}}">
