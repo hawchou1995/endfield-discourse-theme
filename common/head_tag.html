@@ -1,219 +1,239 @@
-/* ============================================
-   Fonts: Rajdhani + Noto Sans SC (Hardcore Style)
-   ============================================ */
-@import url('https://fonts.loli.net/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Rajdhani:wght@500;600;700&display=swap');
-
-// ============================================
-// 《明日方舟·终末地》 (Endspace Style) - V6.0 最终觉醒版
-// ============================================
-
-$endfield-cyan: #00D4FF; 
-$endfield-orange: #FF6B35;
-$endfield-dark-bg: #12151A;
-
-:root {
-  --tertiary: #{$endfield-cyan} !important;
-  --tertiary-hover: #{lighten($endfield-cyan, 10%)} !important;
-  --tertiary-low: rgba(0, 212, 255, 0.2) !important;
-  --tertiary-medium: rgba(0, 212, 255, 0.5) !important;
-  --tertiary-high: rgba(0, 212, 255, 0.8) !important;
-  --quaternary: #{$endfield-orange} !important;
-  --quaternary-hover: #{lighten($endfield-orange, 10%)} !important;
-  --highlight-bg: rgba(0, 212, 255, 0.1) !important;
-  --love: #{$endfield-orange} !important; 
-  --d-hover: rgba(0, 212, 255, 0.05) !important;
-  --d-selected: rgba(0, 212, 255, 0.1) !important;
-}
-
-// 1. 全局基础
-body {
-  background-color: var(--secondary);
-  background-image: 
-    linear-gradient(90deg, rgba(125,125,125,0.05) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(125,125,125,0.05) 1px, transparent 1px);
-  background-size: 40px 40px; 
-  background-attachment: fixed;
-  font-family: "Rajdhani", "Noto Sans SC", "Microsoft YaHei", sans-serif;
-  font-weight: 500; 
-  -webkit-font-smoothing: antialiased;
-}
-
-a {
-  color: $endfield-cyan;
-  transition: all 0.2s ease;
-  font-weight: 600; 
-  &:hover { color: lighten($endfield-cyan, 10%); text-decoration: none; text-shadow: none; }
-}
-a:visited { color: $endfield-cyan; }
-
-// 2. UI 组件
-@mixin endfield-cut-corner {
-  border-radius: 0;
-  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-}
-
-.btn {
-  @include endfield-cut-corner;
-  border: none;
-  text-transform: uppercase;
-  font-family: "Rajdhani", "Noto Sans SC", sans-serif;
-  font-weight: 700; 
-  letter-spacing: 0.5px;
-  position: relative;
-  
-  &.btn-primary {
-    background: $endfield-cyan; color: #000; font-weight: 800;
-    &:hover { background: lighten($endfield-cyan, 10%); transform: translateX(2px); }
-    &::after { content: ''; position: absolute; bottom: 0; right: 0; width: 5px; height: 5px; background: rgba(255,255,255,0.8); }
+<style>
+  #endfield-loader {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #12151A;
+    background-image:
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 9999999;
+    transition: opacity 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    font-family: "Rajdhani", "JetBrains Mono", sans-serif;
+    overflow: visible; /* 避免内部元素溢出被裁 */
   }
-  
-  &.btn-default {
-    background: transparent; color: var(--primary); border: 1px solid var(--primary-low);
-    &:hover { background: var(--primary-low); border-color: $endfield-cyan; color: $endfield-cyan; }
+
+  :root{
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
   }
-}
 
-// 3. 导航栏 (HUD)
-.d-header {
-  background: rgba(18, 21, 26, 0.95); border-bottom: 2px solid $endfield-cyan; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-  &::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, $endfield-cyan, transparent 20%, transparent 80%, $endfield-cyan); }
-  .title a, #site-text-logo { font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800 !important; letter-spacing: 0px; color: #fff !important; font-size: 1.2em; text-transform: uppercase; }
-  .icons .icon { color: #fff !important; border: 1px solid transparent; clip-path: none !important; &:hover { background: rgba(0, 212, 255, 0.1); border: 1px solid $endfield-cyan; border-radius: 0; .d-icon { color: $endfield-cyan !important; } } }
-  .extra-info-wrapper { .topic-link { color: #fff !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700; } .badge-wrapper.bullet span.badge-category { color: #e0e0e0 !important; font-weight: 600; } }
-  .header-buttons .btn { color: #fff !important; border-color: rgba(255,255,255,0.3); clip-path: none !important; &:hover { border-color: $endfield-cyan; color: $endfield-cyan !important; } }
-}
-
-.search-menu .search-input:focus, .d-header .search-input:focus {
-    outline: none; border: 1px solid $endfield-cyan !important; box-shadow: 0 0 8px rgba(0, 212, 255, 0.4), inset 0 0 5px rgba(0, 212, 255, 0.2) !important; 
-    background-color: rgba(0,0,0,0.3) !important; color: #fff !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 600; transition: all 0.2s ease;
-}
-
-// 4. 话题列表
-.topic-list {
-  border-radius: 0; 
-  thead th { border-bottom: 2px solid var(--primary-low); color: var(--primary-medium); font-size: 0.9em; text-transform: uppercase; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700; letter-spacing: 1px; }
-  tbody tr { border-bottom: 1px solid var(--primary-low); }
-  .main-link { font-family: "Noto Sans SC", sans-serif; font-weight: 700 !important; font-size: 1.1em; letter-spacing: 0.2px; }
-  .badge-category-bg { border-radius: 2px; }
-}
-
-.sidebar-section, .rs-component, .topic-list {
-  background: transparent; border: 1px solid var(--primary-low); box-shadow: none; margin-bottom: 24px; position: relative;
-  background-image: linear-gradient(to right, $endfield-cyan 2px, transparent 2px), linear-gradient(to bottom, $endfield-cyan 2px, transparent 2px), linear-gradient(to left, $endfield-cyan 2px, transparent 2px), linear-gradient(to top, $endfield-cyan 2px, transparent 2px);
-  background-position: top left, top left, bottom right, bottom right; background-size: 8px 8px; background-repeat: no-repeat;
-  &::before { display: none; } 
-}
-
-.sidebar-section-header, .rs-component h3 {
-  border-bottom: 1px solid var(--primary-low); padding: 10px 15px; background: rgba(0, 212, 255, 0.05); 
-  color: var(--primary) !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800 !important; 
-  text-transform: uppercase; font-size: 1em; letter-spacing: 1.5px; border-left: 4px solid $endfield-cyan; 
-}
-
-// 5. 帖子详情
-.topic-post {
-  border-left: 1px solid var(--primary-low); &:first-of-type { border-left: 3px solid $endfield-orange; }
-  .topic-avatar { border-top: none; .avatar { border-radius: 4px; border: 2px solid var(--primary-low); } }
-  .cooked { font-weight: 500; line-height: 1.6; blockquote { background: var(--primary-very-low); border-left: 4px solid $endfield-cyan; color: var(--primary); }
-    pre code { background: #1e1e1e; border: 1px solid #333; color: $endfield-cyan; border-radius: 0; font-family: "JetBrains Mono", monospace; font-weight: 500; } p { transition: all 0.3s ease; }
+  #ef-orange-flash {
+    position: absolute; inset: 0;
+    background-color: #FF6B35;
+    opacity: 0; z-index: 10;
+    transition: opacity 0.15s ease-out;
+    pointer-events: none;
   }
-}
 
-// 6. 滚动条
-::-webkit-scrollbar { width: 6px; height: 6px; background: var(--secondary); }
-::-webkit-scrollbar-thumb { background-color: $endfield-cyan; border-radius: 0; &:hover { background-color: var(--primary); } }
-::-webkit-scrollbar-track { background: var(--primary-very-low); border-left: 1px solid var(--primary-low); }
-
-// 7. 特殊组件
-.discourse-tag { color: $endfield-cyan !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700; }
-.badge-notification { background-color: $endfield-orange !important; color: #fff !important; font-family: "Rajdhani", sans-serif; font-weight: 700; &.new-topic { background-color: transparent !important; color: $endfield-cyan !important; padding: 0 !important; } }
-#toggle-current-user { overflow: visible !important; .badge-notification { z-index: 2; } }
-
-.topic-map__stats .btn { clip-path: none !important; border-radius: 4px !important; background: transparent !important; border: none !important; padding: 5px 10px !important; &:hover { background: var(--primary-low) !important; transform: none !important; box-shadow: none !important; } .number, .topic-map__stat-label { color: var(--primary-high-or-secondary-low) !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 600; } }
-
-// 8. 顶栏标签 (Tag Box)
-.discourse-tag.box {
-  border-radius: 0 !important; border: 1px solid var(--primary-low) !important; background-color: var(--secondary) !important; color: var(--primary) !important;
-  font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700 !important; letter-spacing: 0.5px; padding: 4px 8px !important; transition: all 0.2s ease;
-  .d-icon { color: var(--primary-medium) !important; opacity: 0.8; }
-  &:hover { background-color: $endfield-cyan !important; color: #000 !important; border-color: $endfield-cyan !important; text-decoration: none; box-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
-    .d-icon, .tag-icon svg, .tag-icon use { color: $endfield-orange !important; fill: $endfield-orange !important; stroke: $endfield-orange !important; opacity: 1; filter: drop-shadow(0 0 2px rgba(0,0,0,0.5)); }
+  .ef-rail {
+    position: absolute;
+    top: 0; left: 0;
+    width: 14px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    z-index: 5;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
   }
-}
-.discourse-tag.box.discourse-tag--tag-icons-style { border-left: 3px solid var(--color1, var(--tertiary)) !important; background-color: var(--secondary) !important; color: var(--primary) !important; }
 
-// 9. Endfield 导航系统 (Tactical Nav)
-.navigation-container {
-  position: relative; margin-bottom: 15px; padding: 10px 0; border-bottom: 2px solid rgba(0, 212, 255, 0.15); &::before { content: ''; position: absolute; bottom: -2px; left: 0; width: 20px; height: 4px; background: $endfield-cyan; }
-  .category-breadcrumb {
-    .select-kit.combobox { .select-kit-header { background: var(--secondary); border: 1px solid var(--primary-low); border-radius: 0 !important; box-shadow: 0 2px 5px rgba(0,0,0,0.05); .name { font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800 !important; letter-spacing: 0.5px; color: var(--primary) !important; } .d-icon { color: var(--primary-medium); } }
-      &.is-expanded .select-kit-header, .select-kit-header:hover { border-color: $endfield-cyan !important; background: $endfield-cyan !important; box-shadow: 0 0 8px rgba(0, 212, 255, 0.4) !important; .d-icon { color: #000 !important; } .name { color: #000 !important; } }
+  .ef-fill {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 0%;
+    background: #FF6B35;
+    box-shadow: 0 0 15px rgba(255, 107, 53, 0.8);
+    transition: height 0.05s linear;
+  }
+
+  .ef-pct-container {
+    position: absolute;
+    top: 0px; /* JS 写 px（中心点） */
+    left: 28px;
+    transform: translateY(-50%); /* 让 top 表示“中心点” */
+    transition: top 0.05s linear;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    will-change: top;
+  }
+
+  .ef-pct-line-v {
+    width: 4px; height: 24px; background: #FF6B35;
+    margin-left: 4px; margin-bottom: 4px;
+    box-shadow: 0 0 8px rgba(255, 107, 53, 0.8);
+  }
+
+  .ef-pct-num {
+    font-size: 54px; font-weight: 800; color: #FF6B35;
+    letter-spacing: 2px; text-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
+    line-height: 0.9;
+  }
+
+  .ef-pct-subtext {
+    font-size: 14px; color: #FF6B35; font-weight: 700;
+    letter-spacing: 4px; margin-top: 6px; margin-left: 4px; opacity: 0.9;
+  }
+
+  .ef-bg-text {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4vw; color: rgba(255, 255, 255, 0.02);
+    font-weight: 900;
+    letter-spacing: 20px;
+    pointer-events: none; white-space: nowrap; user-select: none;
+  }
+</style>
+
+<script nonce="{{nonce}}">
+(function () {
+  "use strict";
+
+  const LOADER_ID = "endfield-loader";
+
+  // 防重复注入/重复 interval
+  if (window.__efLoaderInterval) {
+    clearInterval(window.__efLoaderInterval);
+    window.__efLoaderInterval = null;
+  }
+
+  function clamp(v, min, max) {
+    return Math.max(min, Math.min(max, v));
+  }
+
+  function getSafeInsetsPx() {
+    const rootStyle = getComputedStyle(document.documentElement);
+    const sat = parseFloat(rootStyle.getPropertyValue("--sat")) || 0;
+    const sab = parseFloat(rootStyle.getPropertyValue("--sab")) || 0;
+    return { top: sat, bottom: sab };
+  }
+
+  function ensureLoaderDom() {
+    let loader = document.getElementById(LOADER_ID);
+    if (loader) return loader;
+
+    // 注入到 body（避免你把 HTML 放在 head 导致奇怪行为）
+    document.body.insertAdjacentHTML("beforeend", `
+      <div id="endfield-loader">
+        <div id="ef-orange-flash"></div>
+        <div class="ef-bg-text">ENDFIELD INITIALIZING</div>
+
+        <div class="ef-rail">
+          <div class="ef-fill" id="ef-bar"></div>
+        </div>
+
+        <div class="ef-pct-container" id="ef-pct-box">
+          <div class="ef-pct-line-v"></div>
+          <div class="ef-pct-num" id="ef-pct">0%</div>
+          <div class="ef-pct-subtext" id="ef-text">LOADING...</div>
+        </div>
+      </div>
+    `);
+
+    return document.getElementById(LOADER_ID);
+  }
+
+  function start() {
+    const loader = ensureLoaderDom();
+    const orangeFlash = document.getElementById("ef-orange-flash");
+    const bar = document.getElementById("ef-bar");
+    const pctBox = document.getElementById("ef-pct-box");
+    const pctText = document.getElementById("ef-pct");
+    const subText = document.getElementById("ef-text");
+
+    if (!loader || !bar || !pctBox || !pctText) return;
+
+    let pct = 0;
+    let isFinishing = false;
+
+    function updatePctBoxPosition(pctValue) {
+      // 用视口高度，而不是 window.innerHeight 的缓存值（移动端地址栏变化更稳）
+      const vh = loader.getBoundingClientRect().height;
+
+      // 关键：真实高度（字体加载后会变）
+      const boxH = pctBox.getBoundingClientRect().height;
+      const half = boxH / 2;
+
+      const inset = getSafeInsetsPx();
+      const buffer = 12;
+
+      // 理想中心点：0% => 0，100% => vh
+      let centerY = (pctValue / 100) * vh;
+
+      const minCenter = half + inset.top + buffer;
+      const maxCenter = vh - half - inset.bottom - buffer;
+
+      if (minCenter > maxCenter) {
+        centerY = vh / 2; // 极小屏降级
+      } else {
+        centerY = clamp(centerY, minCenter, maxCenter);
+      }
+
+      // 因为 pctBox 有 translateY(-50%)，所以 top 设为“中心点像素”
+      pctBox.style.top = centerY + "px";
     }
-    .select-kit-body { border-radius: 0 !important; border: 1px solid $endfield-cyan; box-shadow: 0 4px 15px rgba(0,0,0,0.5); .select-kit-collection { padding: 5px 0; }
-        .select-kit-row { padding: 4px 10px; border-radius: 0; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 600; &.is-highlighted, &:hover { background: rgba(0, 212, 255, 0.1); color: $endfield-cyan; } &.is-selected { background: rgba(0, 212, 255, 0.2); color: $endfield-cyan; font-weight: 800; } }
+
+    function render() {
+      bar.style.height = pct + "%";
+      pctText.textContent = pct + "%";
+      updatePctBoxPosition(pct);
+    }
+
+    // 首帧立刻纠正 0% 的位置（避免被裁切）
+    render();
+
+    // 字体加载完成后高度变化，重算一次（否则会出现“刚开始好，字体加载后又切”）
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(render).catch(function(){});
+    }
+
+    window.addEventListener("resize", render, { passive: true });
+
+    window.__efLoaderInterval = setInterval(() => {
+      if (!isFinishing) {
+        pct += Math.floor(Math.random() * 4) + 1;
+        if (pct >= 85) pct = 85;
+      } else {
+        pct += 8;
+        if (pct >= 100) {
+          pct = 100;
+          render();
+          clearInterval(window.__efLoaderInterval);
+          window.__efLoaderInterval = null;
+          triggerOutro();
+          return;
+        }
+      }
+      render();
+    }, 40);
+
+    // 暴露给外部调用：window.efFinishLoading()
+    window.efFinishLoading = function () {
+      if (isFinishing) return;
+      isFinishing = true;
+      if (subText) subText.textContent = "SYSTEM READY";
+    };
+
+    function triggerOutro() {
+      setTimeout(() => {
+        if (orangeFlash) orangeFlash.style.opacity = "1";
+        setTimeout(() => {
+          loader.style.opacity = "0";
+          loader.style.pointerEvents = "none";
+          setTimeout(() => loader.remove(), 600);
+        }, 200);
+      }, 50);
     }
   }
-  .nav-pills > li > a { border: 1px solid transparent; border-radius: 0 !important; padding: 6px 12px; margin-right: 4px; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-size: 1em; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); color: var(--primary) !important; font-weight: 700 !important; opacity: 0.85; background: var(--primary-very-low); &:hover { background: var(--primary-low); color: var(--primary) !important; opacity: 1; border-color: var(--primary-low); } }
-  .nav-pills > li.active > a, .nav-pills > li > a.active { background: $endfield-cyan !important; color: #000 !important; border-color: $endfield-cyan; font-weight: 800 !important; opacity: 1; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%); &:hover { background: lighten($endfield-cyan, 10%) !important; } }
-  .navigation-controls { .btn { border-radius: 0; text-transform: uppercase; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800; } #create-topic { background: $endfield-orange; color: #fff; border: none; font-weight: 800; &:hover { background: lighten($endfield-orange, 10%); box-shadow: 0 0 15px rgba(255, 107, 53, 0.4); } } }
-}
 
-// 10. 话题底部与时间轴按钮
-.timeline-controls, .timeline-footer-controls, #topic-footer-buttons, .topic-footer-main-buttons {
-  .btn-default:hover { background-color: $endfield-cyan !important; border-color: $endfield-cyan !important; color: #000 !important; .d-icon, .svg-icon { color: #000 !important; fill: #000 !important; stroke: transparent; } }
-}
-
-// 11. 修复新话题通知小圆点
-.badge-notification.new-topic { background-color: $endfield-cyan !important; color: transparent !important; width: 8px !important; height: 8px !important; border-radius: 50% !important; padding: 0 !important; margin: 0 5px !important; display: inline-block !important; vertical-align: middle !important; border: none !important; box-shadow: 0 0 4px $endfield-cyan !important; &::before, &::after { content: none !important; display: none !important; } }
-
-// ============================================
-// 12. 彻底隐藏 Discourse 默认加载动画 (天罗地网版)
-// ============================================
-// 精准拦截初始启动、路由切换、组件懒加载时的紫色省略号，但放过按钮内部的 loading
-#main-outlet > .spinner, 
-#main-outlet.wrap > .spinner, 
-#main-outlet-wrapper > .spinner,
-#main > .spinner,
-body > .spinner,
-.d-app-body > .spinner,
-#discourse-root > .spinner,
-.fallback-spinner, 
-.route-spinner,
-.global-spinner,
-#global-spinner,
-.spinner-container,
-.preload-text { 
-  display: none !important; 
-  opacity: 0 !important;
-  visibility: hidden !important;
-}
-
-// 13. 战术化切角头像 + 角标保护
-img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%); transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); &:hover { clip-path: polygon(0 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 0); transform: scale(1.05); filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.5)); } }
-.d-header .icons .icon, .d-header .header-buttons .btn { clip-path: none !important; border-radius: 0 !important; }
-#toggle-current-user { overflow: visible !important; .badge-notification { position: absolute; z-index: 99 !important; } }
-
-// 14. 全局渲染性能优化
-.topic-list tbody tr, .btn, .sidebar-wrapper .sidebar-container, .discourse-tag.box { will-change: transform, box-shadow, opacity; transform: translateZ(0); backface-visibility: hidden; }
-@media screen and (max-width: 767px) { .d-header { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; } .topic-list tbody tr { box-shadow: none !important; } }
-
-// ============================================
-// 15. 全局按钮 SVG 状态守护 (终极防消失机制)
-// ============================================
-// 放弃局部修复，直接从根源约束所有按钮内的 SVG 图标
-.btn {
-  .d-icon {
-    // 强制 SVG 的颜色和填充色严格跟随按钮文字的当前颜色
-    color: currentColor !important;
-    fill: currentColor !important;
-    // 抵消任何默认的悬浮变淡效果
-    opacity: 1 !important;
-    transition: color 0.2s ease, fill 0.2s ease;
+  // 确保 DOM 可用 + 避免 head 中执行过早
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start, { once: true });
+  } else {
+    start();
   }
-  
-  // 兼容特定深色主题下带有超链接属性模拟的按钮 (如作品集)
-  &[href]:hover .d-icon {
-    color: currentColor !important;
-    fill: currentColor !important;
-  }
-}
+})();
+</script>
