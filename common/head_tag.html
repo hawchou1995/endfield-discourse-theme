@@ -2,9 +2,6 @@
   /* ===================================================
      1. 反客为主：夺舍 Discourse 原生预加载屏
      =================================================== */
-  /* 强制底色，防止原生 splash 瞬间透出白光 */
-  html { background-color: #12151A !important; }
-  
   /* 将原生加载屏直接伪装成终末地背景，填补 JS 延迟加载时的白屏空白 */
   #d-splash {
     background-color: #12151A !important;
@@ -50,7 +47,12 @@
     inset: 0;
     width: 100vw;
     height: 100vh;
-    background-color: transparent; /* 背景已由 #d-splash 承担，这里透明即可 */
+    /* 【核心修复】：必须要有自己的不透明背景！不能依赖官方会被删掉的 splash */
+    background-color: #12151A !important; 
+    background-image:
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
     z-index: 9999999;
     transition: opacity 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
     font-family: "Rajdhani", "JetBrains Mono", sans-serif;
@@ -92,7 +94,7 @@
 
   .ef-pct-container {
     position: absolute;
-    top: 100px; /* 初始占位高度 */
+    top: 100px; 
     left: 28px;
     transform: translateY(-50%); 
     transition: top 0.05s linear;
@@ -133,6 +135,9 @@
 <script nonce="{{nonce}}">
 (function () {
   "use strict";
+
+  const originalBg = document.documentElement.style.backgroundColor;
+  document.documentElement.style.backgroundColor = "#12151A";
 
   const LOADER_ID = "endfield-loader";
 
@@ -186,8 +191,7 @@
       const vh = loader.getBoundingClientRect().height || window.innerHeight;
       let centerY = (pctValue / 100) * vh;
 
-      // 【核心修复】：绝对硬核的保底界限！无论字体是否加载，永远不允许它顶出屏幕外。
-      // 保证容器至少距离顶部 100px，距离底部 100px
+      // 保底界限，防止字体未加载时撞破屏幕边缘
       if (centerY < 100) centerY = 100;
       if (centerY > vh - 100) centerY = vh - 100;
 
@@ -236,8 +240,7 @@
       setTimeout(() => {
         if (orangeFlash) orangeFlash.style.opacity = "1";
         
-        // 动画结束时，将 html 强制的黑底撤销，把控制权还给 Discourse 的日/夜间主题
-        document.documentElement.style.backgroundColor = '';
+        document.documentElement.style.backgroundColor = originalBg;
         
         setTimeout(() => {
           loader.style.opacity = "0";
