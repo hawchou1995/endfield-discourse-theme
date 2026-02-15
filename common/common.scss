@@ -200,18 +200,18 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
 // ============================================
 // 15. 全局按钮 SVG 状态守护 (终极防消失机制)
 // ============================================
-// 放弃局部修复，直接从根源约束所有按钮内的 SVG 图标
+// 强制约束所有按钮内的 SVG 图标，无论在后台还是前台
 .btn {
   .d-icon {
-    // 强制 SVG 的颜色和填充色严格跟随按钮文字的当前颜色
+    // 让 SVG 的颜色和填充色严格跟随按钮当前的文字颜色
     color: currentColor !important;
     fill: currentColor !important;
-    // 抵消任何默认的悬浮变淡效果
+    // 抵消 Discourse 默认的悬浮变淡效果
     opacity: 1 !important;
     transition: color 0.2s ease, fill 0.2s ease;
   }
   
-  // 兼容特定深色主题下带有超链接属性模拟的按钮 (如作品集)
+  // 兼容特定带有超链接属性模拟的按钮 (如作品集)
   &[href]:hover .d-icon {
     color: currentColor !important;
     fill: currentColor !important;
