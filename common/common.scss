@@ -166,8 +166,16 @@ a:visited { color: $endfield-cyan; }
 // 11. 修复新话题通知小圆点
 .badge-notification.new-topic { background-color: $endfield-cyan !important; color: transparent !important; width: 8px !important; height: 8px !important; border-radius: 50% !important; padding: 0 !important; margin: 0 5px !important; display: inline-block !important; vertical-align: middle !important; border: none !important; box-shadow: 0 0 4px $endfield-cyan !important; &::before, &::after { content: none !important; display: none !important; } }
 
-// 12. 隐藏 Discourse 默认加载动画
-#main-outlet.wrap > .spinner, .preload-text { display: none !important; }
+// 12. 彻底隐藏 Discourse 默认加载动画 (全面覆盖新版 DOM)
+#main-outlet.wrap > .spinner, 
+#main-outlet-wrapper > .spinner,
+.fallback-spinner, 
+.route-spinner,
+#main > .spinner,
+body > .spinner,
+.preload-text { 
+  display: none !important; 
+}
 
 // 13. 战术化切角头像 + 角标保护
 img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%); transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); &:hover { clip-path: polygon(0 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 0); transform: scale(1.05); filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.5)); } }
@@ -178,72 +186,23 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
 .topic-list tbody tr, .btn, .sidebar-wrapper .sidebar-container, .discourse-tag.box { will-change: transform, box-shadow, opacity; transform: translateZ(0); backface-visibility: hidden; }
 @media screen and (max-width: 767px) { .d-header { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; } .topic-list tbody tr { box-shadow: none !important; } }
 
-
 // ============================================
-// 15. 修复用户卡片按钮悬浮图标可见性
+// 15. 全局按钮 SVG 状态守护 (终极防消失机制)
 // ============================================
-
-// 针对用户卡片 (User Card) 内的所有按钮进行深度修复
-.user-card, .user-profile {
-  .usercard-controls, .card-content {
-    .btn {
-      // 确保基础图标颜色符合主题
-      .d-icon {
-        color: inherit;
-        fill: currentColor; // 关键：让 SVG 填充颜色跟随文字颜色
-        transition: all 0.2s ease;
-      }
-
-      // 悬浮状态下的终极修复
-      &:hover {
-        background-color: $endfield-cyan !important;
-        color: #000 !important; // 文字变黑
-        border-color: $endfield-cyan !important;
-        
-        .d-icon {
-          color: #000 !important;
-          fill: #000 !important; // 强制 SVG 填充为黑色
-          opacity: 1 !important;
-        }
-
-        .d-button-label {
-          color: #000 !important;
-        }
-      }
-
-      // 特别处理：关注按钮与作品集按钮
-      &.btn-default {
-        .d-icon {
-          color: var(--primary-medium);
-        }
-      }
-      
-      // 特别处理：私信和聊天按钮 (btn-primary)
-      &.btn-primary {
-        .d-icon {
-          color: #000;
-          fill: #000;
-        }
-        &:hover {
-          background-color: lighten($endfield-cyan, 10%) !important;
-        }
-      }
-    }
-  }
-}
-
-// 针对作品集特定的 A 标签按钮加固 (因为它是 <a> 标签模拟的按钮)
-.portfolio-link a.btn:hover {
+// 放弃局部修复，直接从根源约束所有按钮内的 SVG 图标
+.btn {
   .d-icon {
-    color: #000 !important;
-    fill: #000 !important;
+    // 强制 SVG 的颜色和填充色严格跟随按钮文字的当前颜色
+    color: currentColor !important;
+    fill: currentColor !important;
+    // 抵消任何默认的悬浮变淡效果
+    opacity: 1 !important;
+    transition: color 0.2s ease, fill 0.2s ease;
   }
-}
-
-// 修正位置小图标在悬浮时的颜色
-.user-location-widget .btn-show-map:hover {
-  .d-icon {
-    color: #000 !important;
-    fill: #000 !important;
+  
+  // 兼容特定深色主题下带有超链接属性模拟的按钮 (如作品集)
+  &[href]:hover .d-icon {
+    color: currentColor !important;
+    fill: currentColor !important;
   }
 }
