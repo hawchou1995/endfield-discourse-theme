@@ -166,15 +166,26 @@ a:visited { color: $endfield-cyan; }
 // 11. 修复新话题通知小圆点
 .badge-notification.new-topic { background-color: $endfield-cyan !important; color: transparent !important; width: 8px !important; height: 8px !important; border-radius: 50% !important; padding: 0 !important; margin: 0 5px !important; display: inline-block !important; vertical-align: middle !important; border: none !important; box-shadow: 0 0 4px $endfield-cyan !important; &::before, &::after { content: none !important; display: none !important; } }
 
-// 12. 彻底隐藏 Discourse 默认加载动画 (全面覆盖新版 DOM)
+// ============================================
+// 12. 彻底隐藏 Discourse 默认加载动画 (天罗地网版)
+// ============================================
+// 精准拦截初始启动、路由切换、组件懒加载时的紫色省略号，但放过按钮内部的 loading
+#main-outlet > .spinner, 
 #main-outlet.wrap > .spinner, 
 #main-outlet-wrapper > .spinner,
-.fallback-spinner, 
-.route-spinner,
 #main > .spinner,
 body > .spinner,
+.d-app-body > .spinner,
+#discourse-root > .spinner,
+.fallback-spinner, 
+.route-spinner,
+.global-spinner,
+#global-spinner,
+.spinner-container,
 .preload-text { 
   display: none !important; 
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 // 13. 战术化切角头像 + 角标保护
