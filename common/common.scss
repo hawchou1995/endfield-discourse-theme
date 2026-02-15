@@ -253,3 +253,29 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
     fill: currentColor !important;
   }
 }
+
+// 【特区豁免】：单独强化编辑器工具栏按钮的悬浮反馈
+.d-editor-button-bar {
+  .btn.toolbar__button {
+    transition: all 0.2s ease;
+    
+    &:hover {
+      // 悬浮时，强制赋予终末地青色背景，并将图标变为黑色，确保极高的可见度和点击反馈
+      background-color: $endfield-cyan !important;
+      color: #000 !important;
+      border-radius: 4px; // 给编辑器按钮一点点圆角，显得更精致
+      
+      .d-icon {
+        color: #000 !important;
+        fill: #000 !important;
+      }
+    }
+  }
+  
+  // 处理最左侧的 Markdown / 富文本 切换开关
+  .composer-toggle-switch {
+    &:hover {
+      background-color: rgba(0, 212, 255, 0.1) !important;
+    }
+  }
+}
