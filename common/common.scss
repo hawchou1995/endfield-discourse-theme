@@ -177,3 +177,73 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
 // 14. 全局渲染性能优化
 .topic-list tbody tr, .btn, .sidebar-wrapper .sidebar-container, .discourse-tag.box { will-change: transform, box-shadow, opacity; transform: translateZ(0); backface-visibility: hidden; }
 @media screen and (max-width: 767px) { .d-header { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; } .topic-list tbody tr { box-shadow: none !important; } }
+
+
+// ============================================
+// 15. 修复用户卡片按钮悬浮图标可见性
+// ============================================
+
+// 针对用户卡片 (User Card) 内的所有按钮进行深度修复
+.user-card, .user-profile {
+  .usercard-controls, .card-content {
+    .btn {
+      // 确保基础图标颜色符合主题
+      .d-icon {
+        color: inherit;
+        fill: currentColor; // 关键：让 SVG 填充颜色跟随文字颜色
+        transition: all 0.2s ease;
+      }
+
+      // 悬浮状态下的终极修复
+      &:hover {
+        background-color: $endfield-cyan !important;
+        color: #000 !important; // 文字变黑
+        border-color: $endfield-cyan !important;
+        
+        .d-icon {
+          color: #000 !important;
+          fill: #000 !important; // 强制 SVG 填充为黑色
+          opacity: 1 !important;
+        }
+
+        .d-button-label {
+          color: #000 !important;
+        }
+      }
+
+      // 特别处理：关注按钮与作品集按钮
+      &.btn-default {
+        .d-icon {
+          color: var(--primary-medium);
+        }
+      }
+      
+      // 特别处理：私信和聊天按钮 (btn-primary)
+      &.btn-primary {
+        .d-icon {
+          color: #000;
+          fill: #000;
+        }
+        &:hover {
+          background-color: lighten($endfield-cyan, 10%) !important;
+        }
+      }
+    }
+  }
+}
+
+// 针对作品集特定的 A 标签按钮加固 (因为它是 <a> 标签模拟的按钮)
+.portfolio-link a.btn:hover {
+  .d-icon {
+    color: #000 !important;
+    fill: #000 !important;
+  }
+}
+
+// 修正位置小图标在悬浮时的颜色
+.user-location-widget .btn-show-map:hover {
+  .d-icon {
+    color: #000 !important;
+    fill: #000 !important;
+  }
+}
