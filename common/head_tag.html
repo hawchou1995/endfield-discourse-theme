@@ -1,19 +1,29 @@
 <style>
   /* ===================================================
-     1. 物理超度 Discourse 原生预加载屏 (那5个紫色的点)
+     1. 反客为主：夺舍 Discourse 原生预加载屏
      =================================================== */
-  #d-splash, 
+  /* 强制底色，防止原生 splash 瞬间透出白光 */
+  html { background-color: #12151A !important; }
+  
+  /* 将原生加载屏直接伪装成终末地背景，填补 JS 延迟加载时的白屏空白 */
+  #d-splash {
+    background-color: #12151A !important;
+    background-image:
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(255,255,255,0.03) 1px, transparent 1px) !important;
+    background-size: 40px 40px !important;
+    z-index: 9999998 !important; 
+  }
+  /* 物理超度原生屏里的 5 个紫色点和预加载图 */
   #d-splash .dots, 
   #d-splash .preloader-image {
     display: none !important;
     opacity: 0 !important;
-    visibility: hidden !important;
     animation: none !important;
-    z-index: -9999 !important;
   }
 
   /* ===================================================
-     2. 常规加载圈拦截 (双保险)
+     2. 常规内部加载圈拦截 (双保险)
      =================================================== */
   #main-outlet > .spinner, 
   #main-outlet.wrap > .spinner, 
@@ -40,11 +50,7 @@
     inset: 0;
     width: 100vw;
     height: 100vh;
-    background-color: #12151A;
-    background-image:
-      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
+    background-color: transparent; /* 背景已由 #d-splash 承担，这里透明即可 */
     z-index: 9999999;
     transition: opacity 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
     font-family: "Rajdhani", "JetBrains Mono", sans-serif;
@@ -86,7 +92,7 @@
 
   .ef-pct-container {
     position: absolute;
-    top: 80px; /* 增加保底初始位置，防字体未加载前的截断 */
+    top: 100px; /* 初始占位高度 */
     left: 28px;
     transform: translateY(-50%); 
     transition: top 0.05s linear;
@@ -128,10 +134,6 @@
 (function () {
   "use strict";
 
-  // 【核心修复1】：在脚本执行的第一毫秒，强制把整个网页底色涂黑，消灭刺眼的白屏闪烁
-  const originalBg = document.documentElement.style.backgroundColor;
-  document.documentElement.style.backgroundColor = "#12151A";
-
   const LOADER_ID = "endfield-loader";
 
   if (window.__efLoaderInterval) {
@@ -141,13 +143,6 @@
 
   function clamp(v, min, max) {
     return Math.max(min, Math.min(max, v));
-  }
-
-  function getSafeInsetsPx() {
-    const rootStyle = getComputedStyle(document.documentElement);
-    const sat = parseFloat(rootStyle.getPropertyValue("--sat")) || 0;
-    const sab = parseFloat(rootStyle.getPropertyValue("--sab")) || 0;
-    return { top: sat, bottom: sab };
   }
 
   function ensureLoaderDom() {
@@ -188,25 +183,13 @@
     let isFinishing = false;
 
     function updatePctBoxPosition(pctValue) {
-      const vh = loader.getBoundingClientRect().height;
-      
-      // 【核心修复2】：给字体容器增加最小 120px 的保底高度。防止字体未加载时获取高度为0导致的 0% 截断
-      const boxH = Math.max(pctBox.getBoundingClientRect().height, 120);
-      const half = boxH / 2;
-
-      const inset = getSafeInsetsPx();
-      const buffer = 12;
-
+      const vh = loader.getBoundingClientRect().height || window.innerHeight;
       let centerY = (pctValue / 100) * vh;
 
-      const minCenter = half + inset.top + buffer;
-      const maxCenter = vh - half - inset.bottom - buffer;
-
-      if (minCenter > maxCenter) {
-        centerY = vh / 2;
-      } else {
-        centerY = clamp(centerY, minCenter, maxCenter);
-      }
+      // 【核心修复】：绝对硬核的保底界限！无论字体是否加载，永远不允许它顶出屏幕外。
+      // 保证容器至少距离顶部 100px，距离底部 100px
+      if (centerY < 100) centerY = 100;
+      if (centerY > vh - 100) centerY = vh - 100;
 
       pctBox.style.top = centerY + "px";
     }
@@ -252,8 +235,9 @@
     function triggerOutro() {
       setTimeout(() => {
         if (orangeFlash) orangeFlash.style.opacity = "1";
-        // 动画结束时，撤销我们强加的纯黑底色，把控制权还给 Discourse 主题
-        document.documentElement.style.backgroundColor = originalBg;
+        
+        // 动画结束时，将 html 强制的黑底撤销，把控制权还给 Discourse 的日/夜间主题
+        document.documentElement.style.backgroundColor = '';
         
         setTimeout(() => {
           loader.style.opacity = "0";
@@ -264,17 +248,10 @@
     }
   }
 
-  // 【核心修复3】：不再干等 DOMContentLoaded。通过 MutationObserver，一旦 body 标签诞生，瞬间完成截胡注入
-  if (document.body) {
-    start();
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start, { once: true });
   } else {
-    const observer = new MutationObserver(() => {
-      if (document.body) {
-        observer.disconnect();
-        start();
-      }
-    });
-    observer.observe(document.documentElement, { childList: true });
+    start();
   }
 })();
 </script>
