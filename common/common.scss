@@ -77,15 +77,36 @@ a:visited { color: $endfield-cyan; }
 .d-header {
   background: rgba(18, 21, 26, 0.95); border-bottom: 2px solid $endfield-cyan; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
   &::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, $endfield-cyan, transparent 20%, transparent 80%, $endfield-cyan); }
+  
   .title a, #site-text-logo { font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800 !important; letter-spacing: 0px; color: #fff !important; font-size: 1.2em; text-transform: uppercase; }
-  .icons .icon { color: #fff !important; border: 1px solid transparent; clip-path: none !important; &:hover { background: rgba(0, 212, 255, 0.1); border: 1px solid $endfield-cyan; border-radius: 0; .d-icon { color: $endfield-cyan !important; } } }
+  
+  // 【核心修复】：将侧边栏切换按钮 (.header-sidebar-toggle button) 与右侧图标一并处理，强制白/青色，无视浅色模式默认字色
+  .header-sidebar-toggle button, .icons .icon { 
+    color: #fff !important; 
+    border: 1px solid transparent; 
+    clip-path: none !important; 
+    
+    .d-icon { 
+      color: #fff !important; 
+      fill: #fff !important; 
+    } 
+    
+    &:hover { 
+      background: rgba(0, 212, 255, 0.1); 
+      border: 1px solid $endfield-cyan; 
+      border-radius: 0; 
+      color: $endfield-cyan !important;
+      
+      .d-icon { 
+        color: $endfield-cyan !important; 
+        fill: $endfield-cyan !important; 
+      } 
+    } 
+  }
+  
   .extra-info-wrapper { .topic-link { color: #fff !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700; } .badge-wrapper.bullet span.badge-category { color: #e0e0e0 !important; font-weight: 600; } }
+  
   .header-buttons .btn { color: #fff !important; border-color: rgba(255,255,255,0.3); clip-path: none !important; &:hover { border-color: $endfield-cyan; color: $endfield-cyan !important; } }
-}
-
-.search-menu .search-input:focus, .d-header .search-input:focus {
-    outline: none; border: 1px solid $endfield-cyan !important; box-shadow: 0 0 8px rgba(0, 212, 255, 0.4), inset 0 0 5px rgba(0, 212, 255, 0.2) !important; 
-    background-color: rgba(0,0,0,0.3) !important; color: #fff !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 600; transition: all 0.2s ease;
 }
 
 // 4. 话题列表
