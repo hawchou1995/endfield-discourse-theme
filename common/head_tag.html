@@ -87,14 +87,13 @@
     pointer-events: none; white-space: nowrap; user-select: none;
   }
 
-  /* 强制抹杀 Discourse 默认加载动画，在外部 CSS 加载前建立绝对物理拦截 */
-  #main-outlet > .spinner, 
-  #main-outlet.wrap > .spinner, 
-  #main-outlet-wrapper > .spinner,
-  #main > .spinner,
+  /* 强制抹杀 Discourse 默认加载动画，穿透所有 Ember 包装层 */
+  #main-outlet .spinner, 
+  #main-outlet-wrapper .spinner,
+  #main .spinner,
   body > .spinner,
-  .d-app-body > .spinner,
-  #discourse-root > .spinner,
+  .d-app-body .spinner,
+  #discourse-root .spinner,
   .fallback-spinner, 
   .route-spinner,
   .global-spinner,
@@ -103,6 +102,13 @@
     display: none !important; 
     opacity: 0 !important;
     visibility: hidden !important;
+    animation: none !important;
+  }
+
+  /* 兜底防御：就算 Spinner 越狱，也绝对不允许它是紫色，强制染成终末地青色 */
+  .spinner, .loader, .spinner div, .bouncing-dots div {
+    border-color: #00D4FF !important;
+    background-color: #00D4FF !important;
   }
 </style>
 
@@ -168,29 +174,23 @@
     let isFinishing = false;
 
     function updatePctBoxPosition(pctValue) {
-      // 用视口高度，而不是 window.innerHeight 的缓存值（移动端地址栏变化更稳）
       const vh = loader.getBoundingClientRect().height;
-
-      // 关键：真实高度（字体加载后会变）
       const boxH = pctBox.getBoundingClientRect().height;
       const half = boxH / 2;
 
       const inset = getSafeInsetsPx();
       const buffer = 12;
 
-      // 理想中心点：0% => 0，100% => vh
       let centerY = (pctValue / 100) * vh;
-
       const minCenter = half + inset.top + buffer;
       const maxCenter = vh - half - inset.bottom - buffer;
 
       if (minCenter > maxCenter) {
-        centerY = vh / 2; // 极小屏降级
+        centerY = vh / 2;
       } else {
         centerY = clamp(centerY, minCenter, maxCenter);
       }
 
-      // 因为 pctBox 有 translateY(-50%)，所以 top 设为“中心点像素”
       pctBox.style.top = centerY + "px";
     }
 
@@ -200,10 +200,8 @@
       updatePctBoxPosition(pct);
     }
 
-    // 首帧立刻纠正 0% 的位置（避免被裁切）
     render();
 
-    // 字体加载完成后高度变化，重算一次（否则会出现“刚开始好，字体加载后又切”）
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(render).catch(function(){});
     }
@@ -228,7 +226,6 @@
       render();
     }, 40);
 
-    // 暴露给外部调用：window.efFinishLoading()
     window.efFinishLoading = function () {
       if (isFinishing) return;
       isFinishing = true;
@@ -247,7 +244,6 @@
     }
   }
 
-  // 确保 DOM 可用 + 避免 head 中执行过早
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", start, { once: true });
   } else {
