@@ -48,7 +48,7 @@
     z-index: 9999999;
     transition: opacity 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
     font-family: "Rajdhani", "JetBrains Mono", sans-serif;
-    overflow: visible; /* 避免内部元素溢出被裁 */
+    overflow: visible; 
   }
 
   :root{
@@ -86,7 +86,7 @@
 
   .ef-pct-container {
     position: absolute;
-    top: 0px; 
+    top: 80px; /* 增加保底初始位置，防字体未加载前的截断 */
     left: 28px;
     transform: translateY(-50%); 
     transition: top 0.05s linear;
@@ -128,9 +128,12 @@
 (function () {
   "use strict";
 
+  // 【核心修复1】：在脚本执行的第一毫秒，强制把整个网页底色涂黑，消灭刺眼的白屏闪烁
+  const originalBg = document.documentElement.style.backgroundColor;
+  document.documentElement.style.backgroundColor = "#12151A";
+
   const LOADER_ID = "endfield-loader";
 
-  // 防重复注入/重复 interval
   if (window.__efLoaderInterval) {
     clearInterval(window.__efLoaderInterval);
     window.__efLoaderInterval = null;
@@ -151,7 +154,6 @@
     let loader = document.getElementById(LOADER_ID);
     if (loader) return loader;
 
-    // 注入到 body
     document.body.insertAdjacentHTML("beforeend", `
       <div id="endfield-loader">
         <div id="ef-orange-flash"></div>
@@ -187,7 +189,9 @@
 
     function updatePctBoxPosition(pctValue) {
       const vh = loader.getBoundingClientRect().height;
-      const boxH = pctBox.getBoundingClientRect().height;
+      
+      // 【核心修复2】：给字体容器增加最小 120px 的保底高度。防止字体未加载时获取高度为0导致的 0% 截断
+      const boxH = Math.max(pctBox.getBoundingClientRect().height, 120);
       const half = boxH / 2;
 
       const inset = getSafeInsetsPx();
@@ -248,6 +252,9 @@
     function triggerOutro() {
       setTimeout(() => {
         if (orangeFlash) orangeFlash.style.opacity = "1";
+        // 动画结束时，撤销我们强加的纯黑底色，把控制权还给 Discourse 主题
+        document.documentElement.style.backgroundColor = originalBg;
+        
         setTimeout(() => {
           loader.style.opacity = "0";
           loader.style.pointerEvents = "none";
@@ -257,10 +264,17 @@
     }
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", start, { once: true });
-  } else {
+  // 【核心修复3】：不再干等 DOMContentLoaded。通过 MutationObserver，一旦 body 标签诞生，瞬间完成截胡注入
+  if (document.body) {
     start();
+  } else {
+    const observer = new MutationObserver(() => {
+      if (document.body) {
+        observer.disconnect();
+        start();
+      }
+    });
+    observer.observe(document.documentElement, { childList: true });
   }
 })();
 </script>
