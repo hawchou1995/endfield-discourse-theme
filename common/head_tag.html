@@ -1,114 +1,60 @@
 <style>
-  #endfield-loader {
-    position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: #12151A;
-    background-image:
-      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    z-index: 9999999;
-    transition: opacity 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-    font-family: "Rajdhani", "JetBrains Mono", sans-serif;
-    overflow: visible; /* 避免内部元素溢出被裁 */
-  }
+  /*
+    Discourse Route/Global Spinner Killer
+    - Critical CSS: 尽早防闪现
+    - 只针对“疑似全局/路由”区域，尽量不影响按钮内 spinner
+  */
 
-  :root{
-    --sat: env(safe-area-inset-top, 0px);
-    --sab: env(safe-area-inset-bottom, 0px);
-  }
-
-  #ef-orange-flash {
-    position: absolute; inset: 0;
-    background-color: #FF6B35;
-    opacity: 0; z-index: 10;
-    transition: opacity 0.15s ease-out;
-    pointer-events: none;
-  }
-
-  .ef-rail {
-    position: absolute;
-    top: 0; left: 0;
-    width: 14px;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.05);
-    z-index: 5;
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .ef-fill {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 0%;
-    background: #FF6B35;
-    box-shadow: 0 0 15px rgba(255, 107, 53, 0.8);
-    transition: height 0.05s linear;
-  }
-
-  .ef-pct-container {
-    position: absolute;
-    top: 0px; /* JS 写 px（中心点） */
-    left: 28px;
-    transform: translateY(-50%); /* 让 top 表示“中心点” */
-    transition: top 0.05s linear;
-    z-index: 5;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    will-change: top;
-  }
-
-  .ef-pct-line-v {
-    width: 4px; height: 24px; background: #FF6B35;
-    margin-left: 4px; margin-bottom: 4px;
-    box-shadow: 0 0 8px rgba(255, 107, 53, 0.8);
-  }
-
-  .ef-pct-num {
-    font-size: 54px; font-weight: 800; color: #FF6B35;
-    letter-spacing: 2px; text-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
-    line-height: 0.9;
-  }
-
-  .ef-pct-subtext {
-    font-size: 14px; color: #FF6B35; font-weight: 700;
-    letter-spacing: 4px; margin-top: 6px; margin-left: 4px; opacity: 0.9;
-  }
-
-  .ef-bg-text {
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 4vw; color: rgba(255, 255, 255, 0.02);
-    font-weight: 900;
-    letter-spacing: 20px;
-    pointer-events: none; white-space: nowrap; user-select: none;
-  }
-
-  /* 强制抹杀 Discourse 默认加载动画，穿透所有 Ember 包装层 */
-  #main-outlet .spinner, 
-  #main-outlet-wrapper .spinner,
-  #main .spinner,
-  body > .spinner,
-  .d-app-body .spinner,
-  #discourse-root .spinner,
-  .fallback-spinner, 
-  .route-spinner,
-  .global-spinner,
-  #global-spinner,
-  .spinner-container { 
-    display: none !important; 
+  :root.__ef_kill_route_spinner
+    body > .spinner,
+  :root.__ef_kill_route_spinner
+    #discourse-root > .spinner,
+  :root.__ef_kill_route_spinner
+    .d-app-body > .spinner,
+  :root.__ef_kill_route_spinner
+    #main-outlet .spinner,
+  :root.__ef_kill_route_spinner
+    #main-outlet-wrapper .spinner,
+  :root.__ef_kill_route_spinner
+    #main .spinner,
+  :root.__ef_kill_route_spinner
+    #main-outlet .bouncing-dots,
+  :root.__ef_kill_route_spinner
+    #main-outlet-wrapper .bouncing-dots,
+  :root.__ef_kill_route_spinner
+    #main .bouncing-dots,
+  :root.__ef_kill_route_spinner
+    #global-spinner,
+  :root.__ef_kill_route_spinner
+    #global-loading-spinner,
+  :root.__ef_kill_route_spinner
+    .global-spinner,
+  :root.__ef_kill_route_spinner
+    .route-spinner,
+  :root.__ef_kill_route_spinner
+    .spinner-container {
+    display: none !important;
     opacity: 0 !important;
     visibility: hidden !important;
     animation: none !important;
   }
 
-  /* 兜底防御：就算 Spinner 越狱，也绝对不允许它是紫色，强制染成终末地青色 */
-  .spinner, .loader, .spinner div, .bouncing-dots div {
-    border-color: #00D4FF !important;
-    background-color: #00D4FF !important;
+  /* 白名单豁免：按钮/表单控件里的 spinner 要保留 */
+  :root.__ef_kill_route_spinner .btn .spinner,
+  :root.__ef_kill_route_spinner .btn .bouncing-dots,
+  :root.__ef_kill_route_spinner button .spinner,
+  :root.__ef_kill_route_spinner button .bouncing-dots,
+  :root.__ef_kill_route_spinner .d-button .spinner,
+  :root.__ef_kill_route_spinner .d-button .bouncing-dots,
+  :root.__ef_kill_route_spinner .select-kit .spinner,
+  :root.__ef_kill_route_spinner .select-kit .bouncing-dots,
+  :root.__ef_kill_route_spinner .combo-box .spinner,
+  :root.__ef_kill_route_spinner .combo-box .bouncing-dots,
+  :root.__ef_kill_route_spinner .input-group .spinner,
+  :root.__ef_kill_route_spinner .input-group .bouncing-dots {
+    display: inline-block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 </style>
 
@@ -116,138 +62,139 @@
 (function () {
   "use strict";
 
-  const LOADER_ID = "endfield-loader";
+  // 0) 尽早启用 critical CSS（防闪现）
+  document.documentElement.classList.add("__ef_kill_route_spinner");
 
-  // 防重复注入/重复 interval
-  if (window.__efLoaderInterval) {
-    clearInterval(window.__efLoaderInterval);
-    window.__efLoaderInterval = null;
+  // 1) 防重复注册（主题热更新/多次注入时很常见）
+  if (window.__EF_ROUTE_SPINNER_KILLER__) return;
+  window.__EF_ROUTE_SPINNER_KILLER__ = true;
+
+  // 2) 可选：调试开关（控制台执行 window.__EF_KILL_SPINNER_DEBUG = true）
+  function debugLog(...args) {
+    if (window.__EF_KILL_SPINNER_DEBUG) console.log("[RouteSpinnerKiller]", ...args);
   }
 
-  function clamp(v, min, max) {
-    return Math.max(min, Math.min(max, v));
+  // 3) 选择器集合：覆盖 Discourse 常见 spinner 命名 + “三点”
+  const SPINNER_SELECTOR = [
+    "#global-loading-spinner",
+    "#global-spinner",
+    ".global-spinner",
+    ".route-spinner",
+    ".spinner-container",
+    ".spinner",
+    ".bouncing-dots"
+  ].join(",");
+
+  // 4) 白名单：在这些容器/控件里发现 spinner，不杀（避免按钮无反馈）
+  const WHITELIST_CLOSEST = [
+    "button",
+    ".btn",
+    ".d-button",
+    ".select-kit",
+    ".combo-box",
+    ".input-group",
+    ".d-modal",          // 弹窗里可能有真实 loading
+    ".composer-popup",   // 编辑器相关
+    ".composer-container"
+  ].join(",");
+
+  // 5) 我们主要“治理”的范围：路由/主 outlet 附近（降低误伤）
+  const ROUTE_SCOPE_CLOSEST = [
+    "#main-outlet",
+    "#main-outlet-wrapper",
+    "#main",
+    "#discourse-root",
+    ".d-app-body"
+  ].join(",");
+
+  function shouldKill(el) {
+    if (!el || el.nodeType !== 1) return false;
+
+    // 已处理过的别再碰（防抖 + 性能）
+    if (el.dataset && el.dataset.efKilledSpinner === "1") return false;
+
+    // 只处理“像 spinner 的东西”
+    if (!el.matches(SPINNER_SELECTOR)) return false;
+
+    // 在白名单控件里 -> 放过
+    if (el.closest(WHITELIST_CLOSEST)) return false;
+
+    // 必须处在路由/主区域附近 -> 才认为是“全局/路由 spinner”
+    if (!el.closest(ROUTE_SCOPE_CLOSEST) && el.parentElement !== document.body) return false;
+
+    return true;
   }
 
-  function getSafeInsetsPx() {
-    const rootStyle = getComputedStyle(document.documentElement);
-    const sat = parseFloat(rootStyle.getPropertyValue("--sat")) || 0;
-    const sab = parseFloat(rootStyle.getPropertyValue("--sab")) || 0;
-    return { top: sat, bottom: sab };
+  function kill(el, reason) {
+    try {
+      if (!el || el.nodeType !== 1) return;
+
+      // 标记，避免重复处理
+      if (el.dataset) el.dataset.efKilledSpinner = "1";
+
+      // 用隐藏而非 remove：更安全，便于回退/减少副作用
+      el.style.setProperty("display", "none", "important");
+      el.style.setProperty("opacity", "0", "important");
+      el.style.setProperty("visibility", "hidden", "important");
+      el.style.setProperty("animation", "none", "important");
+
+      debugLog("killed:", reason, el);
+    } catch (e) {
+      // 零信任：任何 DOM 操作都可能抛异常（比如节点被瞬间移除）
+    }
   }
 
-  function ensureLoaderDom() {
-    let loader = document.getElementById(LOADER_ID);
-    if (loader) return loader;
+  function scanAndKill(root, reason) {
+    if (!root || root.nodeType !== 1) return;
 
-    // 注入到 body（避免你把 HTML 放在 head 导致奇怪行为）
-    document.body.insertAdjacentHTML("beforeend", `
-      <div id="endfield-loader">
-        <div id="ef-orange-flash"></div>
-        <div class="ef-bg-text">ENDFIELD INITIALIZING</div>
+    // root 自己是 spinner
+    if (root.matches && root.matches(SPINNER_SELECTOR) && shouldKill(root)) {
+      kill(root, reason);
+      return;
+    }
 
-        <div class="ef-rail">
-          <div class="ef-fill" id="ef-bar"></div>
-        </div>
-
-        <div class="ef-pct-container" id="ef-pct-box">
-          <div class="ef-pct-line-v"></div>
-          <div class="ef-pct-num" id="ef-pct">0%</div>
-          <div class="ef-pct-subtext" id="ef-text">LOADING...</div>
-        </div>
-      </div>
-    `);
-
-    return document.getElementById(LOADER_ID);
+    // root 子树里有 spinner
+    const list = root.querySelectorAll ? root.querySelectorAll(SPINNER_SELECTOR) : [];
+    for (const el of list) {
+      if (shouldKill(el)) kill(el, reason);
+    }
   }
 
-  function start() {
-    const loader = ensureLoaderDom();
-    const orangeFlash = document.getElementById("ef-orange-flash");
-    const bar = document.getElementById("ef-bar");
-    const pctBox = document.getElementById("ef-pct-box");
-    const pctText = document.getElementById("ef-pct");
-    const subText = document.getElementById("ef-text");
+  // 6) 首次全量扫描：解决“已存在”的复活/残留
+  const initialScan = () => {
+    scanAndKill(document.documentElement, "initial-scan");
+  };
 
-    if (!loader || !bar || !pctBox || !pctText) return;
-
-    let pct = 0;
-    let isFinishing = false;
-
-    function updatePctBoxPosition(pctValue) {
-      const vh = loader.getBoundingClientRect().height;
-      const boxH = pctBox.getBoundingClientRect().height;
-      const half = boxH / 2;
-
-      const inset = getSafeInsetsPx();
-      const buffer = 12;
-
-      let centerY = (pctValue / 100) * vh;
-      const minCenter = half + inset.top + buffer;
-      const maxCenter = vh - half - inset.bottom - buffer;
-
-      if (minCenter > maxCenter) {
-        centerY = vh / 2;
-      } else {
-        centerY = clamp(centerY, minCenter, maxCenter);
+  // 7) MutationObserver：解决“死而复生”
+  const obs = new MutationObserver((mutations) => {
+    for (const m of mutations) {
+      for (const n of m.addedNodes) {
+        if (n && n.nodeType === 1) scanAndKill(n, "mutation");
       }
-
-      pctBox.style.top = centerY + "px";
     }
+  });
 
-    function render() {
-      bar.style.height = pct + "%";
-      pctText.textContent = pct + "%";
-      updatePctBoxPosition(pct);
-    }
+  function startObserver() {
+    if (!document.body) return;
 
-    render();
+    initialScan();
 
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(render).catch(function(){});
-    }
-
-    window.addEventListener("resize", render, { passive: true });
-
-    window.__efLoaderInterval = setInterval(() => {
-      if (!isFinishing) {
-        pct += Math.floor(Math.random() * 4) + 1;
-        if (pct >= 85) pct = 85;
-      } else {
-        pct += 8;
-        if (pct >= 100) {
-          pct = 100;
-          render();
-          clearInterval(window.__efLoaderInterval);
-          window.__efLoaderInterval = null;
-          triggerOutro();
-          return;
-        }
-      }
-      render();
-    }, 40);
-
-    window.efFinishLoading = function () {
-      if (isFinishing) return;
-      isFinishing = true;
-      if (subText) subText.textContent = "SYSTEM READY";
-    };
-
-    function triggerOutro() {
-      setTimeout(() => {
-        if (orangeFlash) orangeFlash.style.opacity = "1";
-        setTimeout(() => {
-          loader.style.opacity = "0";
-          loader.style.pointerEvents = "none";
-          setTimeout(() => loader.remove(), 600);
-        }, 200);
-      }, 50);
-    }
+    obs.observe(document.body, { childList: true, subtree: true });
+    debugLog("observer started");
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", start, { once: true });
+    document.addEventListener("DOMContentLoaded", startObserver, { once: true });
   } else {
-    start();
+    startObserver();
   }
+
+  // 8) 内置验证点（可在控制台手动调用）
+  window.__EF_TEST_ROUTE_SPINNER_KILLER__ = function () {
+    const demo = document.createElement("div");
+    demo.innerHTML = '<div class="spinner"><div class="bouncing-dots"><div></div><div></div><div></div></div></div>';
+    (document.querySelector("#main-outlet") || document.body).appendChild(demo);
+    debugLog("test inserted demo spinner into outlet");
+  };
 })();
 </script>
