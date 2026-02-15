@@ -167,9 +167,8 @@ a:visited { color: $endfield-cyan; }
 .badge-notification.new-topic { background-color: $endfield-cyan !important; color: transparent !important; width: 8px !important; height: 8px !important; border-radius: 50% !important; padding: 0 !important; margin: 0 5px !important; display: inline-block !important; vertical-align: middle !important; border: none !important; box-shadow: 0 0 4px $endfield-cyan !important; &::before, &::after { content: none !important; display: none !important; } }
 
 // ============================================
-// 12. 彻底隐藏 Discourse 默认加载动画 (无视包裹层版)
+// 12. 彻底隐藏 Discourse 默认加载动画 (天罗地网，含紫色省略号)
 // ============================================
-// 移除严格的子节点选择器，穿透任何隐藏的 ember div 包裹层
 #main-outlet .spinner, 
 #main-outlet-wrapper .spinner,
 #main .spinner,
@@ -180,22 +179,28 @@ a:visited { color: $endfield-cyan; }
 .global-spinner,
 #global-spinner,
 .spinner-container,
-.preload-text { 
+.preload-text,
+/* 真正的真凶：紫色省略号 (跳动的点) */
+#main-outlet .bouncing-dots,
+#main-outlet-wrapper .bouncing-dots,
+#main .bouncing-dots,
+.d-app-body .bouncing-dots,
+#discourse-root .bouncing-dots { 
   display: none !important; 
   opacity: 0 !important;
   visibility: hidden !important;
   animation: none !important;
 }
 
-// 恢复按钮和局部组件内的 Spinner，防止点击后没反馈
-.btn .spinner, .btn .loader, .widget-button .spinner {
+// 恢复按钮和局部组件内的 Spinner / Bouncing dots，防止点击后没反馈
+.btn .spinner, .btn .loader, .widget-button .spinner, .btn .bouncing-dots {
   display: inline-block !important;
   opacity: 1 !important;
   visibility: visible !important;
 }
 
 // 终极兜底：就算加载动画突围出现，也强制染成青色，杜绝突兀的紫色！
-.spinner, .loader, .spinner div {
+.spinner, .loader, .spinner div, .bouncing-dots div {
   border-color: $endfield-cyan !important;
   background-color: $endfield-cyan !important;
 }
@@ -212,13 +217,11 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
 // ============================================
 // 15. 全局按钮 SVG 状态守护 (终极防消失机制)
 // ============================================
-// 强制约束所有按钮内的 SVG 图标，无论在后台还是前台
 .btn {
   .d-icon {
     // 让 SVG 的颜色和填充色严格跟随按钮当前的文字颜色
     color: currentColor !important;
     fill: currentColor !important;
-    // 抵消 Discourse 默认的悬浮变淡效果
     opacity: 1 !important;
     transition: color 0.2s ease, fill 0.2s ease;
   }
