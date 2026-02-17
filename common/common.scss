@@ -80,20 +80,23 @@ a:visited { color: $endfield-cyan; }
   
   .title a, #site-text-logo { font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800 !important; letter-spacing: 0px; color: #fff !important; font-size: 1.2em; text-transform: uppercase; }
   
-  // 【核心修复】：将侧边栏切换按钮 (.header-sidebar-toggle button) 与右侧图标一并处理，强制白/青色，无视浅色模式默认字色
-  .header-sidebar-toggle button, .icons .icon { 
+  // 【核心修复】：为顶栏内的所有交互元素（左右侧图标、按钮）强制绑定白色，无视全局 .btn 的 currentColor 污染
+  .header-sidebar-toggle button, 
+  .d-header-icons .icon, 
+  .header-buttons .btn { 
     color: #fff !important; 
     border: 1px solid transparent; 
     clip-path: none !important; 
     
+    // 强制内部的 SVG 图标也变成白色
     .d-icon { 
       color: #fff !important; 
       fill: #fff !important; 
     } 
     
     &:hover { 
-      background: rgba(0, 212, 255, 0.1); 
-      border: 1px solid $endfield-cyan; 
+      background: rgba(0, 212, 255, 0.1) !important; 
+      border: 1px solid $endfield-cyan !important; 
       border-radius: 0; 
       color: $endfield-cyan !important;
       
@@ -105,8 +108,6 @@ a:visited { color: $endfield-cyan; }
   }
   
   .extra-info-wrapper { .topic-link { color: #fff !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700; } .badge-wrapper.bullet span.badge-category { color: #e0e0e0 !important; font-weight: 600; } }
-  
-  .header-buttons .btn { color: #fff !important; border-color: rgba(255,255,255,0.3); clip-path: none !important; &:hover { border-color: $endfield-cyan; color: $endfield-cyan !important; } }
 }
 
 // 4. 话题列表
