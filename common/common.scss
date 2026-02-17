@@ -726,71 +726,73 @@ button.create.topic-footer-button {
 @keyframes prts-warning-pulse { 0%, 100% { box-shadow: 0 0 0 rgba(255, 107, 53, 0); } 50% { box-shadow: 0 0 10px rgba(255, 107, 53, 0.4); } }
 
 /* ==========================================================================
-   18. 干员图鉴协议 (Operator Dossier / Tactical User Card)
+   18. 干员图鉴协议 (Operator Dossier / Tactical User Card) - 背景兼容修复版
    ========================================================================== */
 
 #user-card {
   /* ----------------------------------------------------
      1. 图鉴外壳装甲 (Dossier Shell)
      ---------------------------------------------------- */
-  background-color: #12151A !important; /* 强制极暗深色底 */
+  background-color: #12151A !important; 
+  
+  /* [核心修复]：解绑 background-image 的 !important 覆写，允许自定义背景图显现 */
+  background-size: cover !important;
+  background-position: center !important;
+  
   border: 1px solid var(--tertiary-medium) !important;
   box-shadow: 0 0 30px rgba(0, 212, 255, 0.15), 0 0 0 1px rgba(0, 212, 255, 0.2) !important;
-  
-  /* 终末地战术切角 (右上和左下大面积切角) */
-  clip-path: polygon(0 20px, 20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
-  
-  /* 战术雷达网格背景 */
-  background-image: 
-    linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px) !important;
-  background-size: 15px 15px !important;
+  clip-path: polygon(0 15px, 15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
   position: relative;
   overflow: hidden;
+  color: #E0E0E0 !important; 
 
-  /* 悬浮扫描线特效 */
+  /* 悬浮扫描线特效 - 提高 z-index 保证在背景与内容之上 */
   &::before {
     content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
     background: var(--tertiary); box-shadow: 0 0 15px var(--tertiary);
-    opacity: 0.5; animation: prts-scan 4s linear infinite; pointer-events: none; z-index: 0;
+    opacity: 0.5; animation: prts-scan 4s linear infinite; pointer-events: none; z-index: 10;
   }
 
-  /* 顶部代号标签 */
   &::after {
-    content: "OPERATOR_ID // VERIFIED"; position: absolute; top: 0; left: 25px;
+    content: "OPERATOR_ID // VERIFIED"; position: absolute; top: 0; left: 20px;
     background: var(--tertiary); color: #000; font-family: "JetBrains Mono", monospace;
     font-size: 9px; font-weight: 900; padding: 2px 8px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px;
-    z-index: 1; letter-spacing: 1px;
+    z-index: 11; letter-spacing: 1px;
   }
 
+  /* [核心修复]：将半透明遮罩与雷达网格下放到内容层，实现完美层叠透视 */
   .card-content { 
-    background: transparent !important; 
-    position: relative; z-index: 2; /* 确保内容在扫描线之上 */
-    padding-top: 15px; /* 给顶部标签留出空间 */
+    /* 85%的深色玻璃层，让自定义背景隐隐透出，同时保证文字清晰可见 */
+    background-color: rgba(18, 21, 26, 0.85) !important; 
+    background-image: 
+      linear-gradient(90deg, rgba(0, 212, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(0, 212, 255, 0.05) 1px, transparent 1px) !important;
+    background-size: 15px 15px !important;
+    position: relative; z-index: 2; 
+    padding: 20px 15px 15px 15px !important; 
+    border-radius: 0 !important;
   }
 
   /* ----------------------------------------------------
      2. 身份信息区 (Identity Matrix)
      ---------------------------------------------------- */
   .card-row.first-row {
-    border-bottom: 1px dashed var(--tertiary-low);
-    padding-bottom: 15px;
+    border-bottom: 1px dashed rgba(0, 212, 255, 0.3); 
+    padding-bottom: 10px;
     margin-bottom: 10px;
     align-items: flex-start;
   }
 
-  /* 头像：强制六边形/重度切角 */
   .user-card-avatar {
     .avatar {
       border-radius: 0 !important;
-      clip-path: polygon(15% 0, 85% 0, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0 85%, 0 15%);
+      clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
       border: 2px solid var(--tertiary);
-      box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
     }
     
-    /* 头像角落的信任度/角色小图标装甲化 */
     .avatar-flair {
-      background-color: var(--secondary) !important;
+      background-color: #12151A !important;
       border: 1px solid var(--quaternary);
       border-radius: 0 !important;
       clip-path: polygon(0 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%);
@@ -801,81 +803,92 @@ button.create.topic-footer-button {
   .names {
     .username .name-username-wrapper {
       font-family: "Rajdhani", "Noto Sans SC", sans-serif;
-      font-size: 1.6em;
+      font-size: 1.5em; 
       font-weight: 900;
-      color: var(--tertiary);
+      color: var(--tertiary) !important;
       text-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
       letter-spacing: 1px;
     }
 
     .names__secondary {
       font-family: "JetBrains Mono", "Noto Sans SC", monospace;
-      color: #E0E0E0; /* 强制灰白防浅色瞎眼 */
-      font-size: 0.9em;
-      background: rgba(0, 212, 255, 0.1);
+      color: #FFF !important; 
+      font-size: 0.85em;
+      background: rgba(0, 212, 255, 0.15);
       padding: 2px 6px;
       border-left: 2px solid var(--tertiary);
       display: inline-block;
       margin-top: 4px;
     }
     
-    .user-status { margin-top: 6px; color: var(--primary-medium); }
+    .user-status { margin-top: 6px; color: #A0A0A0 !important; font-size: 0.9em; }
   }
 
   /* ----------------------------------------------------
      3. 战术控制台 (Action Buttons)
      ---------------------------------------------------- */
   .usercard-controls {
+    display: flex; flex-direction: column; gap: 4px; 
     .btn {
       font-family: "Rajdhani", "Noto Sans SC", sans-serif;
       font-weight: 800; text-transform: uppercase;
       border-radius: 0 !important;
-      background: transparent !important;
+      /* 给按钮增加微弱深色底，防止背景图干扰 */
+      background: rgba(0, 0, 0, 0.4) !important; 
       border: 1px solid var(--tertiary) !important;
       color: var(--tertiary) !important;
       clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
       transition: all 0.2s;
+      padding: 4px 8px; 
+      font-size: 0.85em;
       
       .d-icon { color: var(--tertiary) !important; transition: all 0.2s; }
 
       &:hover {
         background: var(--tertiary) !important;
         color: #000 !important;
-        box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
-        transform: translateY(-2px);
+        box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+        transform: translateX(-2px);
         .d-icon { color: #000 !important; fill: #000 !important; }
       }
       
-      /* 私信/聊天等特殊按钮强制高亮橙色 */
       &.btn-primary {
+        background: rgba(255, 107, 53, 0.1) !important;
         border-color: var(--quaternary) !important;
         color: var(--quaternary) !important;
         .d-icon { color: var(--quaternary) !important; }
         &:hover {
           background: var(--quaternary) !important;
           color: #fff !important;
-          box-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
+          box-shadow: 0 0 10px rgba(255, 107, 53, 0.4);
           .d-icon { color: #fff !important; fill: #fff !important; }
         }
       }
     }
   }
 
+  /* 位置/网址信息修正 */
+  .location-and-website {
+     margin-bottom: 6px;
+     .location, .website-name a { color: #A0A0A0 !important; font-size: 0.85em; }
+  }
+
   /* ----------------------------------------------------
      4. 数据统计面板 (Telemetry Data)
      ---------------------------------------------------- */
   .metadata-row {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid var(--tertiary-low);
-    padding: 10px;
-    margin: 10px 0;
+    background: rgba(0, 0, 0, 0.6); /* 稍微加深底色，对抗高亮背景 */
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    padding: 8px; 
+    margin: 8px 0;
     
     .metadata {
       display: grid;
-      grid-template-columns: repeat(2, 1fr); /* 两列网格 */
-      gap: 8px;
+      grid-template-columns: repeat(2, 1fr); 
+      gap: 6px;
       
-      div {
+      /* 精准制导过滤：只有包含 .desc(如"阅读时间") 的有效数据框才渲染装甲，空框彻底消灭！ */
+      div:has(.desc) {
         display: flex; flex-direction: column;
         background: rgba(0, 212, 255, 0.05);
         border-left: 2px solid var(--tertiary-medium);
@@ -884,16 +897,22 @@ button.create.topic-footer-button {
         .desc {
           font-family: "JetBrains Mono", monospace;
           font-size: 0.7em; text-transform: uppercase;
-          color: var(--primary-medium); font-weight: bold;
+          color: rgba(255, 255, 255, 0.6) !important; 
+          font-weight: bold;
           margin-bottom: 2px;
         }
         
         .date, span:not(.desc), a {
           font-family: "JetBrains Mono", monospace;
-          color: #E0E0E0 !important; /* 强制浅色可见 */
+          color: #E0E0E0 !important; 
           font-size: 0.9em; font-weight: bold;
         }
         a:hover { color: var(--tertiary) !important; text-decoration: none; }
+      }
+      
+      /* 将多余的空占位符打入黑洞 */
+      div:not(:has(.desc)) {
+        display: none !important;
       }
     }
   }
@@ -902,15 +921,15 @@ button.create.topic-footer-button {
      5. 徽章陈列区 (Achievements)
      ---------------------------------------------------- */
   .badge-section {
-    display: flex; flex-wrap: wrap; gap: 6px;
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;
     
     .user-badge {
-      background: rgba(var(--primary-rgb), 0.05) !important;
-      border: 1px solid var(--primary-low) !important;
+      background: rgba(0, 0, 0, 0.6) !important;
+      border: 1px solid rgba(0, 212, 255, 0.2) !important;
       border-radius: 0 !important;
       font-family: "Rajdhani", "Noto Sans SC", sans-serif;
       font-weight: 700;
-      color: var(--primary);
+      color: #E0E0E0 !important; 
       padding: 4px 8px;
       transition: all 0.2s;
       
@@ -919,9 +938,10 @@ button.create.topic-footer-button {
     
     .more-user-badges a {
       font-family: "JetBrains Mono", monospace;
-      font-size: 0.8em; color: var(--tertiary);
+      font-size: 0.8em; color: var(--tertiary) !important;
       border-bottom: 1px dashed var(--tertiary);
-      &:hover { color: var(--quaternary); border-color: var(--quaternary); text-decoration: none; }
+      padding: 2px 4px; background: rgba(0,0,0,0.4);
+      &:hover { color: var(--quaternary) !important; border-color: var(--quaternary); text-decoration: none; }
     }
   }
 }
