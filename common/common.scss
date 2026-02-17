@@ -574,3 +574,59 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
     }
   }
 }
+
+/* ============================================
+   16. 战术回复按钮矩阵 (Tactical Reply Buttons)
+   ============================================ */
+
+/* 1) 常规战术级：帖子右下角 & 时间线跟随的回复按钮 */
+button.post-action-menu__reply,
+button.create.reply-to-post {
+  /* 静态状态：全息瞄准框风格 (带微弱青色底与边框) */
+  background: rgba(0, 212, 255, 0.08) !important;
+  border: 1px solid rgba(0, 212, 255, 0.4) !important;
+  color: var(--tertiary) !important; /* 依赖之前的 currentColor 机制，图标自动变青 */
+  border-radius: 0 !important;
+  
+  /* 终末地标志性切角 */
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+  /* 悬浮状态：青色能量注满，文字图标反黑 */
+  &:hover {
+    background: var(--tertiary) !important;
+    color: #000 !important; 
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+    border-color: var(--tertiary) !important;
+    transform: translateY(-1px);
+  }
+}
+
+/* 让帖子下方的回复按钮和左侧的点赞/分享拉开一点呼吸距 */
+button.post-action-menu__reply {
+  margin-left: 8px !important; 
+}
+
+
+/* 2) 终极指令级：话题最下方的大号回复按钮 */
+button.create.topic-footer-button {
+  /* 绑定终末地战术橙色，作为整个页面的核心视觉焦点 */
+  background: var(--quaternary) !important;
+  color: #fff !important; 
+  border: 1px solid var(--quaternary) !important;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.2);
+  
+  font-family: "Rajdhani", "Noto Sans SC", sans-serif;
+  font-weight: 800 !important;
+  letter-spacing: 2px;
+  padding: 8px 24px !important;
+  
+  /* 悬浮状态：橙色高能过载 (镂空线框发光效果) */
+  &:hover {
+    background: rgba(255, 107, 53, 0.1) !important; 
+    color: var(--quaternary) !important; /* 图标自动变橙 */
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.5), inset 0 0 10px rgba(255, 107, 53, 0.2);
+    border-color: var(--quaternary) !important;
+    transform: translateY(-2px);
+  }
+}
