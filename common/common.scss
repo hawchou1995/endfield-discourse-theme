@@ -80,12 +80,12 @@ a:visited { color: $endfield-cyan; }
   
   .title a, #site-text-logo { font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800 !important; letter-spacing: 0px; color: #fff !important; font-size: 1.2em; text-transform: uppercase; }
   
-  // 【核心修复】：为顶栏内的所有交互元素（左右侧图标、按钮）强制绑定白色，无视全局 .btn 的 currentColor 污染
+  // 【基础防御】：为顶栏内的所有交互元素强制绑定白色
   .header-sidebar-toggle button, 
   .d-header-icons .icon, 
   .header-buttons .btn { 
     color: #fff !important; 
-    border: 1px solid transparent; 
+    border: 1px solid transparent !important; 
     clip-path: none !important; 
     
     // 强制内部的 SVG 图标也变成白色
@@ -94,7 +94,8 @@ a:visited { color: $endfield-cyan; }
       fill: #fff !important; 
     } 
     
-    &:hover { 
+    // 【状态扩充】：悬浮 (:hover)、聚焦 (:focus) 以及自身被激活 (.active) 时，亮起青色
+    &:hover, &:focus, &.active { 
       background: rgba(0, 212, 255, 0.1) !important; 
       border: 1px solid $endfield-cyan !important; 
       border-radius: 0; 
@@ -105,6 +106,19 @@ a:visited { color: $endfield-cyan; }
         fill: $endfield-cyan !important; 
       } 
     } 
+  }
+
+  // 【核心修复：父级激活】：当搜索框、用户菜单展开时，父级 li 会获得 .active 类。此时保持图标青色高亮！
+  .d-header-icons li.active .icon {
+    background: rgba(0, 212, 255, 0.1) !important; 
+    border: 1px solid $endfield-cyan !important; 
+    border-radius: 0; 
+    color: $endfield-cyan !important;
+    
+    .d-icon { 
+      color: $endfield-cyan !important; 
+      fill: $endfield-cyan !important; 
+    }
   }
   
   .extra-info-wrapper { .topic-link { color: #fff !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700; } .badge-wrapper.bullet span.badge-category { color: #e0e0e0 !important; font-weight: 600; } }
