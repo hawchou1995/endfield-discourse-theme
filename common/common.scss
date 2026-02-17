@@ -563,3 +563,216 @@ button.create.topic-footer-button {
     transform: translateY(-2px);
   }
 }
+
+/* ==========================================================================
+   17. PRTS AI 情报解析终端 (Endfield AI Summary Modal)
+   ========================================================================== */
+
+/* 精准锁定包含 AI 摘要的弹窗 */
+.d-modal:has(.ai-summary-modal__body) {
+  
+  /* 1. 终端外壳装甲 */
+  .d-modal__container {
+    background-color: #12151A !important; /* 强制纯正深色底 */
+    border: 1px solid var(--tertiary-medium) !important;
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.15), 0 0 0 1px rgba(0, 212, 255, 0.3) !important;
+    
+    /* 终末地标志性全局切角 */
+    clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+    
+    /* 雷达网格背景 */
+    background-image: 
+      linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px) !important;
+    background-size: 20px 20px !important;
+  }
+
+  /* 2. 终端系统头部 */
+  .d-modal__header {
+    background: rgba(0, 212, 255, 0.08);
+    border-bottom: 2px solid var(--tertiary);
+    padding: 15px 20px;
+    position: relative;
+    
+    /* 伪造系统载入代号 */
+    .d-modal__title-text {
+      font-family: "Rajdhani", "Noto Sans SC", sans-serif;
+      color: var(--tertiary);
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+      display: flex;
+      align-items: center;
+      
+      &::before {
+        content: "[ PRTS.AI.ANALYSIS ] // ";
+        color: var(--quaternary);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.75em;
+        margin-right: 10px;
+        opacity: 0.9;
+      }
+    }
+
+    /* 战术关闭按钮 */
+    .modal-close {
+      color: var(--tertiary) !important;
+      border-radius: 0 !important;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      &:hover {
+        background: var(--quaternary) !important;
+        color: #000 !important;
+        transform: rotate(90deg); /* 悬浮时机械旋转 */
+      }
+    }
+  }
+
+  /* 3. 解析主体区域 */
+  .ai-summary-modal__body {
+    padding: 25px;
+  }
+
+  /* 解析数据框 */
+  .ai-summary-box {
+    background: rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid var(--tertiary-low);
+    border-left: 4px solid var(--tertiary); /* 左侧青色装甲 */
+    border-right: 4px solid var(--quaternary); /* 右侧橙色高光 */
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    
+    /* 右上角数据块标识 */
+    &::before {
+      content: "DECODED_DATA";
+      position: absolute;
+      top: 0; right: 0;
+      background: var(--tertiary);
+      color: #000;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 2px 8px;
+      border-bottom-left-radius: 6px;
+    }
+
+    /* 赛博扫描线动画 */
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: var(--tertiary);
+      box-shadow: 0 0 15px var(--tertiary), 0 0 5px var(--tertiary);
+      opacity: 0.6;
+      animation: prts-scan 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      pointer-events: none;
+    }
+  }
+
+  /* 4. 文本输出与打字机光标 */
+  .generated-summary.cooked {
+    font-family: "JetBrains Mono", "Noto Sans SC", sans-serif;
+    color: var(--primary);
+    font-size: 0.95em;
+    line-height: 1.6;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.1);
+    
+    p { margin-bottom: 1em; }
+    p:last-child { margin-bottom: 0; display: inline; } /* 让光标紧跟最后一段 */
+
+    /* 模拟终端闪烁光标 */
+    &::after {
+      content: " _";
+      color: var(--tertiary);
+      font-weight: 900;
+      font-size: 1.1em;
+      animation: prts-blink 1s step-end infinite;
+    }
+  }
+
+  /* 5. 底部操控面板 */
+  .d-modal__footer {
+    border-top: 1px solid var(--tertiary-low);
+    background: rgba(0, 212, 255, 0.03);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+    
+    /* 总结时间提示 */
+    .summarized-on {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.8em;
+      color: var(--primary-medium);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+      
+      .d-icon { color: var(--tertiary); }
+    }
+    
+    /* “摘要已过时” 警告标签 */
+    .summary-outdated {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75em;
+      font-weight: 900;
+      color: var(--quaternary);
+      background: rgba(255, 107, 53, 0.1);
+      border: 1px solid var(--quaternary);
+      padding: 4px 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0;
+      animation: prts-warning-pulse 2s infinite;
+    }
+    
+    /* 重新生成按钮 */
+    .btn {
+      background: transparent !important;
+      border: 1px solid var(--tertiary) !important;
+      color: var(--tertiary) !important;
+      font-family: "Rajdhani", "Noto Sans SC", sans-serif;
+      font-weight: 800;
+      border-radius: 0;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+      transition: all 0.2s;
+      margin: 0 0 0 auto;
+      
+      .d-icon { color: var(--tertiary) !important; transition: transform 0.5s ease; }
+      
+      &:hover {
+        background: var(--tertiary) !important;
+        color: #000 !important;
+        box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+        transform: translateY(-2px);
+        
+        /* 悬浮时齿轮旋转 */
+        .d-icon { color: #000 !important; fill: #000 !important; transform: rotate(180deg); }
+      }
+    }
+  }
+}
+
+/* ==========================================================================
+   终端专用动画系统 (Keyframes)
+   ========================================================================== */
+@keyframes prts-scan {
+  0% { top: 0; opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { top: 100%; opacity: 0; }
+}
+
+@keyframes prts-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes prts-warning-pulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(255, 107, 53, 0); }
+  50% { box-shadow: 0 0 10px rgba(255, 107, 53, 0.4); }
+}
