@@ -734,19 +734,18 @@ button.create.topic-footer-button {
      1. 图鉴外壳装甲 (Dossier Shell)
      ---------------------------------------------------- */
   background-color: #12151A !important; 
-  
-  /* 解绑 background-image 的 !important 覆写，允许自定义背景图显现 */
   background-size: cover !important;
   background-position: center !important;
-  
   border: 1px solid var(--tertiary-medium) !important;
   box-shadow: 0 0 30px rgba(0, 212, 255, 0.15), 0 0 0 1px rgba(0, 212, 255, 0.2) !important;
   clip-path: polygon(0 15px, 15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
   position: relative;
   overflow: hidden;
+
+  /* 【防爆核心】：为整个卡片建立统一的深色模式文本基调 */
   color: #E0E0E0 !important; 
 
-  /* 悬浮扫描线特效 - 提高 z-index 保证在背景与内容之上 */
+  /* 悬浮扫描线特效 */
   &::before {
     content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
     background: var(--tertiary); box-shadow: 0 0 15px var(--tertiary);
@@ -760,9 +759,7 @@ button.create.topic-footer-button {
     z-index: 11; letter-spacing: 1px;
   }
 
-  /* 将半透明遮罩与雷达网格下放到内容层，实现完美层叠透视 */
   .card-content { 
-    /* 85%的深色玻璃层，让自定义背景隐隐透出，同时保证文字清晰可见 */
     background-color: rgba(18, 21, 26, 0.85) !important; 
     background-image: 
       linear-gradient(90deg, rgba(0, 212, 255, 0.05) 1px, transparent 1px),
@@ -784,14 +781,13 @@ button.create.topic-footer-button {
   }
 
   .user-card-avatar {
-    margin-top: 5px !important; /* 取消原生负边距，防止被外层 overflow: hidden 截断 */
+    margin-top: 5px !important; 
     .avatar {
       border-radius: 0 !important;
       clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
       border: 2px solid var(--tertiary);
       box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
     }
-    
     .avatar-flair {
       background-color: #12151A !important;
       border: 1px solid var(--quaternary);
@@ -800,7 +796,6 @@ button.create.topic-footer-button {
     }
   }
 
-  /* 名字与称号 */
   .names {
     .username .name-username-wrapper {
       font-family: "Rajdhani", "Noto Sans SC", sans-serif;
@@ -810,7 +805,6 @@ button.create.topic-footer-button {
       text-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
       letter-spacing: 1px;
     }
-
     .names__secondary {
       font-family: "JetBrains Mono", "Noto Sans SC", monospace;
       color: #FFF !important; 
@@ -821,8 +815,22 @@ button.create.topic-footer-button {
       display: inline-block;
       margin-top: 4px;
     }
-    
     .user-status { margin-top: 6px; color: #A0A0A0 !important; font-size: 0.9em; }
+  }
+
+  /* 【防爆核心】：暴力穿透个性签名和地理位置的颜色，强杀浅色模式自带黑字 */
+  .bio {
+    color: #E0E0E0 !important;
+    font-size: 0.95em;
+    margin-bottom: 8px;
+    * { color: #E0E0E0 !important; } /* 使用通配符暴力穿透内部标签 */
+  }
+
+  .location-and-website {
+     margin-bottom: 6px;
+     color: #A0A0A0 !important;
+     * { color: #A0A0A0 !important; font-size: 0.9em !important; } /* 包含 Location 插件生成的 HTML */
+     .d-icon { color: var(--tertiary-medium) !important; }
   }
 
   /* ----------------------------------------------------
@@ -834,7 +842,6 @@ button.create.topic-footer-button {
       font-family: "Rajdhani", "Noto Sans SC", sans-serif;
       font-weight: 800; text-transform: uppercase;
       border-radius: 0 !important;
-      /* 给按钮增加微弱深色底，防止背景图干扰 */
       background: rgba(0, 0, 0, 0.4) !important; 
       border: 1px solid var(--tertiary) !important;
       color: var(--tertiary) !important;
@@ -868,63 +875,74 @@ button.create.topic-footer-button {
     }
   }
 
-  /* 位置/网址信息修正 */
-  .location-and-website {
-     margin-bottom: 6px;
-     .location, .website-name a { color: #A0A0A0 !important; font-size: 0.85em; }
-  }
-
   /* ----------------------------------------------------
-     4. 数据统计面板 (Telemetry Data)
+     4. 数据统计面板 (Telemetry Data) - 单行排版修复版
      ---------------------------------------------------- */
   .metadata-row {
     background: rgba(0, 0, 0, 0.6); 
     border: 1px solid rgba(0, 212, 255, 0.2);
-    padding: 8px; 
-    margin: 8px 0;
+    padding: 6px; 
+    margin: 12px 0;
     
     .metadata {
-      display: grid !important;
-      grid-template-columns: repeat(2, 1fr) !important; 
-      gap: 8px !important;
-      align-items: stretch !important; /* 强制网格内所有面板高度一致 */
+      /* 【布局重构】：废弃 Grid，强行启用 Flex 并锁定单行不换行 */
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      gap: 4px !important;
+      align-items: stretch !important;
+      overflow-x: auto; /* 若插件导致项数极多，自动转为可滑动，防止撑爆屏幕 */
       
-      /* 放宽选择器，匹配所有直接子元素 (原生 h3, div, .user-stat 等) 解决排版错乱 */
+      /* 隐藏内部滚动条以保持美观 */
+      &::-webkit-scrollbar { display: none; }
+      scrollbar-width: none;
+      
       > * {
+        /* 【尺寸重构】：每个块平分宽度，并强行锁定绝对高度 48px */
+        flex: 1 1 0 !important; 
         display: flex !important; 
         flex-direction: column !important;
         justify-content: center !important;
+        align-items: center !important; /* 因为横向变窄了，内容强行居中会更好看 */
         background: rgba(0, 212, 255, 0.05) !important;
-        border-left: 2px solid var(--tertiary-medium) !important;
-        padding: 6px 10px !important;
+        
+        /* 为了适应一行多列，去掉左边框，换用底边框做点缀 */
+        border-left: none !important;
+        border-bottom: 2px solid var(--tertiary-medium) !important;
+        padding: 4px !important;
         margin: 0 !important;
-        min-height: 48px !important; /* 强制统一最小高度 */
+        height: 48px !important; 
+        min-height: 48px !important;
         box-sizing: border-box !important;
         
-        /* 强制覆盖所有子元素文本，解决浅色背景下文字发黑不可见 */
-        * { color: #E0E0E0 !important; }
+        * { color: #E0E0E0 !important; } /* 再上一道保险 */
         
         .desc, span.label, span.text {
           font-family: "JetBrains Mono", monospace;
-          font-size: 0.7em !important; 
+          font-size: 9px !important; /* 缩小标题以便在单行里塞得下 */
           text-transform: uppercase;
           color: rgba(255, 255, 255, 0.6) !important; 
           font-weight: bold;
-          margin-bottom: 4px;
+          margin-bottom: 2px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 100%;
         }
         
         .date, .value, span.number, a {
           font-family: "JetBrains Mono", monospace;
           color: #E0E0E0 !important; 
-          font-size: 0.9em !important; 
+          font-size: 11px !important; /* 缩小数值尺寸 */
           font-weight: bold;
+          white-space: nowrap;
         }
         
         a:hover { color: var(--tertiary) !important; text-decoration: none; }
       }
       
-      /* 将真正多余的空占位符隐藏 */
-      > *:empty { display: none !important; }
+      /* 黑洞机制：把空盒子或者没有 span 的乱七八糟结构干掉 */
+      > *:empty, > :not(:has(span)) { display: none !important; }
     }
   }
 
@@ -933,7 +951,7 @@ button.create.topic-footer-button {
      ---------------------------------------------------- */
   .badge-section {
     display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;
-    align-items: center; /* 解决多个徽章和“其他”按钮不对齐的问题 */
+    align-items: center; 
     
     .user-badge {
       background: rgba(0, 0, 0, 0.6) !important;
@@ -943,7 +961,7 @@ button.create.topic-footer-button {
       font-weight: 700;
       color: #E0E0E0 !important; 
       padding: 4px 8px;
-      margin: 0 !important; /* 清除原生边距 */
+      margin: 0 !important; 
       transition: all 0.2s;
       display: inline-flex;
       align-items: center;
