@@ -597,30 +597,30 @@ button.create.topic-footer-button {
       min-width: 0; /* 防止子元素撑爆容器 */
     }
 
-    /* 伪造系统载入代号 */
+/* 伪造系统载入代号 */
     .d-modal__title-text {
       font-family: "Rajdhani", "Noto Sans SC", sans-serif;
       color: var(--tertiary);
       font-weight: 900;
       letter-spacing: 1px;
       text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+      font-size: 1.2rem;
       
-      /* [核心修复] 强制单行，超长部分显示省略号，绝不换行！ */
-      display: block;
+      /* [核心对齐修复]：放弃不稳定的文本对齐，使用 Flex 强制物理绝对居中 */
+      display: flex;
+      align-items: center; 
       white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: 1.2rem;
-      line-height: 1.4;
       
       &::before {
         content: "[ PRTS.AI.ANALYSIS ] // ";
         color: var(--quaternary);
         font-family: "JetBrains Mono", monospace;
-        font-size: 0.7em;
+        font-size: 0.75em; /* 稍微调大一丁点，比例更平衡 */
         margin-right: 8px;
         opacity: 0.9;
-        vertical-align: text-bottom;
+        flex-shrink: 0; /* 绝对防御：防止屏幕太小时前缀被挤压变形 */
+        transform: translateY(1px); /* 针对英文字体的下沉微调，达到视觉完美居中 */
       }
     }
 
