@@ -294,3 +294,283 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
     }
   }
 }
+
+/* ==========================================================================
+   Endfield Chat Protocol - Telegram Tactical Style (终末地电报风通讯系统)
+   ========================================================================== */
+
+/* 1. 聊天面板基础设定 */
+.chat-messages-container {
+  padding: 15px 10px;
+}
+
+.chat-message-container {
+  margin-bottom: 16px;
+  padding: 0 !important; /* 清除原生多余间距 */
+
+  /* 定义消息行的弹性网格：允许换行，便于把回复框挤到上一行 */
+  .chat-message {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end; /* 气泡和头像底部对齐（电报经典布局） */
+  }
+
+  /* 头像与左侧占位符宽度统一 */
+  .chat-message-avatar, .chat-message-left-gutter {
+    width: 44px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    order: 2; /* 放在第二行 */
+  }
+
+  /* 消息主体（包含名字和气泡） */
+  .chat-message-content {
+    order: 3; /* 放在第二行 */
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ----------------------------------------------------
+     名字与时间 (Message Info)
+     ---------------------------------------------------- */
+  .chat-message-info {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-family: "Rajdhani", "Noto Sans SC", sans-serif;
+    
+    .chat-message-info__username__name {
+      font-weight: 800;
+      color: var(--tertiary); /* 他人名字显示青色 */
+      font-size: 1em;
+      letter-spacing: 0.5px;
+    }
+    
+    .chat-message-info__date {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75em;
+      color: var(--primary-medium);
+      opacity: 0.7;
+    }
+  }
+
+  /* ----------------------------------------------------
+     战术气泡 (Message Bubbles)
+     ---------------------------------------------------- */
+  .chat-message-text {
+    padding: 8px 14px;
+    border-radius: 10px;
+    width: fit-content;
+    max-width: 85%; /* 防止气泡太长撑满屏幕 */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    font-size: 0.95em;
+    line-height: 1.5;
+    position: relative;
+    transition: all 0.2s;
+    
+    /* 移除内部 p 标签多余间距 */
+    .chat-cooked p { margin: 0; }
+  }
+
+
+  /* =======================================
+     左侧阵营：其他用户 (OTHERS)
+     ======================================= */
+  &:not(.is-by-current-user) {
+    .chat-message-avatar { margin-right: 12px; }
+    .chat-message-left-gutter { margin-right: 12px; }
+    
+    .chat-message-text {
+      background: var(--primary-very-low);
+      border: 1px solid var(--primary-low);
+      border-left: 3px solid var(--tertiary); /* 左侧青色装甲边框 */
+    }
+    
+    /* 首条消息气泡带“电报小尾巴” */
+    &:not(.-user-info-hidden) .chat-message-text {
+      border-bottom-left-radius: 0; 
+    }
+
+    /* 引用回复对齐气泡 */
+    .chat-reply {
+      margin-left: 56px; /* 44px 头像 + 12px 间距 */
+      width: calc(100% - 56px);
+    }
+  }
+
+  /* =======================================
+     右侧阵营：当前登录用户 (CURRENT USER)
+     ======================================= */
+  &.is-by-current-user {
+    /* 核心魔法：翻转弹性盒子方向！ */
+    .chat-message {
+      flex-direction: row-reverse;
+    }
+    
+    .chat-message-avatar { 
+      order: 2; 
+      margin-left: 12px; 
+    }
+    
+    /* 连续发言时，把隐藏的占位符也放右边 */
+    .chat-message-left-gutter { 
+      order: 2; 
+      margin-left: 12px; 
+      justify-content: flex-end;
+    }
+    
+    /* 让内容靠右排列 */
+    .chat-message-content {
+      order: 3;
+      align-items: flex-end;
+    }
+
+    /* 名字靠右，并改为专属橙色 */
+    .chat-message-info {
+      flex-direction: row-reverse;
+      .chat-message-info__username__name {
+        color: var(--quaternary); 
+      }
+    }
+
+    /* 发送方战术气泡特调（绝对安全青色高亮，无视 RGB） */
+    .chat-message-text {
+      background: rgba(0, 212, 255, 0.08); /* 纯正 Endfield 青底 */
+      border: 1px solid var(--tertiary-low);
+      border-right: 3px solid var(--quaternary); /* 右侧橙色高光 */
+      color: var(--primary);
+    }
+    
+    /* 首条消息气泡带右侧“电报小尾巴” */
+    &:not(.-user-info-hidden) .chat-message-text {
+      border-bottom-right-radius: 0;
+    }
+
+    /* 引用回复靠右对齐 */
+    .chat-reply {
+      order: 1;
+      margin-right: 56px;
+      margin-left: auto;
+      width: calc(100% - 56px);
+      justify-content: flex-end;
+      flex-direction: row-reverse; /* 图标文字换位 */
+      text-align: right;
+      
+      .chat-reply__excerpt { margin-right: 8px; margin-left: 0; }
+    }
+  }
+
+  /* ----------------------------------------------------
+     引用/回复板块 (Replies Box)
+     ---------------------------------------------------- */
+  .chat-reply {
+    display: flex;
+    align-items: center;
+    order: 1; /* 强制挤到气泡上方第一行 */
+    margin-bottom: 6px;
+    background: var(--primary-very-low);
+    border: 1px solid var(--primary-low);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.85em;
+    opacity: 0.8;
+    transition: all 0.2s;
+    
+    &:hover { opacity: 1; border-color: var(--tertiary-medium); }
+    .svg-icon-title { color: var(--tertiary); margin: 0 6px; }
+    .chat-reply__excerpt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; }
+    .chat-user-avatar { margin: 0 6px; .avatar { width: 16px !important; height: 16px !important; } }
+  }
+}
+
+/* ----------------------------------------------------
+   日期分割线 (Date Separator) - 极简赛博风
+   ---------------------------------------------------- */
+.chat-message-separator-date {
+  display: flex !important;
+  justify-content: center !important;
+  margin: 20px 0 !important;
+  
+  .chat-message-separator__text-container {
+    background: var(--primary-very-low);
+    border: 1px solid var(--primary-low);
+    padding: 4px 14px;
+    border-radius: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.75em;
+    font-weight: bold;
+    color: var(--primary-medium);
+    z-index: 1;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  
+  /* 隐藏自带的那条很丑的横线 */
+  .chat-message-separator__line-container { display: none; }
+}
+
+/* ----------------------------------------------------
+   头像统一战术切角
+   ---------------------------------------------------- */
+.chat-user-avatar__container .avatar,
+.chat-message-avatar .avatar {
+  border-radius: 0 !important;
+  clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%);
+}
+
+/* ----------------------------------------------------
+   底部输入框 (Chat Composer) - 悬浮装甲底座
+   ---------------------------------------------------- */
+.chat-composer {
+  background: var(--secondary) !important;
+  border-top: 2px solid var(--tertiary-low) !important;
+  padding: 12px 10px !important;
+  
+  .chat-composer__inner-container {
+    background: var(--primary-very-low);
+    border: 1px solid var(--primary-low);
+    border-radius: 6px;
+    padding: 4px 8px;
+    display: flex;
+    align-items: flex-end;
+    transition: border-color 0.2s;
+    
+    /* 获取焦点时边框亮起青色 */
+    &:focus-within {
+      border-color: var(--tertiary);
+      box-shadow: 0 0 8px rgba(0, 212, 255, 0.1);
+    }
+  }
+
+  .chat-composer__input {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--primary) !important;
+    font-size: 0.95em;
+    resize: none;
+  }
+
+  /* 发送按钮高亮 */
+  .chat-composer-button__wrapper .btn {
+    border-radius: 4px;
+    transition: all 0.2s;
+    
+    &:not([disabled]) {
+      background: var(--tertiary) !important;
+      color: var(--secondary) !important;
+      border: 1px solid var(--tertiary);
+      
+      &:hover {
+        transform: scale(1.05);
+        background: var(--quaternary) !important;
+        border-color: var(--quaternary);
+      }
+      
+      .d-icon { color: var(--secondary) !important; fill: var(--secondary) !important; }
+    }
+  }
+}
