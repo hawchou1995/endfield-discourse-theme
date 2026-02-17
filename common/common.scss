@@ -818,18 +818,18 @@ button.create.topic-footer-button {
     .user-status { margin-top: 6px; color: #A0A0A0 !important; font-size: 0.9em; }
   }
 
-  /* 【防爆核心】：暴力穿透个性签名和地理位置的颜色，强杀浅色模式自带黑字 */
-  .bio {
+  /* 【防爆核心】：扩大火力覆盖，穿透 bio、自定义字段（精选话题等）、个人链接等所有潜在文字域 */
+  .bio, .public-user-fields, .user-card-public-field, .user-field, .user-profile-links {
     color: #E0E0E0 !important;
     font-size: 0.95em;
     margin-bottom: 8px;
-    * { color: #E0E0E0 !important; } /* 使用通配符暴力穿透内部标签 */
+    * { color: #E0E0E0 !important; } /* 强杀所有内层标签自带的颜色，保证浅色模式绝对可见 */
   }
 
   .location-and-website {
      margin-bottom: 6px;
      color: #A0A0A0 !important;
-     * { color: #A0A0A0 !important; font-size: 0.9em !important; } /* 包含 Location 插件生成的 HTML */
+     * { color: #A0A0A0 !important; font-size: 0.9em !important; } 
      .d-icon { color: var(--tertiary-medium) !important; }
   }
 
@@ -876,7 +876,7 @@ button.create.topic-footer-button {
   }
 
   /* ----------------------------------------------------
-     4. 数据统计面板 (Telemetry Data) - 单行排版修复版
+     4. 数据统计面板 (Telemetry Data) - 三列网格修复版
      ---------------------------------------------------- */
   .metadata-row {
     background: rgba(0, 0, 0, 0.6); 
@@ -885,64 +885,62 @@ button.create.topic-footer-button {
     margin: 12px 0;
     
     .metadata {
-      /* 【布局重构】：废弃 Grid，强行启用 Flex 并锁定单行不换行 */
-      display: flex !important;
-      flex-direction: row !important;
-      flex-wrap: nowrap !important;
-      gap: 4px !important;
+      /* 【布局重构】：回归网格，3列平分，保证长数据(如加入日期)不被挤压，文字允许换行 */
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 6px !important;
       align-items: stretch !important;
-      overflow-x: auto; /* 若插件导致项数极多，自动转为可滑动，防止撑爆屏幕 */
-      
-      /* 隐藏内部滚动条以保持美观 */
-      &::-webkit-scrollbar { display: none; }
-      scrollbar-width: none;
       
       > * {
-        /* 【尺寸重构】：每个块平分宽度，并强行锁定绝对高度 48px */
-        flex: 1 1 0 !important; 
         display: flex !important; 
         flex-direction: column !important;
         justify-content: center !important;
-        align-items: center !important; /* 因为横向变窄了，内容强行居中会更好看 */
+        align-items: center !important; 
         background: rgba(0, 212, 255, 0.05) !important;
         
-        /* 为了适应一行多列，去掉左边框，换用底边框做点缀 */
         border-left: none !important;
         border-bottom: 2px solid var(--tertiary-medium) !important;
-        padding: 4px !important;
+        padding: 6px 4px !important;
         margin: 0 !important;
-        height: 48px !important; 
-        min-height: 48px !important;
+        min-height: 52px !important; /* 增加最小高度，允许多行显示 */
+        height: auto !important;
         box-sizing: border-box !important;
+        text-align: center !important;
         
-        * { color: #E0E0E0 !important; } /* 再上一道保险 */
-        
-        .desc, span.label, span.text {
-          font-family: "JetBrains Mono", monospace;
-          font-size: 9px !important; /* 缩小标题以便在单行里塞得下 */
-          text-transform: uppercase;
-          color: rgba(255, 255, 255, 0.6) !important; 
-          font-weight: bold;
-          margin-bottom: 2px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          max-width: 100%;
+        /* 彻底统一内部元素行为，防止各种嵌套导致文字大小参差不齐 */
+        * { 
+          color: #E0E0E0 !important; 
+          line-height: 1.3 !important;
+          margin: 0 !important; /* 干掉 p/h3/div 带来的奇怪留白 */
         }
         
-        .date, .value, span.number, a {
-          font-family: "JetBrains Mono", monospace;
+        /* 标题部分 (如 "发布时间", "加入日期") */
+        .desc, span.label, span.text, .user-stat-label {
+          font-family: "JetBrains Mono", "Noto Sans SC", sans-serif !important;
+          font-size: 10px !important; /* 强制统一字号 */
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.6) !important; 
+          font-weight: bold !important;
+          margin-bottom: 4px !important;
+          white-space: normal !important; /* 解除截断禁令，允许换行 */
+          word-break: break-word !important;
+        }
+        
+        /* 数值部分 (如 "31 分钟前", "7,542") */
+        .date, .value, span.number, a, .user-stat-value {
+          font-family: "JetBrains Mono", sans-serif !important;
           color: #E0E0E0 !important; 
-          font-size: 11px !important; /* 缩小数值尺寸 */
-          font-weight: bold;
-          white-space: nowrap;
+          font-size: 13px !important; /* 强制统一字号 */
+          font-weight: 900 !important;
+          white-space: normal !important;
+          word-break: break-word !important;
         }
         
         a:hover { color: var(--tertiary) !important; text-decoration: none; }
       }
       
-      /* 黑洞机制：把空盒子或者没有 span 的乱七八糟结构干掉 */
-      > *:empty, > :not(:has(span)) { display: none !important; }
+      /* 隐藏无效或空占位框 */
+      > *:empty, > :not(:has(span, div, a)) { display: none !important; }
     }
   }
 
