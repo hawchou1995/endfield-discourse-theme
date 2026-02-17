@@ -726,7 +726,7 @@ button.create.topic-footer-button {
 @keyframes prts-warning-pulse { 0%, 100% { box-shadow: 0 0 0 rgba(255, 107, 53, 0); } 50% { box-shadow: 0 0 10px rgba(255, 107, 53, 0.4); } }
 
 /* ==========================================================================
-   18. 干员图鉴协议 (Operator Dossier / Tactical User Card) - 背景兼容修复版
+   18. 干员图鉴协议 (Operator Dossier / Tactical User Card) - 最终修缮版
    ========================================================================== */
 
 #user-card {
@@ -735,7 +735,7 @@ button.create.topic-footer-button {
      ---------------------------------------------------- */
   background-color: #12151A !important; 
   
-  /* [核心修复]：解绑 background-image 的 !important 覆写，允许自定义背景图显现 */
+  /* 解绑 background-image 的 !important 覆写，允许自定义背景图显现 */
   background-size: cover !important;
   background-position: center !important;
   
@@ -760,7 +760,7 @@ button.create.topic-footer-button {
     z-index: 11; letter-spacing: 1px;
   }
 
-  /* [核心修复]：将半透明遮罩与雷达网格下放到内容层，实现完美层叠透视 */
+  /* 将半透明遮罩与雷达网格下放到内容层，实现完美层叠透视 */
   .card-content { 
     /* 85%的深色玻璃层，让自定义背景隐隐透出，同时保证文字清晰可见 */
     background-color: rgba(18, 21, 26, 0.85) !important; 
@@ -784,6 +784,7 @@ button.create.topic-footer-button {
   }
 
   .user-card-avatar {
+    margin-top: 5px !important; /* 取消原生负边距，防止被外层 overflow: hidden 截断 */
     .avatar {
       border-radius: 0 !important;
       clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
@@ -877,43 +878,53 @@ button.create.topic-footer-button {
      4. 数据统计面板 (Telemetry Data)
      ---------------------------------------------------- */
   .metadata-row {
-    background: rgba(0, 0, 0, 0.6); /* 稍微加深底色，对抗高亮背景 */
+    background: rgba(0, 0, 0, 0.6); 
     border: 1px solid rgba(0, 212, 255, 0.2);
     padding: 8px; 
     margin: 8px 0;
     
     .metadata {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr); 
-      gap: 6px;
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr) !important; 
+      gap: 8px !important;
+      align-items: stretch !important; /* 强制网格内所有面板高度一致 */
       
-      /* 精准制导过滤：只有包含 .desc(如"阅读时间") 的有效数据框才渲染装甲，空框彻底消灭！ */
-      div:has(.desc) {
-        display: flex; flex-direction: column;
-        background: rgba(0, 212, 255, 0.05);
-        border-left: 2px solid var(--tertiary-medium);
-        padding: 4px 8px;
+      /* 放宽选择器，匹配所有直接子元素 (原生 h3, div, .user-stat 等) 解决排版错乱 */
+      > * {
+        display: flex !important; 
+        flex-direction: column !important;
+        justify-content: center !important;
+        background: rgba(0, 212, 255, 0.05) !important;
+        border-left: 2px solid var(--tertiary-medium) !important;
+        padding: 6px 10px !important;
+        margin: 0 !important;
+        min-height: 48px !important; /* 强制统一最小高度 */
+        box-sizing: border-box !important;
         
-        .desc {
+        /* 强制覆盖所有子元素文本，解决浅色背景下文字发黑不可见 */
+        * { color: #E0E0E0 !important; }
+        
+        .desc, span.label, span.text {
           font-family: "JetBrains Mono", monospace;
-          font-size: 0.7em; text-transform: uppercase;
+          font-size: 0.7em !important; 
+          text-transform: uppercase;
           color: rgba(255, 255, 255, 0.6) !important; 
           font-weight: bold;
-          margin-bottom: 2px;
+          margin-bottom: 4px;
         }
         
-        .date, span:not(.desc), a {
+        .date, .value, span.number, a {
           font-family: "JetBrains Mono", monospace;
           color: #E0E0E0 !important; 
-          font-size: 0.9em; font-weight: bold;
+          font-size: 0.9em !important; 
+          font-weight: bold;
         }
+        
         a:hover { color: var(--tertiary) !important; text-decoration: none; }
       }
       
-      /* 将多余的空占位符打入黑洞 */
-      div:not(:has(.desc)) {
-        display: none !important;
-      }
+      /* 将真正多余的空占位符隐藏 */
+      > *:empty { display: none !important; }
     }
   }
 
@@ -921,7 +932,8 @@ button.create.topic-footer-button {
      5. 徽章陈列区 (Achievements)
      ---------------------------------------------------- */
   .badge-section {
-    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;
+    align-items: center; /* 解决多个徽章和“其他”按钮不对齐的问题 */
     
     .user-badge {
       background: rgba(0, 0, 0, 0.6) !important;
@@ -931,17 +943,29 @@ button.create.topic-footer-button {
       font-weight: 700;
       color: #E0E0E0 !important; 
       padding: 4px 8px;
+      margin: 0 !important; /* 清除原生边距 */
       transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
       
       &:hover { border-color: var(--tertiary) !important; box-shadow: 0 0 8px rgba(0, 212, 255, 0.2); }
     }
     
-    .more-user-badges a {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.8em; color: var(--tertiary) !important;
-      border-bottom: 1px dashed var(--tertiary);
-      padding: 2px 4px; background: rgba(0,0,0,0.4);
-      &:hover { color: var(--quaternary) !important; border-color: var(--quaternary); text-decoration: none; }
+    .more-user-badges {
+      display: inline-flex;
+      align-items: center;
+      margin: 0 !important;
+
+      a {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.8em; color: var(--tertiary) !important;
+        border-bottom: 1px dashed var(--tertiary);
+        padding: 4px 6px; 
+        background: rgba(0,0,0,0.4);
+        line-height: 1.2;
+        display: inline-block;
+        &:hover { color: var(--quaternary) !important; border-color: var(--quaternary); text-decoration: none; }
+      }
     }
   }
 }
