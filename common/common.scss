@@ -80,45 +80,40 @@ a:visited { color: $endfield-cyan; }
   
   .title a, #site-text-logo { font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800 !important; letter-spacing: 0px; color: #fff !important; font-size: 1.2em; text-transform: uppercase; }
   
-  // 【基础防御】：为顶栏内的所有交互元素强制绑定白色
+  // 【终极防御】：覆盖官方图标 + 覆盖外挂搜索横幅 (.floating-search-input-wrapper) 的搜索按钮
   .header-sidebar-toggle button, 
   .d-header-icons .icon, 
-  .header-buttons .btn { 
+  .d-header-icons .btn,
+  .header-buttons .btn,
+  .floating-search-input-wrapper .search-icon { 
     color: #fff !important; 
     border: 1px solid transparent !important; 
     clip-path: none !important; 
+    background: transparent !important; // 防止插件自带丑陋底色
     
-    // 强制内部的 SVG 图标也变成白色
-    .d-icon { 
-      color: #fff !important; 
-      fill: #fff !important; 
-    } 
+    // 强制内部 SVG 变成白色
+    .d-icon { color: #fff !important; fill: #fff !important; opacity: 1 !important; } 
     
-    // 【状态扩充】：悬浮 (:hover)、聚焦 (:focus) 以及自身被激活 (.active) 时，亮起青色
+    // 悬浮与激活状态
     &:hover, &:focus, &.active { 
       background: rgba(0, 212, 255, 0.1) !important; 
       border: 1px solid $endfield-cyan !important; 
       border-radius: 0; 
       color: $endfield-cyan !important;
       
-      .d-icon { 
-        color: $endfield-cyan !important; 
-        fill: $endfield-cyan !important; 
-      } 
+      .d-icon { color: $endfield-cyan !important; fill: $endfield-cyan !important; } 
     } 
   }
 
-  // 【核心修复：父级激活】：当搜索框、用户菜单展开时，父级 li 会获得 .active 类。此时保持图标青色高亮！
-  .d-header-icons li.active .icon {
+  // 父级菜单激活时保持青色常亮
+  .d-header-icons li.active .icon,
+  .d-header-icons li.active .btn {
     background: rgba(0, 212, 255, 0.1) !important; 
     border: 1px solid $endfield-cyan !important; 
     border-radius: 0; 
     color: $endfield-cyan !important;
     
-    .d-icon { 
-      color: $endfield-cyan !important; 
-      fill: $endfield-cyan !important; 
-    }
+    .d-icon { color: $endfield-cyan !important; fill: $endfield-cyan !important; }
   }
   
   .extra-info-wrapper { .topic-link { color: #fff !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700; } .badge-wrapper.bullet span.badge-category { color: #e0e0e0 !important; font-weight: 600; } }
