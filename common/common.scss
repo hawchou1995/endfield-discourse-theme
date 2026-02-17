@@ -745,7 +745,6 @@ button.create.topic-footer-button {
   /* 统一深色模式文本基调 */
   color: #E0E0E0 !important; 
 
-  /* 悬浮扫描线特效 */
   &::before {
     content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
     background: var(--tertiary); box-shadow: 0 0 15px var(--tertiary);
@@ -819,33 +818,35 @@ button.create.topic-footer-button {
   }
 
   /* =================================================================
-     【修复1】：暴力穿透 bio、精选话题(featured-topic) 等区域
+     【修复核心1】：高优先级穿透，强杀"精选话题"、地理位置和签名中的黑字
      ================================================================= */
-  .bio, .public-user-fields, .user-card-public-field, .user-field, .user-profile-links, .featured-topic {
+  & .bio, & .public-user-fields, & .user-card-public-field, & .user-field, & .user-profile-links, & .featured-topic {
     color: #E0E0E0 !important;
     font-size: 0.95em;
     margin-bottom: 8px;
     
-    /* 强制内部常规文本变色，杀掉浅色模式黑字 */
-    &, p, span:not(.desc), div { color: #E0E0E0 !important; }
+    /* 强制内部所有元素变成灰白 */
+    &, *, p, span:not(.desc), div { color: #E0E0E0 !important; }
     
-    /* 标题描述(如"精选话题")降级为暗色 */
+    /* 标题前缀降级暗色 */
     .desc {
       color: rgba(255, 255, 255, 0.5) !important;
       font-family: "JetBrains Mono", "Noto Sans SC", sans-serif;
       font-size: 0.85em !important;
       margin-right: 6px;
+      font-weight: normal !important;
     }
     
-    /* 链接高亮青色 */
+    /* 强亮青色链接 */
     a {
       color: var(--tertiary) !important;
-      font-weight: 700;
-      &:hover { color: var(--quaternary) !important; text-decoration: none; }
+      font-weight: 700 !important;
+      text-decoration: none !important;
+      &:hover { color: var(--quaternary) !important; text-decoration: underline !important; }
     }
   }
 
-  .location-and-website {
+  & .location-and-website {
      margin-bottom: 8px;
      color: #A0A0A0 !important;
      * { color: #A0A0A0 !important; font-size: 0.9em !important; } 
@@ -895,92 +896,99 @@ button.create.topic-footer-button {
   }
 
   /* =================================================================
-     【修复2】：数据统计面板 - 完美单行、等分宽度、绝对对齐
+     【修复核心2】：数据统计面板 - 无空洞、绝对单行、极限压缩对齐
      ================================================================= */
   .metadata-row {
     background: rgba(0, 0, 0, 0.6); 
     border: 1px solid rgba(0, 212, 255, 0.2);
-    padding: 6px; 
+    padding: 6px 4px; 
     margin: 12px 0;
     
     .metadata {
       display: flex !important;
       flex-direction: row !important;
-      flex-wrap: nowrap !important; /* 强制死锁在同一行 */
-      gap: 4px !important;
+      flex-wrap: nowrap !important; /* 强制锁定单行 */
+      gap: 2px !important; /* 极限缩小间距以便塞下6个属性 */
       align-items: stretch !important;
-      overflow-x: auto; /* 若空间极端不足，允许横向微调防爆炸 */
+      overflow-x: auto;
       scrollbar-width: none;
       &::-webkit-scrollbar { display: none; }
       
-      /* 关键魔法：将包含"正在关注"和"关注者"的父级外壳溶解，让它们直接成为 metadata 的 Flex 子级平摊宽度 */
+      /* 溶解外壳，让所有数据项成为平级 Flex 兄弟 */
       .follow-statistics-user-card {
         display: contents !important;
       }
       
-      /* 选中所有第一层级的盒子，以及被溶解外壳后释放出来的子盒子 */
-      > div:not(.follow-statistics-user-card), .follow-statistics-user-card > div {
-        flex: 1 1 0 !important; /* 不管是 4 个属性还是 6 个属性，全部完美平分空间 */
-        min-width: 0 !important; /* 允许极限收缩，防止挤出外框 */
+      /* 精准制导：仅对"真实包含标题(.desc)"的盒子应用边框装甲。彻底消除空洞(右下角幽灵框)！ */
+      > div:has(.desc), .follow-statistics-user-card > div:has(.desc) {
+        flex: 1 1 0 !important; 
+        min-width: 0 !important; 
         display: flex !important; 
         flex-direction: column !important;
         justify-content: center !important;
         align-items: center !important; 
         background: rgba(0, 212, 255, 0.05) !important;
         border-bottom: 2px solid var(--tertiary-medium) !important;
-        padding: 4px 2px !important;
+        padding: 4px 1px !important; /* 极限压缩内边距 */
         margin: 0 !important;
-        min-height: 46px !important; /* 统一高度基准 */
+        min-height: 46px !important;
         box-sizing: border-box !important;
-        
-        /* 为盒子内的游离文本(如"5 天") 设定统一种子字体 */
-        color: #E0E0E0 !important;
-        font-family: "JetBrains Mono", "Noto Sans SC", sans-serif !important;
-        font-size: 11px !important;
-        font-weight: 900 !important;
-        line-height: 1.2 !important;
         text-align: center !important;
         
-        /* 标题行 (如 "加入日期：") */
+        /* 强制重置所有元素的高度和间距，防止"点数"被撑歪 */
+        * { 
+          margin: 0 !important; 
+          padding: 0 !important; 
+          line-height: 1.2 !important; 
+          color: #E0E0E0 !important;
+        }
+        
+        /* 标题部分：加入日期：、点数、发布时间 等 */
         .desc, .user-stat-label {
           display: block !important;
           width: 100% !important;
           font-family: "JetBrains Mono", "Noto Sans SC", sans-serif !important;
-          font-size: 9px !important; /* 缩小标题保证单行装得下 */
+          font-size: 8.5px !important; /* 缩小字号弱化冒号的影响 */
           text-transform: uppercase;
           color: rgba(255, 255, 255, 0.5) !important; 
           font-weight: bold !important;
           margin-bottom: 2px !important;
           white-space: nowrap !important;
           overflow: hidden !important;
-          text-overflow: ellipsis !important; /* 比如"加入日期："超出自动打省略号 */
+          text-overflow: ellipsis !important; 
         }
         
-        /* 数值行 (包裹在元素里的数值，如 "7,542") */
-        .date, .value, span:not(.desc):not(.user-stat-label), a {
-          color: #E0E0E0 !important;
-          font-family: "JetBrains Mono", "Noto Sans SC", sans-serif !important;
-          font-size: 11px !important;
+        /* 数值部分：利用相邻兄弟选择器，统一控制包含数值的容器 */
+        .desc ~ * {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          width: 100% !important;
+          font-family: "JetBrains Mono", sans-serif !important;
+          font-size: 10px !important; /* 强制微缩字体，防"2025年4月25日"溢出 */
           font-weight: 900 !important;
-          line-height: 1.2 !important;
-        }
-
-        /* 数值允许裁切并居中 */
-        a, .date, .value {
-          display: inline-block !important;
-          max-width: 100% !important;
           white-space: nowrap !important;
           overflow: hidden !important;
           text-overflow: ellipsis !important;
+          letter-spacing: -0.2px !important; /* 微弱挤压缩短宽度 */
+          
+          /* 核心魔法：剥除"点数"外围多余的 <span> 造成的错位 */
+          * {
+            display: inline !important;
+            font-size: inherit !important;
+            font-weight: inherit !important;
+            letter-spacing: inherit !important;
+          }
+          a { color: var(--tertiary) !important; text-decoration: none !important; }
         }
-        
-        a:hover { color: var(--tertiary) !important; text-decoration: none; }
       }
       
-      /* 隐藏空占位框，保证无数据时不占位 */
-      > *:empty { display: none !important; }
+      /* 清理掉所有不包含 .desc 标题的无效占位框，防幽灵边框 */
+      > div:not(:has(.desc)), .follow-statistics-user-card > div:not(:has(.desc)) { 
+        display: none !important; 
+      }
       
-      /* 绝对对齐核心：强行隐藏“阅读时间”后面的 (最近 2 天) 小尾巴，确保所有块严格为 2 行 */
+      /* 强行隐藏“(最近 2 天)”这类多余的小尾巴，保证高度一致 */
       .metadata__time-read > span:not(.desc) {
         display: none !important;
       }
