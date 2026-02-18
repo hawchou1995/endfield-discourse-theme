@@ -291,7 +291,7 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
 }
 
 /* ==========================================================================
-   Endfield Chat Protocol - Telegram Style (电报仿制版 V2)
+   Endfield Chat Protocol - Telegram Style (像素级电报还原版)
    ========================================================================== */
 
 /* 1. 聊天面板基础设定 */
@@ -307,7 +307,8 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
     display: grid;
     grid-template-rows: auto auto; 
     column-gap: 8px;
-    align-items: flex-end; 
+    /* 【修复1】头像沉底：强制网格项目在底部对齐，让头像永远在最新消息的左下角 */
+    align-items: end; 
   }
 
   /* 头像区域锁定 */
@@ -316,23 +317,25 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
     display: flex;
     justify-content: center;
     margin: 0 !important; 
+    align-self: end !important; /* 再次上锁，确保头像沉底 */
   }
   
   .chat-message-left-gutter { align-items: flex-end; padding-bottom: 6px; }
   .chat-message-left-gutter__date { display: none; } /* TG 风格不在这里显示时间 */
 
-  /* 内容气泡 (TG 风格) */
+  /* 内容气泡 (TG 风格实体化) */
   .chat-message-content {
     min-width: 60px; 
     display: flex;
     flex-direction: column;
-    padding: 6px 12px 18px 12px; /* 底部留出 18px 给时间戳腾位置 */
+    padding: 6px 12px 20px 12px; /* 底部留出 20px 给时间戳腾位置 */
     border-radius: 12px;
     position: relative; 
     transition: all 0.2s;
     margin: 0 !important;
-    border: none !important; /* TG 气泡没有边框 */
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1); /* 轻微阴影浮现感 */
+    border: none !important; 
+    /* 【修复3】增强对比度：实体阴影 */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15) !important; 
   }
 
   /* ----------------------------------------------------
@@ -359,7 +362,7 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
       position: absolute;
       bottom: 4px;
       right: 10px;
-      font-family: inherit; /* 去除主题的等宽字体，更贴近 TG */
+      font-family: inherit; 
       font-size: 0.7em;
       color: rgba(125, 125, 125, 0.7);
       line-height: 1;
@@ -401,10 +404,11 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
       grid-row: 2 / 3;
       justify-self: start;
       max-width: 90%; 
-      background: var(--primary-very-low);
+      /* 【修复3】极高对比度：使用实体面板背景色（浅色白，深色黑） */
+      background-color: var(--secondary) !important;
     }
     
-    /* 左侧精美小尾巴 (利用 mask-image 掏空弧度) */
+    /* 【修复2】纯正 TG 左侧小尾巴 (绝对平底 + 锐角) */
     &:not(.-user-info-hidden) .chat-message-content {
       border-bottom-left-radius: 0;
       &::before {
@@ -413,10 +417,12 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
         bottom: 0;
         left: -8px;
         width: 8px;
-        height: 14px;
-        background-color: var(--primary-very-low);
-        -webkit-mask-image: radial-gradient(circle at 0 0, transparent 8px, black 8.5px);
-        mask-image: radial-gradient(circle at 0 0, transparent 8px, black 8.5px);
+        height: 12px;
+        /* 继承气泡的实体颜色 */
+        background-color: inherit; 
+        /* 使用精确的 SVG 路径掏出 TG 特有的弧度 */
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='8' height='12' viewBox='0 0 8 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 12H0C3.5 12 8 9 8 0V12Z' fill='black'/%3E%3C/svg%3E");
+        mask-image: url("data:image/svg+xml,%3Csvg width='8' height='12' viewBox='0 0 8 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 12H0C3.5 12 8 9 8 0V12Z' fill='black'/%3E%3C/svg%3E");
       }
     }
   }
@@ -425,66 +431,36 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
      右侧阵营：当前登录用户 (CURRENT USER)
      ======================================= */
   &.is-by-current-user {
-    /* ------ 默认小屏/手机端：靠右显示 (节省空间) ------ */
+    /* 默认靠右显示 (节省空间) */
     .chat-message { grid-template-columns: minmax(0, 1fr); }
     .chat-message-avatar, .chat-message-left-gutter { display: none !important; }
+    
+    /* 名字靠右 */
     .chat-message-info {
       justify-content: flex-end; 
       .chat-message-info__username__name { color: var(--quaternary); }
     }
+    
     .chat-reply {
       grid-column: 1 / 2; grid-row: 1 / 2; justify-self: end;
       flex-direction: row-reverse; text-align: right;
       .chat-reply__excerpt { margin-right: 8px; margin-left: 0; }
     }
+    
     .chat-message-content {
       grid-column: 1 / 2; grid-row: 2 / 3; justify-self: end; max-width: 90%;
-      background: rgba(0, 212, 255, 0.1); /* TG绿色，这里沿用主题青色微透 */
+      /* 【修复3】极高对比度：用 solid 混色代替半透明。在面板底色上注入 15% 的青色，绝对不透明 */
+      background-color: color-mix(in srgb, var(--tertiary) 15%, var(--secondary) 100%) !important;
     }
+
+    /* 【修复2】纯正 TG 右侧小尾巴 (绝对平底 + 锐角) */
     &:not(.-user-info-hidden) .chat-message-content {
       border-bottom-right-radius: 0;
       &::after {
-        content: ""; position: absolute; bottom: 0; right: -8px; width: 8px; height: 14px;
-        background-color: rgba(0, 212, 255, 0.1);
-        -webkit-mask-image: radial-gradient(circle at 100% 0, transparent 8px, black 8.5px);
-        mask-image: radial-gradient(circle at 100% 0, transparent 8px, black 8.5px);
-      }
-    }
-
-    /* ------ 桌面端/宽屏模式：全靠左显示，用颜色区分 ------ */
-    @media screen and (min-width: 768px) {
-      .chat-message {
-        grid-template-columns: 36px minmax(0, 1fr) !important; 
-      }
-      /* 恢复头像和名字 */
-      .chat-message-avatar, .chat-message-left-gutter { 
-        display: flex !important; grid-column: 1 / 2 !important; grid-row: 2 / 3 !important; 
-      }
-      .chat-message-info { justify-content: flex-start !important; }
-      
-      /* 引用对齐修正 */
-      .chat-reply {
-        grid-column: 2 / 3 !important; justify-self: start !important;
-        flex-direction: row !important; text-align: left !important;
-        .chat-reply__excerpt { margin-left: 8px !important; margin-right: 0 !important; }
-      }
-      
-      /* 气泡对齐修正 */
-      .chat-message-content {
-        grid-column: 2 / 3 !important; justify-self: start !important;
-      }
-
-      /* 尾巴移位：干掉右边的尾巴，在左边生成青色尾巴 */
-      &:not(.-user-info-hidden) .chat-message-content {
-        border-bottom-right-radius: 12px !important; /* 恢复右下角圆角 */
-        border-bottom-left-radius: 0 !important; /* 切掉左下角圆角 */
-        &::after { display: none !important; } 
-        &::before {
-          content: ""; position: absolute; bottom: 0; left: -8px; width: 8px; height: 14px;
-          background-color: rgba(0, 212, 255, 0.1); /* 跟气泡保持一致颜色 */
-          -webkit-mask-image: radial-gradient(circle at 0 0, transparent 8px, black 8.5px);
-          mask-image: radial-gradient(circle at 0 0, transparent 8px, black 8.5px);
-        }
+        content: ""; position: absolute; bottom: 0; right: -8px; width: 8px; height: 12px;
+        background-color: inherit;
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='8' height='12' viewBox='0 0 8 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 12H8C4.5 12 0 9 0 0V12Z' fill='black'/%3E%3C/svg%3E");
+        mask-image: url("data:image/svg+xml,%3Csvg width='8' height='12' viewBox='0 0 8 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 12H8C4.5 12 0 9 0 0V12Z' fill='black'/%3E%3C/svg%3E");
       }
     }
   }
@@ -505,13 +481,15 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
 }
 
 /* ----------------------------------------------------
-   日期分割线 (Date Separator)
+   日期分割线 (Date Separator) - 仿电报灰色药丸
    ---------------------------------------------------- */
 .chat-message-separator-date {
-  display: flex !important; justify-content: center !important; margin: 20px 0 !important;
+  display: flex !important; justify-content: center !important; margin: 16px 0 !important;
   .chat-message-separator__text-container {
-    background: var(--primary-medium); padding: 4px 12px; border-radius: 12px; border: none;
-    font-family: inherit; font-size: 0.8em; font-weight: normal; color: var(--secondary); z-index: 1; box-shadow: none;
+    background-color: color-mix(in srgb, var(--primary) 12%, transparent) !important;
+    backdrop-filter: blur(5px);
+    padding: 4px 12px; border-radius: 12px; border: none;
+    font-family: inherit; font-size: 0.8em; font-weight: 600; color: var(--primary); z-index: 1; box-shadow: none;
   }
   .chat-message-separator__line-container { display: none; }
 }
@@ -576,6 +554,7 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
    TG 右下角下拉到底按钮 (Scroll to Bottom)
    ========================================================================== */
 .chat-scroll-to-bottom {
+  /* 【修复4】：去掉 display 的覆写，尊重系统的显示隐藏逻辑 */
   position: absolute !important;
   bottom: 75px !important; /* 悬浮在输入框正上方 */
   right: 16px !important;
@@ -585,25 +564,33 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
   background: var(--secondary) !important; /* 浅色模式为白，深色模式为黑 */
   border: 1px solid var(--primary-low) !important;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  clip-path: none !important; /* 覆盖全局按钮的切角设定 */
+  clip-path: none !important; /* 取消切角 */
   z-index: 100 !important;
   transition: all 0.2s ease !important;
   
-  .d-icon {
+  /* 当 Discourse 控制其显示时，强行应用 flex 保证内容居中 */
+  &:not([style*="display: none"]) {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  /* 精准打击内部 SVG 图标 */
+  svg {
     color: var(--primary-medium) !important;
-    font-size: 1.2em !important;
+    fill: var(--primary-medium) !important;
+    width: 20px !important;
+    height: 20px !important;
   }
   
   &:hover {
     background: var(--primary-very-low) !important;
     transform: translateY(-2px) !important;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
-    .d-icon { color: var(--tertiary) !important; }
+    svg { color: var(--tertiary) !important; fill: var(--tertiary) !important; }
   }
 }
+
 /* ============================================
    16. 战术回复按钮矩阵 (Tactical Reply Buttons)
    ============================================ */
