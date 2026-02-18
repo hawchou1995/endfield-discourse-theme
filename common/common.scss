@@ -291,405 +291,232 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
 }
 
 /* ==========================================================================
-   Endfield x Telegram Chat Skin (Orange Accent, Light/Dark Adaptive)
-   Scope: Full page chat only (.full-page-chat)
+   Endfield Chat Protocol - Telegram Tactical Style V3 (终极网格防爆版)
    ========================================================================== */
 
-.full-page-chat {
-  /* ---- Accent (Orange first) ---- */
-  --ef-accent: #ff6b35;
-  --ef-accent-2: #ff9c3a;
-
-  /* HUD secondary (cyan, subtle) */
-  --ef-hud: #12e6d6;
-
-  /* Bubble geometry */
-  --tg-bubble-radius: 14px;
-  --tg-bubble-max: 78%;
-
-  /* Fallbacks (in case color-mix unsupported) */
-  --ef-panel: rgba(0, 0, 0, 0.22);
-  --ef-panel-2: rgba(0, 0, 0, 0.14);
-  --ef-stroke: rgba(255, 255, 255, 0.10);
-  --ef-text: var(--primary);
-  --ef-text-dim: rgba(127, 127, 127, 0.9);
-  --ef-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
-  --ef-glow-orange: 0 0 18px rgba(255, 107, 53, 0.16);
-  --ef-glow-hud: 0 0 16px rgba(18, 230, 214, 0.10);
+/* 1. 聊天面板基础设定 */
+.chat-messages-container {
+  padding: 15px 10px;
 }
 
-/* Prefer adaptive colors when supported */
-@supports (color: color-mix(in srgb, #000, #fff)) {
-  .full-page-chat {
-    /* Panels based on current theme scheme (light/dark) */
-    --ef-panel: color-mix(in srgb, var(--secondary) 86%, #000 14%);
-    --ef-panel-2: color-mix(in srgb, var(--secondary) 92%, #000 8%);
-    --ef-stroke: color-mix(in srgb, var(--primary) 14%, transparent);
-
-    --ef-text: var(--primary);
-    --ef-text-dim: color-mix(in srgb, var(--primary) 62%, transparent);
-
-    --ef-shadow: 0 12px 34px rgba(0, 0, 0, 0.26);
-    --ef-glow-orange: 0 0 18px rgba(255, 107, 53, 0.18);
-    --ef-glow-hud: 0 0 16px rgba(18, 230, 214, 0.12);
-  }
-}
-
-/* =========================
-   Background + Top Navbar
-   ========================= */
-
-.full-page-chat .main-chat-outlet.chat-view {
-  /* Endfield-ish tactical grid; subtle so it works in light/dark */
-  background:
-    radial-gradient(1100px 520px at 20% -10%, rgba(255, 107, 53, 0.10), transparent 60%),
-    radial-gradient(900px 500px at 92% 6%, rgba(18, 230, 214, 0.07), transparent 58%),
-    linear-gradient(180deg, var(--ef-panel-2), var(--ef-panel-2)),
-    repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 22px),
-    repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 22px);
-}
-
-.full-page-chat .c-navbar-container {
-  background: var(--ef-panel);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--ef-stroke);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
-}
-
-.full-page-chat .c-navbar__actions .btn {
-  border-radius: 10px;
-  border: 1px solid transparent;
-}
-.full-page-chat .c-navbar__actions .btn:hover {
-  border-color: var(--ef-stroke);
-  box-shadow: var(--ef-glow-hud);
-}
-
-/* =========================
-   Message layout (Grid)
-   ========================= */
-
-.full-page-chat .chat-messages-container {
-  padding: 14px 12px;
-}
-
-.full-page-chat .chat-message-container {
-  margin-bottom: 10px !important;
+/* 每条消息的外层容器，使用 Flex 允许整体推挤到最右侧 */
+.chat-message-container {
+  display: flex !important;
+  width: 100% !important;
+  margin-bottom: 8px !important;
   padding: 0 !important;
-  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
-.full-page-chat .chat-message {
+/* 消息网格核心：画出头像与气泡的绝对排版地图，宽度随文本自然收缩 */
+.chat-message {
   display: grid !important;
-  width: 100% !important;
+  width: fit-content !important; 
+  max-width: 100% !important;
+  position: relative !important; 
 }
 
-/* Others: avatar + bubble, reply aligns with bubble */
-.full-page-chat .chat-message-container:not(.is-by-current-user) .chat-message {
+/* =======================================
+   左侧阵营：其他用户 (OTHERS)
+   ======================================= */
+.chat-message-container:not(.is-by-current-user) {
+  justify-content: flex-start !important; /* 整体绝对靠左 */
+}
+
+.chat-message-container:not(.is-by-current-user) .chat-message {
   grid-template-columns: 44px minmax(0, 1fr) !important;
-  grid-template-areas:
+  grid-template-areas: 
     ". reply"
     "avatar content" !important;
-  column-gap: 10px !important;
-  align-items: end !important;
+  column-gap: 8px !important;
 }
 
-/* Self: bubble on right, no avatar column */
-.full-page-chat .chat-message-container.is-by-current-user .chat-message {
+.chat-message-container:not(.is-by-current-user) .chat-reply {
+  grid-area: reply !important;
+  justify-self: start !important;
+}
+
+.chat-message-container:not(.is-by-current-user) .chat-message-avatar, 
+.chat-message-container:not(.is-by-current-user) .chat-message-left-gutter {
+  grid-area: avatar !important;
+  align-self: start !important; /* 头像对齐在顶部第一条气泡左侧，绝不重叠 */
+  width: 44px !important;
+  display: flex !important;
+  justify-content: center !important;
+  margin: 0 !important;
+}
+
+.chat-message-container:not(.is-by-current-user) .chat-message-content {
+  grid-area: content !important;
+  justify-self: start !important;
+  background: var(--primary-very-low) !important;
+  border: 1px solid var(--primary-low) !important;
+  border-left: 3px solid var(--tertiary) !important; 
+  border-bottom-left-radius: 0 !important; 
+}
+
+/* =======================================
+   右侧阵营：当前登录用户 (CURRENT USER)
+   ======================================= */
+.chat-message-container.is-by-current-user {
+  justify-content: flex-end !important; /* 整体绝对靠右屏幕边缘！解决不靠右问题 */
+}
+
+.chat-message-container.is-by-current-user .chat-message {
   grid-template-columns: minmax(0, 1fr) !important;
-  grid-template-areas:
+  grid-template-areas: 
     "reply"
     "content" !important;
-  align-items: end !important;
+  justify-items: end !important; /* 气泡和回复框在自身网格内靠右 */
 }
 
-/* Avatar slot */
-.full-page-chat .chat-message-container:not(.is-by-current-user) {
-  .chat-message-avatar,
-  .chat-message-left-gutter {
-    grid-area: avatar !important;
-    align-self: end !important;
-    width: 44px !important;
-    display: flex !important;
-    justify-content: center !important;
-    margin: 0 !important;
+.chat-message-container.is-by-current-user .chat-message-avatar {
+  display: none !important; /* 物理抹除自己的头像 */
+}
+.chat-message-container.is-by-current-user .chat-message-left-gutter {
+  /* 保留隐藏节点以供绝对定位读取时间，但不占任何空间 */
+  position: absolute !important;
+  width: 0 !important; height: 0 !important; margin: 0 !important; padding: 0 !important; border: none !important;
+}
+
+.chat-message-container.is-by-current-user .chat-reply {
+  grid-area: reply !important;
+  justify-self: end !important;
+  flex-direction: row-reverse !important; 
+  text-align: right !important;
+  .chat-reply__excerpt { margin-right: 8px !important; margin-left: 0 !important; }
+}
+
+.chat-message-container.is-by-current-user .chat-message-content {
+  grid-area: content !important;
+  justify-self: end !important;
+  background: rgba(0, 212, 255, 0.08) !important; 
+  border: 1px solid var(--tertiary-low) !important;
+  border-right: 3px solid var(--quaternary) !important; 
+  border-bottom-right-radius: 0 !important;
+}
+
+/* =======================================
+   通用内容组件 (Bubble & Text & Date)
+   ======================================= */
+.chat-message-content {
+  display: flex !important;
+  flex-direction: column !important;
+  min-width: 80px !important; 
+  width: fit-content !important;
+  padding: 8px 12px 20px 12px !important; /* 底部刻意留出 20px 给时间戳 */
+  border-radius: 12px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  margin: 0 !important;
+}
+
+/* 名字与状态 */
+.chat-message-info {
+  display: flex !important;
+  align-items: center !important;
+  margin-bottom: 4px !important;
+  padding-bottom: 2px !important;
+  border-bottom: 1px solid rgba(125,125,125,0.2) !important; 
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+.chat-message-info__username__name {
+  font-weight: 800 !important;
+  color: var(--tertiary) !important;
+  font-size: 0.85em !important; 
+}
+.chat-message-info__status { display: none !important; }
+
+/* 翻转自己名字的方向 */
+.chat-message-container.is-by-current-user .chat-message-info {
+  flex-direction: row-reverse !important;
+  justify-content: flex-start !important;
+  border-bottom-color: rgba(255, 107, 53, 0.2) !important;
+  .chat-message-info__username__name { 
+    color: var(--quaternary) !important; 
+    margin-left: 8px !important; margin-right: 0 !important; 
   }
-  .chat-message-left-gutter__date { display: none !important; }
+}
+.chat-message-container:not(.is-by-current-user) .chat-message-info__username__name {
+  margin-right: 8px !important;
 }
 
-/* Self: hide avatar/gutter (Telegram-ish) */
-.full-page-chat .chat-message-container.is-by-current-user {
-  .chat-message-avatar,
-  .chat-message-left-gutter { display: none !important; }
+/* 【黑科技】：抽离时间戳，绝对定位到 .chat-message 的右下角（即紧贴着气泡右下角） */
+.chat-message-info__date,
+.chat-message-left-gutter__date {
+  position: absolute !important;
+  bottom: 4px !important;
+  right: 12px !important;
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 0.7em !important;
+  color: var(--primary-medium) !important;
+  opacity: 0.7 !important;
+  line-height: 1 !important;
+  z-index: 10 !important;
+  display: block !important;
 }
 
-/* Tighten consecutive messages */
-.full-page-chat .chat-message-container.-user-info-hidden {
+/* 文本防爆换行 */
+.chat-message-text {
+  font-size: 0.95em !important;
+  line-height: 1.5 !important;
+  color: var(--primary) !important;
+  word-break: break-word !important; 
+  min-width: 0 !important;
+  
+  .chat-cooked p { margin: 0 !important; }
+  .chat-uploads img { border-radius: 6px !important; margin-top: 4px !important; max-width: 100% !important; height: auto !important; }
+}
+
+/* 连发消息间距压缩 */
+.chat-message-container.-user-info-hidden {
   margin-top: -6px !important;
 }
 
-/* =========================
-   Bubble (Telegram-ish + Endfield edge)
-   ========================= */
-
-.full-page-chat .chat-message-content {
-  grid-area: content !important;
-
-  display: flex !important;
-  flex-direction: column !important;
-
-  max-width: var(--tg-bubble-max) !important;
-  width: fit-content !important;
-  min-width: 0 !important;
-
-  padding: 10px 12px 22px 12px !important; /* reserve for timestamp */
-  border-radius: var(--tg-bubble-radius) !important;
-  position: relative !important;
-  margin: 0 !important;
-
-  background: color-mix(in srgb, var(--primary-very-low) 55%, transparent) !important;
-  border: 1px solid color-mix(in srgb, var(--primary) 12%, transparent) !important;
-  box-shadow: var(--ef-shadow);
+/* ----------------------------------------------------
+   引用/回复板块 (Replies Box)
+   ---------------------------------------------------- */
+.chat-reply {
+  display: flex !important; align-items: center !important; margin-bottom: 4px !important;
+  background: var(--primary-very-low) !important; border: 1px solid var(--primary-low) !important; border-radius: 4px !important; padding: 4px 8px !important; font-size: 0.85em !important; opacity: 0.8 !important; transition: all 0.2s !important;
+  width: fit-content !important; max-width: 100% !important; box-sizing: border-box !important;
+  
+  &:hover { opacity: 1 !important; border-color: var(--tertiary-medium) !important; }
+  .svg-icon-title { color: var(--tertiary) !important; margin: 0 6px !important; flex-shrink: 0 !important; }
+  .chat-reply__excerpt { white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; flex: 1 !important; min-width: 0 !important; }
+  .chat-user-avatar { margin: 0 6px !important; flex-shrink: 0 !important; .avatar { width: 16px !important; height: 16px !important; } }
 }
 
-/* Others: subtle HUD cyan stripe */
-.full-page-chat .chat-message-container:not(.is-by-current-user) .chat-message-content {
-  justify-self: start !important;
-  border-left: 3px solid color-mix(in srgb, var(--ef-hud) 65%, transparent) !important;
-}
-
-/* Self: orange accent bubble */
-.full-page-chat .chat-message-container.is-by-current-user .chat-message-content {
-  justify-self: end !important;
-
-  background: linear-gradient(
-    180deg,
-    rgba(255, 107, 53, 0.14),
-    rgba(255, 107, 53, 0.08)
-  ) !important;
-
-  border-color: rgba(255, 107, 53, 0.25) !important;
-  border-right: 3px solid rgba(255, 107, 53, 0.78) !important;
-  box-shadow: var(--ef-shadow), var(--ef-glow-orange);
-}
-
-/* Bubble tails */
-.full-page-chat .chat-message-container:not(.is-by-current-user) .chat-message-content::before {
-  content: "";
-  position: absolute;
-  left: -6px;
-  bottom: 10px;
-  width: 10px;
-  height: 10px;
-  background: color-mix(in srgb, var(--primary-very-low) 55%, transparent);
-  border-left: 1px solid color-mix(in srgb, var(--primary) 12%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--primary) 12%, transparent);
-  transform: rotate(45deg);
-}
-
-.full-page-chat .chat-message-container.is-by-current-user .chat-message-content::before {
-  content: "";
-  position: absolute;
-  right: -6px;
-  bottom: 10px;
-  width: 10px;
-  height: 10px;
-  background: rgba(255, 107, 53, 0.10);
-  border-right: 1px solid rgba(255, 107, 53, 0.22);
-  border-bottom: 1px solid rgba(255, 107, 53, 0.22);
-  transform: rotate(45deg);
-}
-
-/* =========================
-   Avatar cut + name + time
-   ========================= */
-
-.full-page-chat .chat-user-avatar__container .avatar,
-.full-page-chat .chat-message-avatar .avatar {
-  border-radius: 0 !important;
-  clip-path: polygon(14% 0, 100% 0, 100% 86%, 86% 100%, 0 100%, 0 14%) !important;
-  border: 1px solid color-mix(in srgb, var(--ef-hud) 20%, transparent);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.22);
-}
-
-.full-page-chat .chat-message-info {
-  display: flex !important;
-  align-items: baseline !important;
-  gap: 10px;
-
-  margin-bottom: 6px !important;
-  padding-bottom: 4px !important;
-  border-bottom: 1px solid color-mix(in srgb, var(--primary) 10%, transparent) !important;
-
-  .chat-message-info__username__name {
-    font-weight: 800 !important;
-    font-size: 0.86em !important;
-    letter-spacing: 0.2px;
-    color: color-mix(in srgb, var(--ef-hud) 75%, var(--primary) 25%) !important;
-    text-shadow: var(--ef-glow-hud);
-  }
-
-  .chat-message-info__status { display: none !important; }
-
-  .chat-message-info__date {
-    position: absolute !important;
-    bottom: 6px !important;
-    right: 10px !important;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "JetBrains Mono", monospace !important;
-    font-size: 0.72em !important;
-    color: var(--ef-text-dim) !important;
-    line-height: 1 !important;
-  }
-}
-
-/* Self: username becomes orange */
-.full-page-chat .chat-message-container.is-by-current-user .chat-message-info {
-  flex-direction: row-reverse !important;
-
-  .chat-message-info__username__name {
-    color: rgba(255, 107, 53, 0.92) !important;
-    text-shadow: 0 0 14px rgba(255, 107, 53, 0.14);
-  }
-}
-
-/* =========================
-   Text, links, uploads
-   ========================= */
-
-.full-page-chat .chat-message-text {
-  font-size: 0.95em !important;
-  line-height: 1.55 !important;
-  color: var(--ef-text) !important;
-  word-break: break-word !important;
-  min-width: 0 !important;
-
-  .chat-cooked p { margin: 0 !important; }
-
-  .chat-cooked a {
-    color: rgba(255, 107, 53, 0.95);
-    text-decoration: none;
-    border-bottom: 1px dashed rgba(255, 107, 53, 0.35);
-  }
-  .chat-cooked a:hover {
-    border-bottom-color: rgba(255, 107, 53, 0.75);
-    text-shadow: 0 0 16px rgba(255, 107, 53, 0.18);
-  }
-
-  .chat-uploads img {
-    border-radius: 10px !important;
-    margin-top: 6px !important;
-    max-width: 100% !important;
-    height: auto !important;
-    border: 1px solid color-mix(in srgb, var(--primary) 12%, transparent);
-    box-shadow: 0 12px 28px rgba(0,0,0,0.22);
-  }
-}
-
-/* Reaction pills */
-.full-page-chat .chat-message-reaction-list .chat-message-reaction {
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--ef-accent) 18%, transparent);
-  background: color-mix(in srgb, var(--secondary) 60%, transparent);
-}
-
-/* =========================
-   Reply box, separators, scroll button
-   ========================= */
-
-.full-page-chat .chat-reply {
-  grid-area: reply !important;
-  justify-self: start !important;
-
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px;
-
-  margin-bottom: 6px !important;
-  padding: 6px 10px !important;
-  width: fit-content !important;
-  max-width: 100% !important;
-
-  background: color-mix(in srgb, var(--secondary) 62%, transparent) !important;
-  border: 1px solid color-mix(in srgb, var(--ef-accent) 16%, transparent) !important;
-  border-radius: 10px !important;
-  opacity: 0.9 !important;
-
-  .svg-icon-title { color: rgba(255, 107, 53, 0.95) !important; }
-  .chat-reply__excerpt {
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    min-width: 0 !important;
-    color: var(--ef-text-dim) !important;
-  }
-}
-
-.full-page-chat .chat-message-container.is-by-current-user .chat-reply {
-  justify-self: end !important;
-  flex-direction: row-reverse !important;
-  text-align: right !important;
-}
-
-.full-page-chat .chat-message-separator-date {
-  display: flex !important;
-  justify-content: center !important;
-  margin: 18px 0 !important;
-
+/* ----------------------------------------------------
+   日期分割线 (Date Separator)
+   ---------------------------------------------------- */
+.chat-message-separator-date {
+  display: flex !important; justify-content: center !important; margin: 20px 0 !important;
   .chat-message-separator__text-container {
-    background: color-mix(in srgb, var(--secondary) 66%, transparent) !important;
-    border: 1px solid color-mix(in srgb, var(--ef-accent) 18%, transparent) !important;
-    padding: 6px 14px !important;
-    border-radius: 999px !important;
-    color: var(--ef-text-dim) !important;
-    box-shadow: var(--ef-glow-orange);
+    background: var(--primary-very-low) !important; border: 1px solid var(--primary-low) !important; padding: 4px 14px !important; border-radius: 12px !important;
+    font-family: "JetBrains Mono", monospace !important; font-size: 0.75em !important; font-weight: bold !important; color: var(--primary-medium) !important; z-index: 1 !important; box-shadow: 0 0 10px rgba(0,0,0,0.1) !important;
   }
   .chat-message-separator__line-container { display: none !important; }
 }
 
-.full-page-chat .chat-scroll-to-bottom__button.visible {
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--secondary) 60%, transparent);
-  border: 1px solid color-mix(in srgb, var(--ef-accent) 22%, transparent);
-  box-shadow: var(--ef-glow-orange);
+/* 头像统一战术切角 */
+.chat-user-avatar__container .avatar, .chat-message-avatar .avatar {
+  border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%) !important;
 }
 
-/* =========================
-   Composer (Input)
-   ========================= */
-
-.full-page-chat .chat-composer {
-  background: var(--ef-panel);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid var(--ef-stroke);
-}
-
-.full-page-chat .chat-composer__inner-container {
-  background: color-mix(in srgb, var(--secondary) 70%, transparent) !important;
-  border: 1px solid color-mix(in srgb, var(--ef-accent) 18%, transparent) !important;
-  border-radius: 12px !important;
-
-  &:focus-within {
-    border-color: rgba(255, 107, 53, 0.45) !important;
-    box-shadow: var(--ef-glow-orange) !important;
+/* 底部输入框 (Chat Composer) */
+.chat-composer {
+  background: var(--secondary) !important; border-top: 2px solid var(--tertiary-low) !important; padding: 12px 10px !important;
+  .chat-composer__inner-container {
+    background: var(--primary-very-low) !important; border: 1px solid var(--primary-low) !important; border-radius: 6px !important; padding: 4px 8px !important; display: flex !important; align-items: flex-end !important; transition: border-color 0.2s !important;
+    &:focus-within { border-color: var(--tertiary) !important; box-shadow: 0 0 8px rgba(0, 212, 255, 0.1) !important; }
+  }
+  .chat-composer__input { background: transparent !important; border: none !important; box-shadow: none !important; color: var(--primary) !important; font-size: 0.95em !important; resize: none !important; }
+  .chat-composer-button__wrapper .btn {
+    border-radius: 4px !important; transition: all 0.2s !important;
+    &:not([disabled]) { background: var(--tertiary) !important; color: var(--secondary) !important; border: 1px solid var(--tertiary) !important; &:hover { transform: scale(1.05) !important; background: var(--quaternary) !important; border-color: var(--quaternary) !important; } .d-icon { color: var(--secondary) !important; fill: var(--secondary) !important; } }
   }
 }
-
-.full-page-chat .chat-composer__input {
-  background: transparent !important;
-  color: var(--ef-text) !important;
-}
-
-/* Send button */
-.full-page-chat .chat-composer-button.-send:not([disabled]) {
-  background: rgba(255, 107, 53, 0.18) !important;
-  border: 1px solid rgba(255, 107, 53, 0.38) !important;
-  border-radius: 10px !important;
-}
-.full-page-chat .chat-composer-button.-send:not([disabled]):hover {
-  box-shadow: var(--ef-glow-orange);
-  transform: translateY(-1px);
-}
-
 /* ============================================
    16. 战术回复按钮矩阵 (Tactical Reply Buttons)
    ============================================ */
