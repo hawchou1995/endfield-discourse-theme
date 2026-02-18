@@ -291,7 +291,7 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
 }
 
 /* ==========================================================================
-   Endfield Chat Protocol - Telegram Tactical Style V3 (绝对网格防御版)
+   Endfield Chat Protocol - Telegram Style (电报仿制版 V2)
    ========================================================================== */
 
 /* 1. 聊天面板基础设定 */
@@ -300,41 +300,39 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
 }
 
 .chat-message-container {
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   padding: 0 !important;
 
-  /* 【核心防爆修复】：放弃 Flex，启用 CSS Grid 网格。锁定列宽，根除所有换行错位的灵异事件 */
   .chat-message {
     display: grid;
-    /* 定义两列：第一列固定 44px (头像)，第二列占满剩余空间 (气泡) */
-    grid-template-columns: 44px minmax(0, 1fr);
-    grid-template-rows: auto auto; /* 两行：上行放引用，下行放主体 */
-    column-gap: 12px;
+    grid-template-rows: auto auto; 
+    column-gap: 8px;
     align-items: flex-end; 
   }
 
-  /* 头像区域锁定在固定列中 */
+  /* 头像区域锁定 */
   .chat-message-avatar, .chat-message-left-gutter {
-    width: 44px;
+    width: 36px;
     display: flex;
     justify-content: center;
     margin: 0 !important; 
   }
   
   .chat-message-left-gutter { align-items: flex-end; padding-bottom: 6px; }
-  .chat-message-left-gutter__date { font-family: "JetBrains Mono", monospace; font-size: 0.7em; color: var(--primary-medium); opacity: 0.6; }
+  .chat-message-left-gutter__date { display: none; } /* TG 风格不在这里显示时间 */
 
-  /* 内容气泡作为独立单元 */
+  /* 内容气泡 (TG 风格) */
   .chat-message-content {
-    min-width: 80px; 
+    min-width: 60px; 
     display: flex;
     flex-direction: column;
-    padding: 8px 12px; 
+    padding: 6px 12px 18px 12px; /* 底部留出 18px 给时间戳腾位置 */
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     position: relative; 
     transition: all 0.2s;
     margin: 0 !important;
+    border: none !important; /* TG 气泡没有边框 */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1); /* 轻微阴影浮现感 */
   }
 
   /* ----------------------------------------------------
@@ -342,28 +340,30 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
      ---------------------------------------------------- */
   .chat-message-info {
     display: flex;
+    justify-content: flex-start; /* 名字强制左对齐 */
     align-items: center;
-    margin-bottom: 4px;
-    padding-bottom: 2px;
-    border-bottom: 1px solid rgba(125,125,125,0.2); 
+    margin-bottom: 2px;
+    padding-bottom: 0;
+    border-bottom: none !important; 
     
     .chat-message-info__username__name {
-      font-weight: 800;
+      font-weight: 700;
       color: var(--tertiary);
       font-size: 0.85em; 
     }
     
     .chat-message-info__status { display: none; }
     
+    /* 绝对定位时间到气泡最右下角 */
     .chat-message-info__date {
       position: absolute;
-      bottom: 6px;
-      right: 12px;
-      font-family: "JetBrains Mono", monospace;
+      bottom: 4px;
+      right: 10px;
+      font-family: inherit; /* 去除主题的等宽字体，更贴近 TG */
       font-size: 0.7em;
-      color: var(--primary-medium);
-      opacity: 0.7;
+      color: rgba(125, 125, 125, 0.7);
       line-height: 1;
+      font-weight: normal;
     }
   }
 
@@ -372,86 +372,120 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
      ---------------------------------------------------- */
   .chat-message-text {
     font-size: 0.95em;
-    line-height: 1.5;
+    line-height: 1.4;
     color: var(--primary);
-    padding-bottom: 12px; 
-    word-break: break-word; /* 极小窗下，防超长文本撑爆网格 */
+    word-break: break-word; 
     
     .chat-cooked p { margin: 0; }
     .chat-uploads img { border-radius: 6px; margin-top: 4px; max-width: 100%; height: auto; }
   }
 
-  &.-user-info-hidden .chat-message-text { padding-bottom: 0; }
-
   /* =======================================
      左侧阵营：其他用户 (OTHERS)
      ======================================= */
   &:not(.is-by-current-user) {
-    /* 锁定引用的位置 */
+    .chat-message {
+      grid-template-columns: 36px minmax(0, 1fr);
+    }
     .chat-reply {
       grid-column: 2 / 3;
       grid-row: 1 / 2;
       justify-self: start;
     }
-    /* 锁定头像的位置：第 1 列，第 2 行 */
     .chat-message-avatar, .chat-message-left-gutter {
       grid-column: 1 / 2;
       grid-row: 2 / 3;
     }
-    /* 锁定气泡的位置：第 2 列，第 2 行 */
     .chat-message-content {
       grid-column: 2 / 3;
       grid-row: 2 / 3;
       justify-self: start;
       max-width: 90%; 
-
       background: var(--primary-very-low);
-      border: 1px solid var(--primary-low);
-      border-left: 3px solid var(--tertiary); 
     }
     
-    &:not(.-user-info-hidden) .chat-message-content { border-bottom-left-radius: 0; }
+    /* 左侧精美小尾巴 (利用 mask-image 掏空弧度) */
+    &:not(.-user-info-hidden) .chat-message-content {
+      border-bottom-left-radius: 0;
+      &::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: -8px;
+        width: 8px;
+        height: 14px;
+        background-color: var(--primary-very-low);
+        -webkit-mask-image: radial-gradient(circle at 0 0, transparent 8px, black 8.5px);
+        mask-image: radial-gradient(circle at 0 0, transparent 8px, black 8.5px);
+      }
+    }
   }
 
   /* =======================================
      右侧阵营：当前登录用户 (CURRENT USER)
      ======================================= */
   &.is-by-current-user {
-    .chat-message {
-      /* 魔法：翻转网格列序！第一列变自适应弹簧区，第二列固定 44px 给头像！ */
-      grid-template-columns: minmax(0, 1fr) 44px;
+    /* ------ 默认小屏/手机端：靠右显示 (节省空间) ------ */
+    .chat-message { grid-template-columns: minmax(0, 1fr); }
+    .chat-message-avatar, .chat-message-left-gutter { display: none !important; }
+    .chat-message-info {
+      justify-content: flex-end; 
+      .chat-message-info__username__name { color: var(--quaternary); }
     }
     .chat-reply {
-      grid-column: 1 / 2;
-      grid-row: 1 / 2;
-      justify-self: end;
-      flex-direction: row-reverse; 
-      text-align: right;
+      grid-column: 1 / 2; grid-row: 1 / 2; justify-self: end;
+      flex-direction: row-reverse; text-align: right;
       .chat-reply__excerpt { margin-right: 8px; margin-left: 0; }
     }
-    /* 头像被强制分配到网格右侧（第 2 列） */
-    .chat-message-avatar, .chat-message-left-gutter {
-      grid-column: 2 / 3;
-      grid-row: 2 / 3;
-    }
-    /* 气泡被强制分配到网格左侧（第 1 列）并靠右对齐 */
     .chat-message-content {
-      grid-column: 1 / 2;
-      grid-row: 2 / 3;
-      justify-self: end;
-      max-width: 90%;
-
-      background: rgba(0, 212, 255, 0.08); 
-      border: 1px solid var(--tertiary-low);
-      border-right: 3px solid var(--quaternary); 
+      grid-column: 1 / 2; grid-row: 2 / 3; justify-self: end; max-width: 90%;
+      background: rgba(0, 212, 255, 0.1); /* TG绿色，这里沿用主题青色微透 */
     }
-    
-    &:not(.-user-info-hidden) .chat-message-content { border-bottom-right-radius: 0; }
+    &:not(.-user-info-hidden) .chat-message-content {
+      border-bottom-right-radius: 0;
+      &::after {
+        content: ""; position: absolute; bottom: 0; right: -8px; width: 8px; height: 14px;
+        background-color: rgba(0, 212, 255, 0.1);
+        -webkit-mask-image: radial-gradient(circle at 100% 0, transparent 8px, black 8.5px);
+        mask-image: radial-gradient(circle at 100% 0, transparent 8px, black 8.5px);
+      }
+    }
 
-    .chat-message-info {
-      border-bottom-color: rgba(255, 107, 53, 0.2);
-      flex-direction: row-reverse;
-      .chat-message-info__username__name { color: var(--quaternary); }
+    /* ------ 桌面端/宽屏模式：全靠左显示，用颜色区分 ------ */
+    @media screen and (min-width: 768px) {
+      .chat-message {
+        grid-template-columns: 36px minmax(0, 1fr) !important; 
+      }
+      /* 恢复头像和名字 */
+      .chat-message-avatar, .chat-message-left-gutter { 
+        display: flex !important; grid-column: 1 / 2 !important; grid-row: 2 / 3 !important; 
+      }
+      .chat-message-info { justify-content: flex-start !important; }
+      
+      /* 引用对齐修正 */
+      .chat-reply {
+        grid-column: 2 / 3 !important; justify-self: start !important;
+        flex-direction: row !important; text-align: left !important;
+        .chat-reply__excerpt { margin-left: 8px !important; margin-right: 0 !important; }
+      }
+      
+      /* 气泡对齐修正 */
+      .chat-message-content {
+        grid-column: 2 / 3 !important; justify-self: start !important;
+      }
+
+      /* 尾巴移位：干掉右边的尾巴，在左边生成青色尾巴 */
+      &:not(.-user-info-hidden) .chat-message-content {
+        border-bottom-right-radius: 12px !important; /* 恢复右下角圆角 */
+        border-bottom-left-radius: 0 !important; /* 切掉左下角圆角 */
+        &::after { display: none !important; } 
+        &::before {
+          content: ""; position: absolute; bottom: 0; left: -8px; width: 8px; height: 14px;
+          background-color: rgba(0, 212, 255, 0.1); /* 跟气泡保持一致颜色 */
+          -webkit-mask-image: radial-gradient(circle at 0 0, transparent 8px, black 8.5px);
+          mask-image: radial-gradient(circle at 0 0, transparent 8px, black 8.5px);
+        }
+      }
     }
   }
 
@@ -459,13 +493,11 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
      引用/回复板块 (Replies Box)
      ---------------------------------------------------- */
   .chat-reply {
-    display: flex; align-items: center; margin-bottom: 6px;
-    background: var(--primary-very-low); border: 1px solid var(--primary-low); border-radius: 4px; padding: 4px 8px; font-size: 0.85em; opacity: 0.8; transition: all 0.2s;
-    width: fit-content;
-    max-width: 100%;
-    box-sizing: border-box;
-    
-    &:hover { opacity: 1; border-color: var(--tertiary-medium); }
+    display: flex; align-items: center; margin-bottom: 4px;
+    background: var(--primary-very-low); border-radius: 4px; padding: 4px 8px; font-size: 0.85em; opacity: 0.8; transition: all 0.2s;
+    border: none; border-left: 2px solid var(--tertiary);
+    width: fit-content; max-width: 100%; box-sizing: border-box;
+    &:hover { opacity: 1; }
     .svg-icon-title { color: var(--tertiary); margin: 0 6px; flex-shrink: 0; }
     .chat-reply__excerpt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
     .chat-user-avatar { margin: 0 6px; flex-shrink: 0; .avatar { width: 16px !important; height: 16px !important; } }
@@ -478,31 +510,100 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
 .chat-message-separator-date {
   display: flex !important; justify-content: center !important; margin: 20px 0 !important;
   .chat-message-separator__text-container {
-    background: var(--primary-very-low); border: 1px solid var(--primary-low); padding: 4px 14px; border-radius: 12px;
-    font-family: "JetBrains Mono", monospace; font-size: 0.75em; font-weight: bold; color: var(--primary-medium); z-index: 1; box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    background: var(--primary-medium); padding: 4px 12px; border-radius: 12px; border: none;
+    font-family: inherit; font-size: 0.8em; font-weight: normal; color: var(--secondary); z-index: 1; box-shadow: none;
   }
   .chat-message-separator__line-container { display: none; }
 }
 
-/* 头像统一战术切角 */
+/* 强行覆盖主题切角，回归 TG 的完美圆形头像 */
 .chat-user-avatar__container .avatar, .chat-message-avatar .avatar {
-  border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%);
+  border-radius: 50% !important; clip-path: none !important;
 }
 
-/* 底部输入框 (Chat Composer) */
+/* ==========================================================================
+   底部输入框 (TG Style Composer)
+   ========================================================================== */
 .chat-composer {
-  background: var(--secondary) !important; border-top: 2px solid var(--tertiary-low) !important; padding: 12px 10px !important;
+  background: var(--secondary) !important; 
+  border-top: 1px solid var(--primary-low) !important; 
+  padding: 8px 12px !important;
+  
   .chat-composer__inner-container {
-    background: var(--primary-very-low); border: 1px solid var(--primary-low); border-radius: 6px; padding: 4px 8px; display: flex; align-items: flex-end; transition: border-color 0.2s;
-    &:focus-within { border-color: var(--tertiary); box-shadow: 0 0 8px rgba(0, 212, 255, 0.1); }
+    background: var(--primary-very-low) !important; 
+    border: 1px solid transparent !important; 
+    border-radius: 24px !important; /* TG 药丸形状 */
+    padding: 4px 8px !important; 
+    display: flex; align-items: flex-end; transition: background 0.2s, box-shadow 0.2s;
+    &:focus-within { 
+      background: var(--secondary) !important; 
+      border-color: var(--tertiary) !important; 
+      box-shadow: 0 2px 10px rgba(0, 212, 255, 0.1) !important;
+    }
   }
-  .chat-composer__input { background: transparent !important; border: none !important; box-shadow: none !important; color: var(--primary) !important; font-size: 0.95em; resize: none; }
+  
+  .chat-composer__input { 
+    background: transparent !important; border: none !important; box-shadow: none !important; 
+    color: var(--primary) !important; font-size: 1em !important; resize: none; 
+    padding: 8px 4px !important; 
+  }
+  
   .chat-composer-button__wrapper .btn {
-    border-radius: 4px; transition: all 0.2s;
-    &:not([disabled]) { background: var(--tertiary) !important; color: var(--secondary) !important; border: 1px solid var(--tertiary); &:hover { transform: scale(1.05); background: var(--quaternary) !important; border-color: var(--quaternary); } .d-icon { color: var(--secondary) !important; fill: var(--secondary) !important; } }
+    border-radius: 50% !important; background: transparent !important; border: none !important; 
+    color: var(--primary-medium) !important; clip-path: none !important; padding: 8px !important; margin: 0 2px !important;
+    transition: all 0.2s ease !important;
+    
+    .d-icon { color: currentColor !important; fill: currentColor !important; }
+    
+    &:hover { 
+      background: rgba(0, 212, 255, 0.1) !important; 
+      color: var(--tertiary) !important; 
+      transform: scale(1.1) !important; 
+    }
+    
+    /* 发送按钮特殊高亮 */
+    &.send-btn, &[title*="发送"] {
+      color: var(--tertiary) !important;
+      &:hover {
+        background: var(--tertiary) !important;
+        color: var(--secondary) !important;
+      }
+    }
   }
 }
 
+/* ==========================================================================
+   TG 右下角下拉到底按钮 (Scroll to Bottom)
+   ========================================================================== */
+.chat-scroll-to-bottom {
+  position: absolute !important;
+  bottom: 75px !important; /* 悬浮在输入框正上方 */
+  right: 16px !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  background: var(--secondary) !important; /* 浅色模式为白，深色模式为黑 */
+  border: 1px solid var(--primary-low) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  clip-path: none !important; /* 覆盖全局按钮的切角设定 */
+  z-index: 100 !important;
+  transition: all 0.2s ease !important;
+  
+  .d-icon {
+    color: var(--primary-medium) !important;
+    font-size: 1.2em !important;
+  }
+  
+  &:hover {
+    background: var(--primary-very-low) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+    .d-icon { color: var(--tertiary) !important; }
+  }
+}
 /* ============================================
    16. 战术回复按钮矩阵 (Tactical Reply Buttons)
    ============================================ */
