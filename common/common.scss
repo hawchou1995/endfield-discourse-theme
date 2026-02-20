@@ -75,21 +75,20 @@ a:visited { color: $endfield-cyan; }
 
 // 3. 导航栏 (HUD)
 .d-header {
-  /* 注意这里：顶栏背景被硬编码为深色了！ */
   background: rgba(18, 21, 26, 0.95); border-bottom: 2px solid $endfield-cyan; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
   &::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, $endfield-cyan, transparent 20%, transparent 80%, $endfield-cyan); }
   
   .title a, #site-text-logo { font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800 !important; letter-spacing: 0px; color: #fff !important; font-size: 1.2em; text-transform: uppercase; }
   
   // ============================================
-  // 【阵营分离防御】：针对顶栏强制深色的图标适配
+  // 【阵营分离防御】
   // ============================================
 
-  // 阵营 A：直接贴在深色顶栏上的图标 (汉堡菜单、聊天、通知等) - 必须永远为白色
+  // 阵营 A：深色顶栏上的图标 - 【修复】：增加 :not 豁免注册/登录按钮！
   .header-sidebar-toggle button, 
   .d-header-icons .icon, 
   .d-header-icons .btn,
-  .header-buttons .btn { 
+  .header-buttons .btn:not(.login-button):not(.sign-up-button) { 
     color: #fff !important; 
     border: 1px solid transparent !important; 
     clip-path: none !important; 
@@ -111,29 +110,64 @@ a:visited { color: $endfield-cyan; }
     } 
   }
 
-  // 阵营 B：嵌入在搜索框内部的图标 (浅色模式搜索框是白色的，所以要用主文本色适配)
+  // 阵营 B：搜索框内部图标 (自适应白/黑底色)
   .floating-search-input-wrapper .search-icon,
   .floating-search-input-wrapper .show-advanced-search {
-    /* 使用 var(--primary) 确保其在浅色模式(白底)是黑色的，在深色模式(黑底)是白色的 */
     color: var(--primary) !important; 
     border: 1px solid transparent !important; 
     clip-path: none !important; 
     background: transparent !important; 
     
-    .d-icon { 
-        color: var(--primary) !important; 
-        fill: var(--primary) !important; 
-        opacity: 0.7 !important; 
-        transition: all 0.2s ease;
-    } 
+    .d-icon { color: var(--primary) !important; fill: var(--primary) !important; opacity: 0.7 !important; transition: all 0.2s ease;} 
     
     &:hover, &:focus, &.active { 
-      background: rgba(0, 212, 255, 0.1) !important; 
-      border: 1px solid $endfield-cyan !important; 
-      border-radius: 0; 
-      color: $endfield-cyan !important;
+      background: rgba(0, 212, 255, 0.1) !important; border: 1px solid $endfield-cyan !important; border-radius: 0; color: $endfield-cyan !important;
       .d-icon { color: $endfield-cyan !important; fill: $endfield-cyan !important; opacity: 1 !important; } 
     } 
+  }
+
+  // 阵营 C：未登录访客大门 (注册/登录按钮专属终末地装甲)
+  .header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* 按钮之间留点呼吸距 */
+
+    .sign-up-button {
+      background: var(--quaternary) !important; /* 实心战术橙 - 主引导 */
+      color: #fff !important;
+      border: 1px solid var(--quaternary) !important;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)) !important;
+      font-family: "Rajdhani", "Noto Sans SC", sans-serif !important;
+      font-weight: 800 !important;
+      letter-spacing: 1px;
+      transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+      
+      &:hover {
+        background: rgba(255, 107, 53, 0.1) !important;
+        color: var(--quaternary) !important;
+        box-shadow: 0 0 15px rgba(255, 107, 53, 0.5), inset 0 0 8px rgba(255, 107, 53, 0.3);
+      }
+    }
+    
+    .login-button {
+      background: rgba(0, 212, 255, 0.05) !important; /* 镂空能量青 - 次引导 */
+      color: var(--tertiary) !important; 
+      border: 1px solid var(--tertiary) !important;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)) !important;
+      font-family: "Rajdhani", "Noto Sans SC", sans-serif !important;
+      font-weight: 800 !important;
+      letter-spacing: 1px;
+      transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+      
+      .d-icon { color: var(--tertiary) !important; fill: var(--tertiary) !important; transition: all 0.2s ease;}
+
+      &:hover {
+         background: var(--tertiary) !important;
+         color: #000 !important;
+         box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+         .d-icon { color: #000 !important; fill: #000 !important; }
+      }
+    }
   }
 
   // 父级菜单激活时保持青色常亮
@@ -148,11 +182,10 @@ a:visited { color: $endfield-cyan; }
   
   .extra-info-wrapper { .topic-link { color: #fff !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700; } .badge-wrapper.bullet span.badge-category { color: #e0e0e0 !important; font-weight: 600; } }
 
-  /* 修复聊天气泡未读小圆点 (彻底抹杀紫色及白边) */
+  /* 修复聊天气泡未读小圆点 */
   .chat-channel-unread-indicator,
   .chat-channel-urgent-indicator {
     background-color: var(--quaternary) !important; 
-    /* 核心修正：顶栏背景被硬编码为深色，这里挖空边框也必须硬编码深色，杜绝浅色模式下的丑陋白圈 */
     border-color: #12151A !important; 
     box-shadow: 0 0 6px rgba(255, 107, 53, 0.6) !important;
     color: #fff !important; 
@@ -164,7 +197,6 @@ a:visited { color: $endfield-cyan; }
 /* 侧边栏(Sidebar)聊天面板红点同步防御 */
 .sidebar-section-link-wrapper .chat-channel-unread-indicator {
     background-color: var(--quaternary) !important;
-    /* 侧边栏的背景随主题模式变化，所以用次级背景色挖空是安全的 */
     border-color: var(--secondary) !important; 
     box-shadow: 0 0 6px rgba(255, 107, 53, 0.6) !important;
 }
