@@ -119,6 +119,34 @@ a:visited { color: $endfield-cyan; }
   .extra-info-wrapper { .topic-link { color: #fff !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700; } .badge-wrapper.bullet span.badge-category { color: #e0e0e0 !important; font-weight: 600; } }
 }
 
+/* ============================================
+   修复聊天气泡未读小圆点 (防紫色渗透机制)
+   ============================================ */
+.d-header {
+  .chat-channel-unread-indicator,
+  .chat-channel-urgent-indicator {
+    /* 1. 强制注入终末地战术橙色，覆盖原生紫色 */
+    background-color: var(--quaternary) !important; 
+    
+    /* 2. 动态匹配当前顶栏背景色，确保“镂空挖剪”效果在浅色/深色模式下均完美呈现 */
+    border-color: var(--header_background) !important; 
+    
+    /* 3. 终末地专属：添加全息能量外发光效果 */
+    box-shadow: 0 0 6px rgba(255, 107, 53, 0.6) !important;
+    
+    /* 4. 如果有数字 (被@状态)，确保文字清晰可见 */
+    color: #fff !important; 
+    font-family: "Rajdhani", "JetBrains Mono", sans-serif !important;
+    font-weight: 800 !important;
+  }
+}
+
+/* 主动预见：侧边栏(Sidebar)如果也有聊天面板，同步抹杀紫色红点 */
+.sidebar-section-link-wrapper .chat-channel-unread-indicator {
+    background-color: var(--quaternary) !important;
+    box-shadow: 0 0 6px rgba(255, 107, 53, 0.6) !important;
+}
+
 // 4. 话题列表
 .topic-list {
   border-radius: 0; 
@@ -735,18 +763,35 @@ button.create.topic-footer-button {
 @keyframes prts-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 @keyframes prts-warning-pulse { 0%, 100% { box-shadow: 0 0 0 rgba(255, 107, 53, 0); } 50% { box-shadow: 0 0 10px rgba(255, 107, 53, 0.4); } }
 
-/* 1. 准确定位搜索框内的图标 */
-.d-header {
-  .search-input {
-    .search-icon {
-      /* 2. 强制使用顶栏主文本色，确保对比度 */
+/* 1. 定位到当前主题特有的搜索包裹器 */
+.floating-search-input-wrapper {
+  
+  /* 2. 修复外层放大镜图标 (.search-icon) */
+  .search-menu {
+    > .search-icon {
       svg {
-        fill: var(--header_primary);
-        /* 增加不透明度确保清晰，防止被 opacity 属性淡化 */
-        opacity: 0.7; 
+        /* 防御性编程：同时设定 fill 和 color，并用 !important 压制默认 .btn 样式 */
+        fill: var(--header_primary) !important;
+        color: var(--header_primary) !important;
+        opacity: 0.7;
         transition: opacity 0.2s ease;
       }
 
+      &:hover svg {
+        opacity: 1;
+      }
+    }
+  }
+
+  /* 3. 主动预见：顺手修复输入框内的“高级搜索滑块”图标 (.show-advanced-search) */
+  .search-input-wrapper .searching {
+    .show-advanced-search {
+      svg {
+        fill: var(--header_primary) !important;
+        color: var(--header_primary) !important;
+        opacity: 0.6;
+      }
+      
       &:hover svg {
         opacity: 1;
       }
