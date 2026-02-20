@@ -734,3 +734,22 @@ button.create.topic-footer-button {
 @keyframes prts-scan { 0% { top: 0; opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { top: 100%; opacity: 0; } }
 @keyframes prts-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 @keyframes prts-warning-pulse { 0%, 100% { box-shadow: 0 0 0 rgba(255, 107, 53, 0); } 50% { box-shadow: 0 0 10px rgba(255, 107, 53, 0.4); } }
+
+/* 1. 准确定位搜索框内的图标 */
+.d-header {
+  .search-input {
+    .search-icon {
+      /* 2. 强制使用顶栏主文本色，确保对比度 */
+      svg {
+        fill: var(--header_primary);
+        /* 增加不透明度确保清晰，防止被 opacity 属性淡化 */
+        opacity: 0.7; 
+        transition: opacity 0.2s ease;
+      }
+
+      &:hover svg {
+        opacity: 1;
+      }
+    }
+  }
+}
