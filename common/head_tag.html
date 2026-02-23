@@ -64,12 +64,17 @@
     --sab: env(safe-area-inset-bottom, 0px);
   }
 
+  /* ---------------------------------------------
+     核心修改点 1：转场幕布改为从左侧锚定，初始宽度为0
+     --------------------------------------------- */
   #ef-orange-flash {
     position: absolute; inset: 0;
     background-color: #FF6B35;
-    opacity: 0; z-index: 10;
-    transition: opacity 0.15s ease-out;
+    z-index: 10;
     pointer-events: none;
+    transform-origin: left center; /* 锚定左边缘 */
+    transform: scaleX(0);          /* 初始 X 轴缩放为 0 */
+    transition: transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1); /* 具有清脆推进感的曲线 */
   }
 
   .ef-rail {
@@ -230,23 +235,23 @@
       render();
     }, 40);
 
-    window.efFinishLoading = function () {
-      if (isFinishing) return;
-      isFinishing = true;
-      if (subText) subText.textContent = "SYSTEM READY";
-    };
-
     function triggerOutro() {
       setTimeout(() => {
-        if (orangeFlash) orangeFlash.style.opacity = "1";
+        
+        // ---------------------------------------------
+        // 核心修改点 2：触发缩放伸展，产生自左向右快速扫过的效果
+        // ---------------------------------------------
+        if (orangeFlash) orangeFlash.style.transform = "scaleX(1)";
         
         document.documentElement.style.backgroundColor = originalBg;
         
+        // 核心修改点 3：延长了一点延时 (200ms -> 250ms)
+        // 确保橙色横扫的 0.25s 动画播放完毕后，整个大幕布再开始淡出消失
         setTimeout(() => {
           loader.style.opacity = "0";
           loader.style.pointerEvents = "none";
           setTimeout(() => loader.remove(), 600);
-        }, 200);
+        }, 250); 
       }, 50);
     }
   }
