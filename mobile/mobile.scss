@@ -78,24 +78,6 @@
     }
   }
 
-  // ------------------------------------------------------------
-  // 侧边栏菜单项优化
-  // ------------------------------------------------------------
-  .sidebar-section-link-wrapper .sidebar-section-link {
-    border-radius: 0 !important;
-    
-    &.active {
-      background: var(--primary-very-low);
-      border-left: 3px solid var(--tertiary); // 青色高亮条
-      font-weight: bold;
-    }
-    
-    // 增加一点高度，方便点击
-    padding-top: 10px !important;
-    padding-bottom: 10px !important;
-  }
-}
-
 // 6. 其他微调
 // ------------------------------------------------------------
 // 稍微调整底部区域，防止被切角遮挡
