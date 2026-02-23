@@ -816,3 +816,99 @@ button.create.topic-footer-button {
 @keyframes prts-scan { 0% { top: 0; opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { top: 100%; opacity: 0; } }
 @keyframes prts-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 @keyframes prts-warning-pulse { 0%, 100% { box-shadow: 0 0 0 rgba(255, 107, 53, 0); } 50% { box-shadow: 0 0 10px rgba(255, 107, 53, 0.4); } }
+
+/* ==========================================================================
+   18. 侧边栏深度强化装甲 (PRTS Tactical Sidebar Enhancement)
+   ========================================================================== */
+
+/* 1. 侧边栏主架构：增加右侧系统隔离边界与微弱暗场 */
+.sidebar-wrapper {
+  border-right: 1px solid rgba(0, 212, 255, 0.15) !important;
+  background-color: rgba(18, 21, 26, 0.3) !important; 
+}
+
+/* 2. 压缩导航组块 (Sections) 的空旷感 */
+.sidebar-section {
+  margin-bottom: 16px !important; 
+}
+
+/* 3. 导航标题 (Section Header)：增加 PRTS 状态呼吸灯 */
+.sidebar-section-header {
+  position: relative;
+  /* 增加一个右侧闪烁的系统读取点，极大地增强科幻代入感 */
+  &::after {
+    content: "";
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    background-color: var(--tertiary);
+    box-shadow: 0 0 6px var(--tertiary);
+    animation: prts-blink 2s step-end infinite;
+  }
+}
+
+/* 4. 菜单链接项 (Link Items) 的战术机动交互 (高能核心) */
+.sidebar-section-link-wrapper .sidebar-section-link {
+  border-radius: 0 !important;
+  margin: 2px 8px !important; /* 左右内收，给高亮边框留出物理空间 */
+  padding: 6px 10px !important; /* 压缩默认的上下高度，提升信息密度 */
+  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  border-left: 2px solid transparent !important; /* 预置左侧能量条插槽 */
+  
+  /* 默认图标颜色压暗，突出主次层级 */
+  .sidebar-section-link-prefix {
+    color: var(--primary-medium) !important;
+    transition: color 0.2s ease;
+  }
+
+  /* 【重要互动】悬浮状态：产生机械推拉感，文字发光 */
+  &:hover {
+    background-color: rgba(0, 212, 255, 0.05) !important;
+    border-left-color: var(--tertiary-medium) !important;
+    padding-left: 16px !important; /* 悬浮时向右滑入缩进，战术反馈感极强！*/
+    
+    .sidebar-section-link-prefix, .sidebar-section-link-content-text {
+      color: var(--tertiary) !important;
+      text-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+    }
+  }
+
+  /* 激活状态：锁定并切割 */
+  &.active {
+    background-color: rgba(0, 212, 255, 0.1) !important;
+    border-left: 3px solid var(--tertiary) !important;
+    padding-left: 16px !important;
+    font-weight: 800 !important;
+    
+    /* 激活态加入标志性终末地右下切角 */
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+    
+    .sidebar-section-link-prefix, .sidebar-section-link-content-text {
+      color: var(--tertiary) !important;
+    }
+  }
+}
+
+/* 5. 彻底抹杀圆润元素：分类小圆点与通知数字装甲化 */
+
+/* 分类颜色点：变为发光小方块 */
+.sidebar-section-link-wrapper .badge-category-bg {
+  border-radius: 2px !important; 
+  width: 8px !important;
+  height: 8px !important;
+  box-shadow: 0 0 4px currentColor; /* 完美继承各自分类颜色并发光 */
+}
+
+/* 通知数字气泡：战术橙 + 方块硬派装甲 */
+.sidebar-section-link-wrapper .sidebar-section-link-content-badge {
+  background-color: var(--quaternary) !important;
+  color: #fff !important;
+  border-radius: 2px !important;
+  font-family: "JetBrains Mono", monospace !important;
+  font-weight: 800 !important;
+  padding: 2px 6px !important;
+  box-shadow: 0 0 6px rgba(255, 107, 53, 0.5);
+}
