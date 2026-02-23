@@ -47,7 +47,6 @@
     inset: 0;
     width: 100vw;
     height: 100vh;
-    /* 【核心修复】：必须要有自己的不透明背景！不能依赖官方会被删掉的 splash */
     background-color: #12151A !important; 
     background-image:
       linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
@@ -64,9 +63,7 @@
     --sab: env(safe-area-inset-bottom, 0px);
   }
 
-  /* ---------------------------------------------
-     核心修改点 1：转场幕布改为从左侧锚定，初始宽度为0
-     --------------------------------------------- */
+  /* 转场幕布：从左侧锚定，初始宽度为0 */
   #ef-orange-flash {
     position: absolute; inset: 0;
     background-color: #FF6B35;
@@ -74,7 +71,7 @@
     pointer-events: none;
     transform-origin: left center; /* 锚定左边缘 */
     transform: scaleX(0);          /* 初始 X 轴缩放为 0 */
-    transition: transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1); /* 具有清脆推进感的曲线 */
+    transition: transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1); /* 清脆的推进感曲线 */
   }
 
   .ef-rail {
@@ -235,18 +232,23 @@
       render();
     }, 40);
 
+    // ==========================================
+    // 🚑 核心修复：把丢失的通讯函数加回来！
+    // ==========================================
+    window.efFinishLoading = function () {
+      if (isFinishing) return;
+      isFinishing = true;
+      if (subText) subText.textContent = "SYSTEM READY";
+    };
+
     function triggerOutro() {
       setTimeout(() => {
-        
-        // ---------------------------------------------
-        // 核心修改点 2：触发缩放伸展，产生自左向右快速扫过的效果
-        // ---------------------------------------------
+        // 触发物理横扫
         if (orangeFlash) orangeFlash.style.transform = "scaleX(1)";
         
         document.documentElement.style.backgroundColor = originalBg;
         
-        // 核心修改点 3：延长了一点延时 (200ms -> 250ms)
-        // 确保橙色横扫的 0.25s 动画播放完毕后，整个大幕布再开始淡出消失
+        // 留足 250ms 让橙色闪光扫过全屏，然后整个界面淡出
         setTimeout(() => {
           loader.style.opacity = "0";
           loader.style.pointerEvents = "none";
