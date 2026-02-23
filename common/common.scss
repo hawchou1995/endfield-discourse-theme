@@ -84,7 +84,7 @@ a:visited { color: $endfield-cyan; }
   // 【阵营分离防御】
   // ============================================
 
-  // 阵营 A：深色顶栏上的图标 - 【修复】：增加 :not 豁免注册/登录按钮！
+  // 阵营 A：深色顶栏上的图标
   .header-sidebar-toggle button, 
   .d-header-icons .icon, 
   .d-header-icons .btn,
@@ -821,10 +821,10 @@ button.create.topic-footer-button {
    18. 侧边栏深度强化装甲 (PRTS Tactical Sidebar Enhancement)
    ========================================================================== */
 
-/* 1. 侧边栏主架构：增加右侧系统隔离边界与微弱暗场 */
+/* 1. 侧边栏主架构：修复浅色模式的灰色布条，底色自适应 */
 .sidebar-wrapper {
-  border-right: 1px solid rgba(0, 212, 255, 0.15) !important;
-  background-color: rgba(18, 21, 26, 0.3) !important; 
+  border-right: 1px solid var(--tertiary-low) !important;
+  background-color: transparent !important; /* 让它自己呼吸，不要强制糊上深灰色！ */
 }
 
 /* 2. 压缩导航组块 (Sections) 的空旷感 */
@@ -911,4 +911,61 @@ button.create.topic-footer-button {
   font-weight: 800 !important;
   padding: 2px 6px !important;
   box-shadow: 0 0 6px rgba(255, 107, 53, 0.5);
+}
+
+/* ==========================================================================
+   19. 右侧边栏战术压缩与高能反馈 (Right Sidebar Tactical Array)
+   ========================================================================== */
+
+.tc-right-sidebar-wrapper, .d-right-sidebar {
+  
+  /* 1. 压缩小组件之间的巨大沟壑 */
+  .rs-component {
+    margin-bottom: 16px !important;
+    
+    /* 2. 重组卡片内部空间 */
+    .rs-component-content {
+      padding: 8px 12px 12px 12px !important;
+      
+      /* 3. 针对内部列表 (如活跃用户、热门标签) 的高密度排列 */
+      ul {
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+        
+        li {
+          padding: 6px 4px !important;
+          margin-bottom: 4px;
+          border-bottom: 1px solid var(--primary-very-low);
+          transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+          border-left: 2px solid transparent; /* 预留给能量条的插槽 */
+          display: flex;
+          align-items: center;
+          
+          &:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+          }
+          
+          /* 【核心交互】悬浮微动：机械向右滑入并点亮 */
+          &:hover {
+            background-color: rgba(0, 212, 255, 0.05);
+            border-left-color: var(--tertiary);
+            padding-left: 12px !important; /* 悬浮时向右推挤，消除稀疏感 */
+            
+            /* 如果里面有链接，文字也跟着亮起 */
+            a {
+              color: var(--tertiary) !important;
+              text-shadow: 0 0 5px rgba(0, 212, 255, 0.3);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /* 4. 右侧边栏特定元素的硬派修饰 */
+  img.avatar {
+    border-radius: 0 !important; /* 确保右侧的头像也被战术切角统管 */
+  }
 }
