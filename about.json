@@ -5,7 +5,7 @@
   "authors": "hawchou1995",
   "theme_version": "0.2.0",
   "minimum_discourse_version": "2026.1.0",
-  "maximum_discourse_version": "2026.2.99",
+  "maximum_discourse_version": null,
   "assets": {
     "endfield-logo": "assets/endfield-logo.png",
     "endfield-bg": "assets/endfield-bg.jpg"
