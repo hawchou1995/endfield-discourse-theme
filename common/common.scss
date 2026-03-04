@@ -971,35 +971,38 @@ button.create.topic-footer-button {
 }
 
 /* ==========================================================================
-   Endfield System Notices (帖子内部系统提示 - 极致紧凑版)
+   Endfield System Notices (帖子内部系统提示 - 模块化对接装甲版)
    ========================================================================== */
 .post__row .post-notice {
   display: flex !important;
   align-items: center !important;
   border-radius: 0 !important;
   
-  /* [核心修复] 极限压缩上下内边距，实现刀片般的紧凑感 */
+  /* 极限压缩内边距 */
   padding: 4px 12px !important; 
-  margin: 10px 0 !important; 
+  
+  /* [核心对接机制]：保留顶部间距，彻底抹杀底部间距，并轻微下沉 1px 咬合下方的卡片 */
+  margin: 15px 0 -1px 0 !important; 
   min-height: 28px !important; 
   
   position: relative;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+  z-index: 2; /* 确保层级高于下方的帖子，压住边框缝隙 */
+  box-shadow: none !important; /* 取消整体阴影，使其融入下方的帖子组件 */
   
-  /* 切角尺寸缩小，以匹配极低的高度 */
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+  /* 右下角保留微小切角，形成装甲拼接的机械缝隙感 */
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
 
   p {
-    margin: 0 0 0 8px !important; /* 缩小与Emoji的间距 */
+    margin: 0 0 0 8px !important; 
     font-family: "Rajdhani", "Noto Sans SC", sans-serif;
     color: var(--primary) !important;
     font-weight: 600 !important;
-    font-size: 0.85em !important; /* 字号微缩，提升精密感 */
+    font-size: 0.85em !important; 
     line-height: 1.2 !important;
   }
 
   img.emoji {
-    width: 16px !important; /* 压缩表情体积，防撑高容器 */
+    width: 16px !important; 
     height: 16px !important;
     flex-shrink: 0;
     filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.2)); 
@@ -1011,7 +1014,7 @@ button.create.topic-footer-button {
     top: 0;
     right: 0;
     font-family: "JetBrains Mono", monospace;
-    font-size: 8px !important; /* 极小字号 */
+    font-size: 8px !important; 
     font-weight: 900;
     padding: 1px 6px !important;
     border-bottom-left-radius: 4px;
@@ -1024,18 +1027,18 @@ button.create.topic-footer-button {
      1. 首次发帖通知 (青色能量阵营)
      ======================================= */
   &.new-user {
-    background-color: rgba(0, 212, 255, 0.05) !important;
+    background-color: rgba(0, 212, 255, 0.08) !important; /* 略微提亮底色，增强实体感 */
     border: 1px solid var(--tertiary-low) !important;
-    border-left: 3px solid var(--tertiary) !important; /* 左侧指示条变细 */
+    border-bottom-color: transparent !important; /* 隐藏底边框以实现无缝对接 */
+    border-left: 3px solid var(--tertiary) !important; 
     
-    /* 青色全息网格 - 密度提高 */
     background-image:
       linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px),
       linear-gradient(180deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px) !important;
     background-size: 10px 10px !important; 
 
     &::before {
-      content: "NEW_OPERATOR"; /* 缩短文本防拥挤 */
+      content: "NEW_OP"; /* 进一步缩短文本 */
       background: var(--tertiary-medium);
       color: #000;
     }
@@ -1045,20 +1048,26 @@ button.create.topic-footer-button {
      2. 老用户回归通知 (战术橙色阵营)
      ======================================= */
   &.returning-user {
-    background-color: rgba(255, 107, 53, 0.05) !important;
+    background-color: rgba(255, 107, 53, 0.08) !important;
     border: 1px solid rgba(255, 107, 53, 0.2) !important;
+    border-bottom-color: transparent !important; /* 隐藏底边框以实现无缝对接 */
     border-left: 3px solid var(--quaternary) !important;
 
-    /* 橙色全息网格 - 密度提高 */
     background-image:
       linear-gradient(90deg, rgba(255, 107, 53, 0.03) 1px, transparent 1px),
       linear-gradient(180deg, rgba(255, 107, 53, 0.03) 1px, transparent 1px) !important;
     background-size: 10px 10px !important;
 
     &::before {
-      content: "RETURN_OPERATOR";
+      content: "RET_OP";
       background: rgba(255, 107, 53, 0.6);
       color: #fff;
     }
   }
+}
+
+/* 强制下方的头像与发帖区域消除默认边距，主动上贴 */
+.post__row:has(.post-notice) + .post__row {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
