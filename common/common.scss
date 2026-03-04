@@ -970,3 +970,89 @@ button.create.topic-footer-button {
   }
 }
 
+/* ==========================================================================
+   Endfield System Notices (帖子内部的新人/回归装甲提示)
+   ========================================================================== */
+.post__row .post-notice {
+  display: flex !important;
+  align-items: center !important;
+  border-radius: 0 !important;
+  padding: 12px 16px !important;
+  margin: 15px 0 !important;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+  
+  /* 抹平右下角，做机械切角 */
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+
+  p {
+    margin: 0 0 0 12px !important; /* 给左侧 Emoji 留出呼吸距 */
+    font-family: "Rajdhani", "Noto Sans SC", sans-serif;
+    color: var(--primary) !important;
+    font-weight: 600 !important;
+    font-size: 0.95em !important;
+  }
+
+  img.emoji {
+    width: 20px !important;
+    height: 20px !important;
+    flex-shrink: 0;
+    /* 给 Emoji 加一点微光投影，使其不那么死板 */
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.2)); 
+  }
+
+  /* 右上角战术情报标签基类 */
+  &::before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 900;
+    padding: 2px 8px;
+    border-bottom-left-radius: 6px;
+    z-index: 2;
+  }
+
+  /* =======================================
+     1. 首次发帖通知 (青色能量阵营)
+     ======================================= */
+  &.new-user {
+    background-color: rgba(0, 212, 255, 0.05) !important;
+    border: 1px solid var(--tertiary-low) !important;
+    border-left: 4px solid var(--tertiary) !important;
+    
+    /* 青色全息网格 */
+    background-image:
+      linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px) !important;
+    background-size: 20px 20px !important;
+
+    &::before {
+      content: "NEW_OPERATOR // JOINED";
+      background: var(--tertiary-medium);
+      color: #000;
+    }
+  }
+
+  /* =======================================
+     2. 老用户回归通知 (战术橙色阵营)
+     ======================================= */
+  &.returning-user {
+    background-color: rgba(255, 107, 53, 0.05) !important;
+    border: 1px solid rgba(255, 107, 53, 0.2) !important;
+    border-left: 4px solid var(--quaternary) !important;
+
+    /* 橙色全息网格 */
+    background-image:
+      linear-gradient(90deg, rgba(255, 107, 53, 0.03) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(255, 107, 53, 0.03) 1px, transparent 1px) !important;
+    background-size: 20px 20px !important;
+
+    &::before {
+      content: "RETURN_OPERATOR // LOGGED";
+      background: rgba(255, 107, 53, 0.6);
+      color: #fff;
+    }
+  }
+}
