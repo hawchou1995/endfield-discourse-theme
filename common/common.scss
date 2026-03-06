@@ -25,7 +25,9 @@ $endfield-dark-bg: #12151A;
   --d-selected: rgba(0, 212, 255, 0.1) !important;
 }
 
-// 1. 全局基础
+// ==========================================================================
+// 1. 全局基础与变量映射
+// ==========================================================================
 body {
   background-color: var(--secondary);
   background-image: 
@@ -46,7 +48,9 @@ a {
 }
 a:visited { color: $endfield-cyan; }
 
-// 2. UI 组件
+// ==========================================================================
+// 2. UI 组件切角装甲
+// ==========================================================================
 @mixin endfield-cut-corner {
   border-radius: 0;
   clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
@@ -73,17 +77,15 @@ a:visited { color: $endfield-cyan; }
   }
 }
 
-// 3. 导航栏 (HUD)
+// ==========================================================================
+// 3. 导航栏 (HUD) 防御阵列
+// ==========================================================================
 .d-header {
   background: rgba(18, 21, 26, 0.95); border-bottom: 2px solid $endfield-cyan; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
   &::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, $endfield-cyan, transparent 20%, transparent 80%, $endfield-cyan); }
   
   .title a, #site-text-logo { font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800 !important; letter-spacing: 0px; color: #fff !important; font-size: 1.2em; text-transform: uppercase; }
   
-  // ============================================
-  // 【阵营分离防御】
-  // ============================================
-
   // 阵营 A：深色顶栏上的图标
   .header-sidebar-toggle button, 
   .d-header-icons .icon, 
@@ -94,30 +96,18 @@ a:visited { color: $endfield-cyan; }
     clip-path: none !important; 
     background: transparent !important; 
     
-    .d-icon { 
-        color: #fff !important; 
-        fill: #fff !important; 
-        opacity: 0.85 !important; 
-        transition: all 0.2s ease;
-    } 
+    .d-icon { color: #fff !important; fill: #fff !important; opacity: 0.85 !important; transition: all 0.2s ease; } 
     
     &:hover, &:focus, &.active { 
-      background: rgba(0, 212, 255, 0.1) !important; 
-      border: 1px solid $endfield-cyan !important; 
-      border-radius: 0; 
-      color: $endfield-cyan !important;
+      background: rgba(0, 212, 255, 0.1) !important; border: 1px solid $endfield-cyan !important; border-radius: 0; color: $endfield-cyan !important;
       .d-icon { color: $endfield-cyan !important; fill: $endfield-cyan !important; opacity: 1 !important; } 
     } 
   }
 
-  // 阵营 B：搜索框内部图标 (自适应白/黑底色)
+  // 阵营 B：搜索框内部图标
   .floating-search-input-wrapper .search-icon,
   .floating-search-input-wrapper .show-advanced-search {
-    color: var(--primary) !important; 
-    border: 1px solid transparent !important; 
-    clip-path: none !important; 
-    background: transparent !important; 
-    
+    color: var(--primary) !important; border: 1px solid transparent !important; clip-path: none !important; background: transparent !important; 
     .d-icon { color: var(--primary) !important; fill: var(--primary) !important; opacity: 0.7 !important; transition: all 0.2s ease;} 
     
     &:hover, &:focus, &.active { 
@@ -126,82 +116,38 @@ a:visited { color: $endfield-cyan; }
     } 
   }
 
-  // 阵营 C：未登录访客大门 (注册/登录按钮专属终末地装甲)
+  // 阵营 C：未登录访客大门
   .header-buttons {
-    display: flex;
-    align-items: center;
-    gap: 8px; /* 按钮之间留点呼吸距 */
-
+    display: flex; align-items: center; gap: 8px;
     .sign-up-button {
-      background: var(--quaternary) !important; /* 实心战术橙 - 主引导 */
-      color: #fff !important;
-      border: 1px solid var(--quaternary) !important;
+      background: var(--quaternary) !important; color: #fff !important; border: 1px solid var(--quaternary) !important;
       clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)) !important;
-      font-family: "Rajdhani", "Noto Sans SC", sans-serif !important;
-      font-weight: 800 !important;
-      letter-spacing: 1px;
-      transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
-      
-      &:hover {
-        background: rgba(255, 107, 53, 0.1) !important;
-        color: var(--quaternary) !important;
-        box-shadow: 0 0 15px rgba(255, 107, 53, 0.5), inset 0 0 8px rgba(255, 107, 53, 0.3);
-      }
+      font-family: "Rajdhani", "Noto Sans SC", sans-serif !important; font-weight: 800 !important; letter-spacing: 1px; transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+      &:hover { background: rgba(255, 107, 53, 0.1) !important; color: var(--quaternary) !important; box-shadow: 0 0 15px rgba(255, 107, 53, 0.5), inset 0 0 8px rgba(255, 107, 53, 0.3); }
     }
     
     .login-button {
-      background: rgba(0, 212, 255, 0.05) !important; /* 镂空能量青 - 次引导 */
-      color: var(--tertiary) !important; 
-      border: 1px solid var(--tertiary) !important;
+      background: rgba(0, 212, 255, 0.05) !important; color: var(--tertiary) !important; border: 1px solid var(--tertiary) !important;
       clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)) !important;
-      font-family: "Rajdhani", "Noto Sans SC", sans-serif !important;
-      font-weight: 800 !important;
-      letter-spacing: 1px;
-      transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
-      
+      font-family: "Rajdhani", "Noto Sans SC", sans-serif !important; font-weight: 800 !important; letter-spacing: 1px; transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
       .d-icon { color: var(--tertiary) !important; fill: var(--tertiary) !important; transition: all 0.2s ease;}
-
-      &:hover {
-         background: var(--tertiary) !important;
-         color: #000 !important;
-         box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
-         .d-icon { color: #000 !important; fill: #000 !important; }
-      }
+      &:hover { background: var(--tertiary) !important; color: #000 !important; box-shadow: 0 0 15px rgba(0, 212, 255, 0.5); .d-icon { color: #000 !important; fill: #000 !important; } }
     }
   }
 
-  // 父级菜单激活时保持青色常亮
-  .d-header-icons li.active .icon,
-  .d-header-icons li.active .btn {
-    background: rgba(0, 212, 255, 0.1) !important; 
-    border: 1px solid $endfield-cyan !important; 
-    border-radius: 0; 
-    color: $endfield-cyan !important;
-    .d-icon { color: $endfield-cyan !important; fill: $endfield-cyan !important; }
-  }
-  
+  // 菜单激活状态
+  .d-header-icons li.active .icon, .d-header-icons li.active .btn { background: rgba(0, 212, 255, 0.1) !important; border: 1px solid $endfield-cyan !important; border-radius: 0; color: $endfield-cyan !important; .d-icon { color: $endfield-cyan !important; fill: $endfield-cyan !important; } }
   .extra-info-wrapper { .topic-link { color: #fff !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700; } .badge-wrapper.bullet span.badge-category { color: #e0e0e0 !important; font-weight: 600; } }
 
-  /* 修复聊天气泡未读小圆点 */
-  .chat-channel-unread-indicator,
-  .chat-channel-urgent-indicator {
-    background-color: var(--quaternary) !important; 
-    border-color: #12151A !important; 
-    box-shadow: 0 0 6px rgba(255, 107, 53, 0.6) !important;
-    color: #fff !important; 
-    font-family: "Rajdhani", "JetBrains Mono", sans-serif !important;
-    font-weight: 800 !important;
-  }
+  // 聊天气泡未读小圆点
+  .chat-channel-unread-indicator, .chat-channel-urgent-indicator { background-color: var(--quaternary) !important; border-color: #12151A !important; box-shadow: 0 0 6px rgba(255, 107, 53, 0.6) !important; color: #fff !important; font-family: "Rajdhani", "JetBrains Mono", sans-serif !important; font-weight: 800 !important; }
 }
 
-/* 侧边栏(Sidebar)聊天面板红点同步防御 */
-.sidebar-section-link-wrapper .chat-channel-unread-indicator {
-    background-color: var(--quaternary) !important;
-    border-color: var(--secondary) !important; 
-    box-shadow: 0 0 6px rgba(255, 107, 53, 0.6) !important;
-}
+.sidebar-section-link-wrapper .chat-channel-unread-indicator { background-color: var(--quaternary) !important; border-color: var(--secondary) !important; box-shadow: 0 0 6px rgba(255, 107, 53, 0.6) !important; }
 
-// 4. 话题列表
+// ==========================================================================
+// 4. 话题列表 (Topic List)
+// ==========================================================================
 .topic-list {
   border-radius: 0; 
   thead th { border-bottom: 2px solid var(--primary-low); color: var(--primary-medium); font-size: 0.9em; text-transform: uppercase; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700; letter-spacing: 1px; }
@@ -217,13 +163,11 @@ a:visited { color: $endfield-cyan; }
   &::before { display: none; } 
 }
 
-.sidebar-section-header, .rs-component h3 {
-  border-bottom: 1px solid var(--primary-low); padding: 10px 15px; background: rgba(0, 212, 255, 0.05); 
-  color: var(--primary) !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800 !important; 
-  text-transform: uppercase; font-size: 1em; letter-spacing: 1.5px; border-left: 4px solid $endfield-cyan; 
-}
+.sidebar-section-header, .rs-component h3 { border-bottom: 1px solid var(--primary-low); padding: 10px 15px; background: rgba(0, 212, 255, 0.05); color: var(--primary) !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800 !important; text-transform: uppercase; font-size: 1em; letter-spacing: 1.5px; border-left: 4px solid $endfield-cyan; }
 
-// 5. 帖子详情
+// ==========================================================================
+// 5. 帖子详情与排版 (Topic Post)
+// ==========================================================================
 .topic-post {
   border-left: 1px solid var(--primary-low); &:first-of-type { border-left: 3px solid $endfield-orange; }
   .topic-avatar { border-top: none; .avatar { border-radius: 4px; border: 2px solid var(--primary-low); } }
@@ -232,19 +176,22 @@ a:visited { color: $endfield-cyan; }
   }
 }
 
-// 6. 滚动条
+// ==========================================================================
+// 6. 滚动条物理反馈 (Scrollbar)
+// ==========================================================================
 ::-webkit-scrollbar { width: 6px; height: 6px; background: var(--secondary); }
 ::-webkit-scrollbar-thumb { background-color: $endfield-cyan; border-radius: 0; &:hover { background-color: var(--primary); } }
 ::-webkit-scrollbar-track { background: var(--primary-very-low); border-left: 1px solid var(--primary-low); }
 
-// 7. 特殊组件
+// ==========================================================================
+// 7. 顶栏标签与角标 (Tags & Badges)
+// ==========================================================================
 .discourse-tag { color: $endfield-cyan !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700; }
 .badge-notification { background-color: $endfield-orange !important; color: #fff !important; font-family: "Rajdhani", sans-serif; font-weight: 700; &.new-topic { background-color: transparent !important; color: $endfield-cyan !important; padding: 0 !important; } }
 #toggle-current-user { overflow: visible !important; .badge-notification { z-index: 2; } }
 
 .topic-map__stats .btn { clip-path: none !important; border-radius: 4px !important; background: transparent !important; border: none !important; padding: 5px 10px !important; &:hover { background: var(--primary-low) !important; transform: none !important; box-shadow: none !important; } .number, .topic-map__stat-label { color: var(--primary-high-or-secondary-low) !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 600; } }
 
-// 8. 顶栏标签 (Tag Box)
 .discourse-tag.box {
   border-radius: 0 !important; border: 1px solid var(--primary-low) !important; background-color: var(--secondary) !important; color: var(--primary) !important;
   font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 700 !important; letter-spacing: 0.5px; padding: 4px 8px !important; transition: all 0.2s ease;
@@ -255,7 +202,9 @@ a:visited { color: $endfield-cyan; }
 }
 .discourse-tag.box.discourse-tag--tag-icons-style { border-left: 3px solid var(--color1, var(--tertiary)) !important; background-color: var(--secondary) !important; color: var(--primary) !important; }
 
-// 9. Endfield 导航系统 (Tactical Nav)
+// ==========================================================================
+// 8. Endfield 导航系统 (Tactical Nav)
+// ==========================================================================
 .navigation-container {
   position: relative; margin-bottom: 15px; padding: 10px 0; border-bottom: 2px solid rgba(0, 212, 255, 0.15); &::before { content: ''; position: absolute; bottom: -2px; left: 0; width: 20px; height: 4px; background: $endfield-cyan; }
   .category-breadcrumb {
@@ -271,877 +220,220 @@ a:visited { color: $endfield-cyan; }
   .navigation-controls { .btn { border-radius: 0; text-transform: uppercase; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800; } #create-topic { background: $endfield-orange; color: #fff; border: none; font-weight: 800; &:hover { background: lighten($endfield-orange, 10%); box-shadow: 0 0 15px rgba(255, 107, 53, 0.4); } } }
 }
 
-// 10. 话题底部与时间轴按钮
+// ==========================================================================
+// 9. 底部与按钮 (Footer Controls)
+// ==========================================================================
 .timeline-controls, .timeline-footer-controls, #topic-footer-buttons, .topic-footer-main-buttons {
   .btn-default:hover { background-color: $endfield-cyan !important; border-color: $endfield-cyan !important; color: #000 !important; .d-icon, .svg-icon { color: #000 !important; fill: #000 !important; stroke: transparent; } }
 }
-
-// 11. 修复新话题通知小圆点
 .badge-notification.new-topic { background-color: $endfield-cyan !important; color: transparent !important; width: 8px !important; height: 8px !important; border-radius: 50% !important; padding: 0 !important; margin: 0 5px !important; display: inline-block !important; vertical-align: middle !important; border: none !important; box-shadow: 0 0 4px $endfield-cyan !important; &::before, &::after { content: none !important; display: none !important; } }
 
-// ============================================
-// 12. 彻底隐藏 Discourse 默认加载动画 (天罗地网，含紫色省略号)
-// ============================================
-#main-outlet .spinner, 
-#main-outlet-wrapper .spinner,
-#main .spinner,
-.d-app-body .spinner,
-#discourse-root .spinner,
-.fallback-spinner, 
-.route-spinner,
-.global-spinner,
-#global-spinner,
-.spinner-container,
-.preload-text,
-/* 真正的真凶：紫色省略号 (跳动的点) */
-#main-outlet .bouncing-dots,
-#main-outlet-wrapper .bouncing-dots,
-#main .bouncing-dots,
-.d-app-body .bouncing-dots,
-#discourse-root .bouncing-dots { 
-  display: none !important; 
-  opacity: 0 !important;
-  visibility: hidden !important;
-  animation: none !important;
-}
+// ==========================================================================
+// 10. 加载动画终结器 (Spinner Override)
+// ==========================================================================
+#main-outlet .spinner, #main-outlet-wrapper .spinner, #main .spinner, .d-app-body .spinner, #discourse-root .spinner, .fallback-spinner, .route-spinner, .global-spinner, #global-spinner, .spinner-container, .preload-text,
+#main-outlet .bouncing-dots, #main-outlet-wrapper .bouncing-dots, #main .bouncing-dots, .d-app-body .bouncing-dots, #discourse-root .bouncing-dots { display: none !important; opacity: 0 !important; visibility: hidden !important; animation: none !important; }
+.btn .spinner, .btn .loader, .widget-button .spinner, .btn .bouncing-dots { display: inline-block !important; opacity: 1 !important; visibility: visible !important; }
+.spinner, .loader, .spinner div, .bouncing-dots div { border-color: $endfield-cyan !important; background-color: $endfield-cyan !important; }
 
-// 恢复按钮和局部组件内的 Spinner / Bouncing dots，防止点击后没反馈
-.btn .spinner, .btn .loader, .widget-button .spinner, .btn .bouncing-dots {
-  display: inline-block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-// 终极兜底：就算加载动画突围出现，也强制染成青色，杜绝突兀的紫色！
-.spinner, .loader, .spinner div, .bouncing-dots div {
-  border-color: $endfield-cyan !important;
-  background-color: $endfield-cyan !important;
-}
-
-// 13. 战术化切角头像 + 角标保护
+// ==========================================================================
+// 11. 头像战术裁切 (Avatars)
+// ==========================================================================
 img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%); transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); &:hover { clip-path: polygon(0 0, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 0); transform: scale(1.05); filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.5)); } }
 .d-header .icons .icon, .d-header .header-buttons .btn { clip-path: none !important; border-radius: 0 !important; }
 #toggle-current-user { overflow: visible !important; .badge-notification { position: absolute; z-index: 99 !important; } }
 
-// 14. 全局渲染性能优化
+// ==========================================================================
+// 12. 全局渲染性能与细节 (Performance & SVG)
+// ==========================================================================
 .topic-list tbody tr, .btn, .sidebar-wrapper .sidebar-container, .discourse-tag.box { will-change: transform, box-shadow, opacity; transform: translateZ(0); backface-visibility: hidden; }
 @media screen and (max-width: 767px) { .d-header { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; } .topic-list tbody tr { box-shadow: none !important; } }
 
-/* ==========================================================================
-   模块 1: Endfield AI Conversation Protocol (AI 对话界面专属装甲)
-   ========================================================================== */
-/* 零信任机制：仅当页面内探测到 AI 专属控件时，才接管当前用户的气泡，绝对防御常规话题被污染 */
-body:has(.ai-conversation__participants) .topic-post.post--current-user {
-  
-  /* 接管帖子主体外壳 */
-  .topic-body, .post__body {
-    background-color: rgba(0, 212, 255, 0.05) !important; /* 强制覆盖紫色，使用低浓度能量青 */
-    border: 1px solid var(--tertiary-medium) !important;
-    border-right: 4px solid var(--quaternary) !important; /* 战术橙色右边缘阵列，区分我方阵营 */
-    border-radius: 0 !important; /* 抹杀默认圆润边角 */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 0 20px rgba(0, 212, 255, 0.02) !important;
-    
-    /* 终末地标志性 UI 切角：右下角机械切割 */
-    clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px)) !important;
-  }
-
-  /* 修复文字与背景的对比度，防止紫色主题残留的变量导致文字看不清 */
-  .cooked {
-    color: var(--primary) !important;
-    p { color: inherit !important; }
-  }
-}
-
-/* ==========================================================================
-   模块 2: Endfield Timeline System (时间线 HUD 视觉重构)
-   ========================================================================== */
-.timeline-container {
-
-  /* 1. 滚动条抓手 (Handle) 装甲化 */
-  .timeline-scroller .timeline-handle {
-    background-color: var(--tertiary) !important; /* 高亮青色核心 */
-    width: 6px !important; /* 强化物理实体感 */
-    border-radius: 0 !important; /* 铲除圆角 */
-    box-shadow: 0 0 10px rgba(0, 212, 255, 0.4) !important; /* 呼吸发光反馈 */
-  }
-
-  /* 2. 悬浮数据读取面板 (Scroller Content) */
-  .timeline-scroller-content {
-    background-color: var(--secondary) !important; /* 匹配深色装甲底色 */
-    border: 1px solid var(--tertiary-low) !important;
-    border-radius: 0 !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
-    
-    /* 引入科幻雷达切割角 */
-    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)) !important;
-    padding: 6px 12px !important;
-
-    /* 当前阅读进度数字的高能显示 */
-    .timeline-replies {
-      color: var(--tertiary) !important;
-      font-family: "Rajdhani", "JetBrains Mono", monospace !important;
-      font-weight: 800 !important;
-      letter-spacing: 1px;
-      text-shadow: 0 0 5px rgba(0, 212, 255, 0.3) !important;
-    }
-    
-    /* 时间戳文字降级显示，建立层次 */
-    .timeline-ago {
-      color: var(--primary-medium) !important;
-      font-size: 0.85em !important;
-      font-family: "Rajdhani", "Noto Sans SC", sans-serif !important;
-    }
-  }
-
-  /* 3. 彻底防线：抹杀时间线头部/尾部可能存在的紫色背景覆盖 */
-  .timeline-date-wrapper a:hover,
-  .timeline-date-wrapper a:focus {
-     color: var(--quaternary) !important; /* 交互时警示转为战术橙 */
-     background: transparent !important;
-  }
-}
-
-// ============================================
-// 15. 全局按钮 SVG 状态守护 (终极防消失机制)
-// ============================================
 .btn {
-  .d-icon {
-    // 让 SVG 的颜色和填充色严格跟随按钮当前的文字颜色
-    color: currentColor !important;
-    fill: currentColor !important;
-    opacity: 1 !important;
-    transition: color 0.2s ease, fill 0.2s ease;
-  }
-  
-  // 兼容特定带有超链接属性模拟的按钮 (如作品集)
-  &[href]:hover .d-icon {
-    color: currentColor !important;
-    fill: currentColor !important;
-  }
+  .d-icon { color: currentColor !important; fill: currentColor !important; opacity: 1 !important; transition: color 0.2s ease, fill 0.2s ease; }
+  &[href]:hover .d-icon { color: currentColor !important; fill: currentColor !important; }
 }
 
-// 【特区豁免】：单独强化编辑器工具栏按钮的悬浮反馈
 .d-editor-button-bar {
-  .btn.toolbar__button {
-    transition: all 0.2s ease;
-    
-    &:hover {
-      // 悬浮时，强制赋予终末地青色背景，并将图标变为黑色，确保极高的可见度和点击反馈
-      background-color: $endfield-cyan !important;
-      color: #000 !important;
-      border-radius: 4px; // 给编辑器按钮一点点圆角，显得更精致
-      
-      .d-icon {
-        color: #000 !important;
-        fill: #000 !important;
-      }
-    }
-  }
-  
-  // 处理最左侧的 Markdown / 富文本 切换开关
-  .composer-toggle-switch {
-    &:hover {
-      background-color: rgba(0, 212, 255, 0.1) !important;
-    }
-  }
+  .btn.toolbar__button { transition: all 0.2s ease; &:hover { background-color: $endfield-cyan !important; color: #000 !important; border-radius: 4px; .d-icon { color: #000 !important; fill: #000 !important; } } }
+  .composer-toggle-switch:hover { background-color: rgba(0, 212, 255, 0.1) !important; }
 }
 
-/* ==========================================================================
-   Endfield Chat Protocol - Telegram Tactical Style V3 (网格区域终极防御版)
-   ========================================================================== */
+// ==========================================================================
+// 13. 聊天面板终极防御 (Chat Protocol)
+// ==========================================================================
+.chat-messages-container { padding: 15px 10px; }
+.chat-message-container { margin-bottom: 12px !important; padding: 0 !important; width: 100% !important; }
+.chat-message { display: grid !important; width: 100% !important; }
 
-/* 1. 聊天面板基础设定 */
-.chat-messages-container {
-  padding: 15px 10px;
-}
-
-.chat-message-container {
-  margin-bottom: 12px !important;
-  padding: 0 !important;
-  width: 100% !important;
-}
-
-/* 【核心防御机制】：使用 Grid Areas 画地图，杜绝一切挤压和重叠 */
-.chat-message {
-  display: grid !important;
-  width: 100% !important;
-}
-
-/* =======================================
-   左侧阵营：其他用户 (OTHERS)
-   ======================================= */
-.chat-message-container:not(.is-by-current-user) .chat-message {
-  /* 定义两列：40px 给头像，剩余空间全给气泡。定义 "." 代表空白区域，让回复框与气泡完美对齐 */
-  grid-template-columns: 40px minmax(0, 1fr) !important;
-  grid-template-areas: 
-    ". reply"
-    "avatar content" !important;
-  column-gap: 8px !important;
-  align-items: end !important; /* 头像沉在网格底部 */
-}
-
+.chat-message-container:not(.is-by-current-user) .chat-message { grid-template-columns: 40px minmax(0, 1fr) !important; grid-template-areas: ". reply" "avatar content" !important; column-gap: 8px !important; align-items: end !important; }
 .chat-message-container:not(.is-by-current-user) {
-  .chat-reply {
-    grid-area: reply !important;
-    justify-self: start !important;
-  }
-  .chat-message-avatar, .chat-message-left-gutter {
-    grid-area: avatar !important;
-    align-self: end !important;
-    width: 40px !important;
-    display: flex !important;
-    justify-content: center !important;
-    margin: 0 !important;
-  }
-  .chat-message-content {
-    grid-area: content !important;
-    justify-self: start !important;
-    background: var(--primary-very-low) !important;
-    border: 1px solid var(--primary-low) !important;
-    border-left: 3px solid var(--tertiary) !important; 
-    border-bottom-left-radius: 0 !important; /* 切平底部贴合头像 */
-  }
-  /* 隐藏多余的边栏时间 */
+  .chat-reply { grid-area: reply !important; justify-self: start !important; }
+  .chat-message-avatar, .chat-message-left-gutter { grid-area: avatar !important; align-self: end !important; width: 40px !important; display: flex !important; justify-content: center !important; margin: 0 !important; }
+  .chat-message-content { grid-area: content !important; justify-self: start !important; background: var(--primary-very-low) !important; border: 1px solid var(--primary-low) !important; border-left: 3px solid var(--tertiary) !important; border-bottom-left-radius: 0 !important; }
   .chat-message-left-gutter__date { display: none !important; }
 }
 
-/* =======================================
-   右侧阵营：当前登录用户 (自己发的消息)
-   ======================================= */
-.chat-message-container.is-by-current-user .chat-message {
-  /* 自己发的消息隐藏头像列，独占整行 */
-  grid-template-columns: minmax(0, 1fr) !important;
-  grid-template-areas: 
-    "reply"
-    "content" !important;
-  align-items: end !important;
-}
-
+.chat-message-container.is-by-current-user .chat-message { grid-template-columns: minmax(0, 1fr) !important; grid-template-areas: "reply" "content" !important; align-items: end !important; }
 .chat-message-container.is-by-current-user {
-  .chat-message-avatar, .chat-message-left-gutter { display: none !important; } /* 直接抹除自己头像 */
-  
-  .chat-reply {
-    grid-area: reply !important;
-    justify-self: end !important; /* 回复框绝对靠右 */
-    flex-direction: row-reverse !important; 
-    text-align: right !important;
-    .chat-reply__excerpt { margin-right: 8px !important; margin-left: 0 !important; }
-  }
-  
-  .chat-message-content {
-    grid-area: content !important;
-    justify-self: end !important; /* 气泡绝对靠右 */
-    background: rgba(0, 212, 255, 0.08) !important; 
-    border: 1px solid var(--tertiary-low) !important;
-    border-right: 3px solid var(--quaternary) !important; 
-    border-bottom-right-radius: 0 !important; /* 切平底部 */
-  }
-
-  /* 名字与状态翻转 */
-  .chat-message-info {
-    flex-direction: row-reverse !important;
-    border-bottom-color: rgba(255, 107, 53, 0.2) !important;
-    .chat-message-info__username__name { 
-      color: var(--quaternary) !important; 
-      margin-left: 8px !important; 
-      margin-right: 0 !important;
-    }
-  }
+  .chat-message-avatar, .chat-message-left-gutter { display: none !important; }
+  .chat-reply { grid-area: reply !important; justify-self: end !important; flex-direction: row-reverse !important; text-align: right !important; .chat-reply__excerpt { margin-right: 8px !important; margin-left: 0 !important; } }
+  .chat-message-content { grid-area: content !important; justify-self: end !important; background: rgba(0, 212, 255, 0.08) !important; border: 1px solid var(--tertiary-low) !important; border-right: 3px solid var(--quaternary) !important; border-bottom-right-radius: 0 !important; }
+  .chat-message-info { flex-direction: row-reverse !important; border-bottom-color: rgba(255, 107, 53, 0.2) !important; .chat-message-info__username__name { color: var(--quaternary) !important; margin-left: 8px !important; margin-right: 0 !important; } }
 }
 
-/* ----------------------------------------------------
-   内容气泡本体 (通用)
-   ---------------------------------------------------- */
-.chat-message-content {
-  display: flex !important;
-  flex-direction: column !important;
-  min-width: 0 !important; /* 防爆核心：允许内容缩放 */
-  max-width: 90% !important; /* 限制最大宽度，防止气泡顶到屏幕边缘 */
-  width: fit-content !important; /* 随文字长度自然撑开 */
-  padding: 8px 12px 20px 12px !important; /* 底部预留 20px 专门放时间戳 */
-  border-radius: 12px !important;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1) !important;
-  position: relative !important; 
-  margin: 0 !important;
-}
+.chat-message-content { display: flex !important; flex-direction: column !important; min-width: 0 !important; max-width: 90% !important; width: fit-content !important; padding: 8px 12px 20px 12px !important; border-radius: 12px !important; box-shadow: 0 1px 4px rgba(0,0,0,0.1) !important; position: relative !important; margin: 0 !important; }
+.chat-message-container.-user-info-hidden { margin-top: -6px !important; }
+.chat-message-info { display: flex !important; align-items: center !important; margin-bottom: 4px !important; padding-bottom: 2px !important; border-bottom: 1px solid rgba(125,125,125,0.2) !important; .chat-message-info__username__name { font-weight: 800 !important; color: var(--tertiary) !important; font-size: 0.85em !important; } .chat-message-info__status { display: none !important; } .chat-message-info__date { position: absolute !important; bottom: 4px !important; right: 10px !important; font-family: "JetBrains Mono", monospace !important; font-size: 0.7em !important; color: var(--primary-medium) !important; opacity: 0.7 !important; line-height: 1 !important; } }
+.chat-message-text { font-size: 0.95em !important; line-height: 1.5 !important; color: var(--primary) !important; word-break: break-word !important; min-width: 0 !important; .chat-cooked p { margin: 0 !important; } .chat-uploads img { border-radius: 6px !important; margin-top: 4px !important; max-width: 100% !important; height: auto !important; } }
+.chat-reply { display: flex !important; align-items: center !important; margin-bottom: 4px !important; background: var(--primary-very-low) !important; border: 1px solid var(--primary-low) !important; border-radius: 4px !important; padding: 4px 8px !important; font-size: 0.85em !important; opacity: 0.8 !important; transition: all 0.2s !important; width: fit-content !important; max-width: 100% !important; box-sizing: border-box !important; &:hover { opacity: 1 !important; border-color: var(--tertiary-medium) !important; } .svg-icon-title { color: var(--tertiary) !important; margin: 0 6px !important; flex-shrink: 0 !important; } .chat-reply__excerpt { white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; flex: 1 !important; min-width: 0 !important; } .chat-user-avatar { margin: 0 6px !important; flex-shrink: 0 !important; .avatar { width: 16px !important; height: 16px !important; } } }
+.chat-message-separator-date { display: flex !important; justify-content: center !important; margin: 20px 0 !important; .chat-message-separator__text-container { background: var(--primary-very-low) !important; border: 1px solid var(--primary-low) !important; padding: 4px 14px !important; border-radius: 12px !important; font-family: "JetBrains Mono", monospace !important; font-size: 0.75em !important; font-weight: bold !important; color: var(--primary-medium) !important; z-index: 1 !important; box-shadow: 0 0 10px rgba(0,0,0,0.1) !important; } .chat-message-separator__line-container { display: none !important; } }
+.chat-user-avatar__container .avatar, .chat-message-avatar .avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%) !important; }
+.chat-composer { background: var(--secondary) !important; border-top: 2px solid var(--tertiary-low) !important; padding: 12px 10px !important; .chat-composer__inner-container { background: var(--primary-very-low) !important; border: 1px solid var(--primary-low) !important; border-radius: 6px !important; padding: 4px 8px !important; display: flex !important; align-items: flex-end !important; transition: border-color 0.2s !important; &:focus-within { border-color: var(--tertiary) !important; box-shadow: 0 0 8px rgba(0, 212, 255, 0.1) !important; } } .chat-composer__input { background: transparent !important; border: none !important; box-shadow: none !important; color: var(--primary) !important; font-size: 0.95em !important; resize: none !important; } .chat-composer-button__wrapper .btn { border-radius: 4px !important; transition: all 0.2s !important; &:not([disabled]) { background: var(--tertiary) !important; color: var(--secondary) !important; border: 1px solid var(--tertiary) !important; &:hover { transform: scale(1.05) !important; background: var(--quaternary) !important; border-color: var(--quaternary) !important; } .d-icon { color: var(--secondary) !important; fill: var(--secondary) !important; } } } }
 
-/* 去除连续消息的顶部间距，显得更紧凑 */
-.chat-message-container.-user-info-hidden {
-  margin-top: -6px !important;
-}
+// ==========================================================================
+// 14. 战术回复按钮矩阵 (Reply Buttons)
+// ==========================================================================
+button.post-action-menu__reply, button.create.reply-to-post { background: rgba(0, 212, 255, 0.08) !important; border: 1px solid rgba(0, 212, 255, 0.4) !important; color: var(--tertiary) !important; border-radius: 0 !important; clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px)); transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1); &:hover { background: var(--tertiary) !important; color: #000 !important; box-shadow: 0 0 15px rgba(0, 212, 255, 0.5); border-color: var(--tertiary) !important; transform: translateY(-1px); } }
+button.post-action-menu__reply { margin-left: 8px !important; }
+button.create.topic-footer-button { background: var(--quaternary) !important; color: #fff !important; border: 1px solid var(--quaternary) !important; box-shadow: 0 4px 15px rgba(255, 107, 53, 0.2); font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800 !important; letter-spacing: 2px; padding: 8px 24px !important; &:hover { background: rgba(255, 107, 53, 0.1) !important; color: var(--quaternary) !important; box-shadow: 0 0 20px rgba(255, 107, 53, 0.5), inset 0 0 10px rgba(255, 107, 53, 0.2); border-color: var(--quaternary) !important; transform: translateY(-2px); } }
 
-/* ----------------------------------------------------
-   名字与时间 (Message Info)
-   ---------------------------------------------------- */
-.chat-message-info {
-  display: flex !important;
-  align-items: center !important;
-  margin-bottom: 4px !important;
-  padding-bottom: 2px !important;
-  border-bottom: 1px solid rgba(125,125,125,0.2) !important; 
-  
-  .chat-message-info__username__name {
-    font-weight: 800 !important;
-    color: var(--tertiary) !important;
-    font-size: 0.85em !important; 
-  }
-  
-  .chat-message-info__status { display: none !important; }
-  
-  /* 将时间戳从头顶拽下来，强制悬浮在气泡最右下角 */
-  .chat-message-info__date {
-    position: absolute !important;
-    bottom: 4px !important;
-    right: 10px !important;
-    font-family: "JetBrains Mono", monospace !important;
-    font-size: 0.7em !important;
-    color: var(--primary-medium) !important;
-    opacity: 0.7 !important;
-    line-height: 1 !important;
-  }
-}
-
-/* ----------------------------------------------------
-   文本区域
-   ---------------------------------------------------- */
-.chat-message-text {
-  font-size: 0.95em !important;
-  line-height: 1.5 !important;
-  color: var(--primary) !important;
-  word-break: break-word !important; /* 强制换行防挤压 */
-  min-width: 0 !important;
-  
-  .chat-cooked p { margin: 0 !important; }
-  .chat-uploads img { border-radius: 6px !important; margin-top: 4px !important; max-width: 100% !important; height: auto !important; }
-}
-
-/* ----------------------------------------------------
-   引用/回复板块 (Replies Box)
-   ---------------------------------------------------- */
-.chat-reply {
-  display: flex !important; 
-  align-items: center !important; 
-  margin-bottom: 4px !important;
-  background: var(--primary-very-low) !important; 
-  border: 1px solid var(--primary-low) !important; 
-  border-radius: 4px !important; 
-  padding: 4px 8px !important; 
-  font-size: 0.85em !important; 
-  opacity: 0.8 !important; 
-  transition: all 0.2s !important;
-  width: fit-content !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-  
-  &:hover { opacity: 1 !important; border-color: var(--tertiary-medium) !important; }
-  .svg-icon-title { color: var(--tertiary) !important; margin: 0 6px !important; flex-shrink: 0 !important; }
-  .chat-reply__excerpt { white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; flex: 1 !important; min-width: 0 !important; }
-  .chat-user-avatar { margin: 0 6px !important; flex-shrink: 0 !important; .avatar { width: 16px !important; height: 16px !important; } }
-}
-
-/* ----------------------------------------------------
-   日期分割线 (Date Separator)
-   ---------------------------------------------------- */
-.chat-message-separator-date {
-  display: flex !important; justify-content: center !important; margin: 20px 0 !important;
-  .chat-message-separator__text-container {
-    background: var(--primary-very-low) !important; border: 1px solid var(--primary-low) !important; padding: 4px 14px !important; border-radius: 12px !important;
-    font-family: "JetBrains Mono", monospace !important; font-size: 0.75em !important; font-weight: bold !important; color: var(--primary-medium) !important; z-index: 1 !important; box-shadow: 0 0 10px rgba(0,0,0,0.1) !important;
-  }
-  .chat-message-separator__line-container { display: none !important; }
-}
-
-/* 头像统一战术切角 */
-.chat-user-avatar__container .avatar, .chat-message-avatar .avatar {
-  border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%) !important;
-}
-
-/* 底部输入框 (Chat Composer) */
-.chat-composer {
-  background: var(--secondary) !important; border-top: 2px solid var(--tertiary-low) !important; padding: 12px 10px !important;
-  .chat-composer__inner-container {
-    background: var(--primary-very-low) !important; border: 1px solid var(--primary-low) !important; border-radius: 6px !important; padding: 4px 8px !important; display: flex !important; align-items: flex-end !important; transition: border-color 0.2s !important;
-    &:focus-within { border-color: var(--tertiary) !important; box-shadow: 0 0 8px rgba(0, 212, 255, 0.1) !important; }
-  }
-  .chat-composer__input { background: transparent !important; border: none !important; box-shadow: none !important; color: var(--primary) !important; font-size: 0.95em !important; resize: none !important; }
-  .chat-composer-button__wrapper .btn {
-    border-radius: 4px !important; transition: all 0.2s !important;
-    &:not([disabled]) { background: var(--tertiary) !important; color: var(--secondary) !important; border: 1px solid var(--tertiary) !important; &:hover { transform: scale(1.05) !important; background: var(--quaternary) !important; border-color: var(--quaternary) !important; } .d-icon { color: var(--secondary) !important; fill: var(--secondary) !important; } }
-  }
-}
-/* ============================================
-   16. 战术回复按钮矩阵 (Tactical Reply Buttons)
-   ============================================ */
-
-/* 1) 常规战术级：帖子右下角 & 时间线跟随的回复按钮 */
-button.post-action-menu__reply,
-button.create.reply-to-post {
-  /* 静态状态：全息瞄准框风格 (带微弱青色底与边框) */
-  background: rgba(0, 212, 255, 0.08) !important;
-  border: 1px solid rgba(0, 212, 255, 0.4) !important;
-  color: var(--tertiary) !important; /* 依赖之前的 currentColor 机制，图标自动变青 */
-  border-radius: 0 !important;
-  
-  /* 终末地标志性切角 */
-  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
-  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
-
-  /* 悬浮状态：青色能量注满，文字图标反黑 */
-  &:hover {
-    background: var(--tertiary) !important;
-    color: #000 !important; 
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
-    border-color: var(--tertiary) !important;
-    transform: translateY(-1px);
-  }
-}
-
-/* 让帖子下方的回复按钮和左侧的点赞/分享拉开一点呼吸距 */
-button.post-action-menu__reply {
-  margin-left: 8px !important; 
-}
-
-
-/* 2) 终极指令级：话题最下方的大号回复按钮 */
-button.create.topic-footer-button {
-  /* 绑定终末地战术橙色，作为整个页面的核心视觉焦点 */
-  background: var(--quaternary) !important;
-  color: #fff !important; 
-  border: 1px solid var(--quaternary) !important;
-  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.2);
-  
-  font-family: "Rajdhani", "Noto Sans SC", sans-serif;
-  font-weight: 800 !important;
-  letter-spacing: 2px;
-  padding: 8px 24px !important;
-  
-  /* 悬浮状态：橙色高能过载 (镂空线框发光效果) */
-  &:hover {
-    background: rgba(255, 107, 53, 0.1) !important; 
-    color: var(--quaternary) !important; /* 图标自动变橙 */
-    box-shadow: 0 0 20px rgba(255, 107, 53, 0.5), inset 0 0 10px rgba(255, 107, 53, 0.2);
-    border-color: var(--quaternary) !important;
-    transform: translateY(-2px);
-  }
-}
-
-/* ==========================================================================
-   17. PRTS AI 情报解析终端 (Endfield AI Summary Modal) - 紧凑修复版
-   ========================================================================== */
-
-/* 精准锁定包含 AI 摘要的弹窗 */
+// ==========================================================================
+// 15. PRTS AI 情报解析终端 (AI Summary Modal)
+// ==========================================================================
 .d-modal:has(.ai-summary-modal__body) {
-  
-  /* 1. 终端外壳装甲 */
-  .d-modal__container {
-    background-color: #12151A !important; /* 强制纯正深色底 */
-    border: 1px solid var(--tertiary-medium) !important;
-    box-shadow: 0 0 40px rgba(0, 212, 255, 0.15), 0 0 0 1px rgba(0, 212, 255, 0.3) !important;
-    clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
-    
-    background-image: 
-      linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px) !important;
-    background-size: 20px 20px !important;
-  }
-
-  /* 2. 终端系统头部 */
-  .d-modal__header {
-    background: rgba(0, 212, 255, 0.08);
-    border-bottom: 2px solid var(--tertiary);
-    /* [核心修复] 压缩上下内边距，让头部变得紧凑干练 */
-    padding: 10px 20px; 
-    position: relative;
-    
-    .d-modal__title {
-      flex: 1;
-      min-width: 0; /* 防止子元素撑爆容器 */
-    }
-
-/* 伪造系统载入代号 */
-    .d-modal__title-text {
-      font-family: "Rajdhani", "Noto Sans SC", sans-serif;
-      color: var(--tertiary);
-      font-weight: 900;
-      letter-spacing: 1px;
-      text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
-      font-size: 1.2rem;
-      
-      /* [核心对齐修复]：放弃不稳定的文本对齐，使用 Flex 强制物理绝对居中 */
-      display: flex;
-      align-items: center; 
-      white-space: nowrap;
-      overflow: hidden;
-      
-      &::before {
-        content: "[ PRTS.AI.ANALYSIS ] // ";
-        color: var(--quaternary);
-        font-family: "JetBrains Mono", monospace;
-        font-size: 0.75em; /* 稍微调大一丁点，比例更平衡 */
-        margin-right: 8px;
-        opacity: 0.9;
-        flex-shrink: 0; /* 绝对防御：防止屏幕太小时前缀被挤压变形 */
-        transform: translateY(1px); /* 针对英文字体的下沉微调，达到视觉完美居中 */
-      }
-    }
-
-    /* 战术关闭按钮 */
-    .modal-close {
-      color: var(--tertiary) !important;
-      border-radius: 0 !important;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      &:hover {
-        background: var(--quaternary) !important;
-        color: #000 !important;
-        transform: rotate(90deg);
-      }
-    }
-  }
-
-  /* 3. 解析主体区域 */
-  .ai-summary-modal__body {
-    padding: 20px 25px;
-  }
-
-  /* 解析数据框 */
-  .ai-summary-box {
-    background: rgba(0, 0, 0, 0.6) !important; /* 略微加深底色，对比度更高 */
-    border: 1px solid var(--tertiary-low);
-    border-left: 4px solid var(--tertiary); 
-    border-right: 4px solid var(--quaternary);
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
-    
-    &::before {
-      content: "DECODED_DATA";
-      position: absolute; top: 0; right: 0;
-      background: var(--tertiary); color: #000;
-      font-family: "JetBrains Mono", monospace; font-size: 10px; font-weight: 900;
-      padding: 2px 8px; border-bottom-left-radius: 6px;
-    }
-
-    &::after {
-      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: var(--tertiary); box-shadow: 0 0 15px var(--tertiary), 0 0 5px var(--tertiary);
-      opacity: 0.6; animation: prts-scan 3s cubic-bezier(0.4, 0, 0.2, 1) infinite; pointer-events: none;
-    }
-  }
-
-  /* 4. 文本输出与打字机光标 */
-  .generated-summary.cooked {
-    font-family: "JetBrains Mono", "Noto Sans SC", sans-serif;
-    
-    /* [核心修复] 脱离系统黑白变量绑定，强行赋予极高亮度的灰白色，防浅色模式瞎眼 */
-    color: #E0E0E0 !important; 
-    
-    font-size: 0.95em;
-    line-height: 1.6;
-    text-shadow: 0 0 1px rgba(255, 255, 255, 0.1);
-    
-    p { margin-bottom: 1em; }
-    p:last-child { margin-bottom: 0; display: inline; } 
-
-    &::after {
-      content: " _"; color: var(--tertiary); font-weight: 900; font-size: 1.1em;
-      animation: prts-blink 1s step-end infinite;
-    }
-  }
-
-  /* 5. 底部操控面板 */
-  .d-modal__footer {
-    border-top: 1px solid var(--tertiary-low);
-    background: rgba(0, 212, 255, 0.03);
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 10px 20px; /* 进一步压缩底部多余留白 */
-    flex-wrap: wrap; gap: 10px;
-    
-    .summarized-on {
-      font-family: "JetBrains Mono", monospace; font-size: 0.8em; color: var(--primary-medium);
-      display: flex; align-items: center; gap: 6px; margin: 0;
-      .d-icon { color: var(--tertiary); }
-    }
-    
-    .summary-outdated {
-      font-family: "JetBrains Mono", monospace; font-size: 0.75em; font-weight: 900;
-      color: var(--quaternary); background: rgba(255, 107, 53, 0.1); border: 1px solid var(--quaternary);
-      padding: 4px 8px; text-transform: uppercase; letter-spacing: 1px; margin: 0;
-      animation: prts-warning-pulse 2s infinite;
-    }
-    
-    .btn {
-      background: transparent !important; border: 1px solid var(--tertiary) !important; color: var(--tertiary) !important;
-      font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800; border-radius: 0;
-      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
-      transition: all 0.2s; margin: 0 0 0 auto; padding: 6px 12px; /* 压缩按钮高度 */
-      
-      .d-icon { color: var(--tertiary) !important; transition: transform 0.5s ease; }
-      &:hover {
-        background: var(--tertiary) !important; color: #000 !important; box-shadow: 0 0 15px rgba(0, 212, 255, 0.4); transform: translateY(-2px);
-        .d-icon { color: #000 !important; fill: #000 !important; transform: rotate(180deg); }
-      }
-    }
-  }
+  .d-modal__container { background-color: #12151A !important; border: 1px solid var(--tertiary-medium) !important; box-shadow: 0 0 40px rgba(0, 212, 255, 0.15), 0 0 0 1px rgba(0, 212, 255, 0.3) !important; clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px)); background-image: linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px), linear-gradient(180deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px) !important; background-size: 20px 20px !important; }
+  .d-modal__header { background: rgba(0, 212, 255, 0.08); border-bottom: 2px solid var(--tertiary); padding: 10px 20px; position: relative; .d-modal__title { flex: 1; min-width: 0; } .d-modal__title-text { font-family: "Rajdhani", "Noto Sans SC", sans-serif; color: var(--tertiary); font-weight: 900; letter-spacing: 1px; text-shadow: 0 0 10px rgba(0, 212, 255, 0.5); font-size: 1.2rem; display: flex; align-items: center; white-space: nowrap; overflow: hidden; &::before { content: "[ PRTS.AI.ANALYSIS ] // "; color: var(--quaternary); font-family: "JetBrains Mono", monospace; font-size: 0.75em; margin-right: 8px; opacity: 0.9; flex-shrink: 0; transform: translateY(1px); } } .modal-close { color: var(--tertiary) !important; border-radius: 0 !important; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); &:hover { background: var(--quaternary) !important; color: #000 !important; transform: rotate(90deg); } } }
+  .ai-summary-modal__body { padding: 20px 25px; }
+  .ai-summary-box { background: rgba(0, 0, 0, 0.6) !important; border: 1px solid var(--tertiary-low); border-left: 4px solid var(--tertiary); border-right: 4px solid var(--quaternary); padding: 20px; position: relative; overflow: hidden; &::before { content: "DECODED_DATA"; position: absolute; top: 0; right: 0; background: var(--tertiary); color: #000; font-family: "JetBrains Mono", monospace; font-size: 10px; font-weight: 900; padding: 2px 8px; border-bottom-left-radius: 6px; } &::after { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--tertiary); box-shadow: 0 0 15px var(--tertiary), 0 0 5px var(--tertiary); opacity: 0.6; animation: prts-scan 3s cubic-bezier(0.4, 0, 0.2, 1) infinite; pointer-events: none; } }
+  .generated-summary.cooked { font-family: "JetBrains Mono", "Noto Sans SC", sans-serif; color: #E0E0E0 !important; font-size: 0.95em; line-height: 1.6; text-shadow: 0 0 1px rgba(255, 255, 255, 0.1); p { margin-bottom: 1em; } p:last-child { margin-bottom: 0; display: inline; } &::after { content: " _"; color: var(--tertiary); font-weight: 900; font-size: 1.1em; animation: prts-blink 1s step-end infinite; } }
+  .d-modal__footer { border-top: 1px solid var(--tertiary-low); background: rgba(0, 212, 255, 0.03); display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; flex-wrap: wrap; gap: 10px; .summarized-on { font-family: "JetBrains Mono", monospace; font-size: 0.8em; color: var(--primary-medium); display: flex; align-items: center; gap: 6px; margin: 0; .d-icon { color: var(--tertiary); } } .summary-outdated { font-family: "JetBrains Mono", monospace; font-size: 0.75em; font-weight: 900; color: var(--quaternary); background: rgba(255, 107, 53, 0.1); border: 1px solid var(--quaternary); padding: 4px 8px; text-transform: uppercase; letter-spacing: 1px; margin: 0; animation: prts-warning-pulse 2s infinite; } .btn { background: transparent !important; border: 1px solid var(--tertiary) !important; color: var(--tertiary) !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800; border-radius: 0; clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)); transition: all 0.2s; margin: 0 0 0 auto; padding: 6px 12px; .d-icon { color: var(--tertiary) !important; transition: transform 0.5s ease; } &:hover { background: var(--tertiary) !important; color: #000 !important; box-shadow: 0 0 15px rgba(0, 212, 255, 0.4); transform: translateY(-2px); .d-icon { color: #000 !important; fill: #000 !important; transform: rotate(180deg); } } } }
 }
 
-/* ==========================================================================
-   终端专用动画系统 (Keyframes)
-   ========================================================================== */
 @keyframes prts-scan { 0% { top: 0; opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { top: 100%; opacity: 0; } }
 @keyframes prts-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 @keyframes prts-warning-pulse { 0%, 100% { box-shadow: 0 0 0 rgba(255, 107, 53, 0); } 50% { box-shadow: 0 0 10px rgba(255, 107, 53, 0.4); } }
 
-/* ==========================================================================
-   18. 侧边栏深度强化装甲 (PRTS Tactical Sidebar Enhancement)
-   ========================================================================== */
+// ==========================================================================
+// 16. 侧边栏深度强化装甲 (Sidebar)
+// ==========================================================================
+.sidebar-wrapper { border-right: 1px solid var(--tertiary-low) !important; background-color: transparent !important; }
+.sidebar-section { margin-bottom: 16px !important; }
+.sidebar-section-header { position: relative; &::after { content: ""; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); width: 4px; height: 4px; background-color: var(--tertiary); box-shadow: 0 0 6px var(--tertiary); animation: prts-blink 2s step-end infinite; } }
+.sidebar-section-link-wrapper .sidebar-section-link { border-radius: 0 !important; margin: 2px 8px !important; padding: 6px 10px !important; transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) !important; border-left: 2px solid transparent !important; .sidebar-section-link-prefix { color: var(--primary-medium) !important; transition: color 0.2s ease; } &:hover { background-color: rgba(0, 212, 255, 0.05) !important; border-left-color: var(--tertiary-medium) !important; padding-left: 16px !important; .sidebar-section-link-prefix, .sidebar-section-link-content-text { color: var(--tertiary) !important; text-shadow: 0 0 8px rgba(0, 212, 255, 0.3); } } &.active { background-color: rgba(0, 212, 255, 0.1) !important; border-left: 3px solid var(--tertiary) !important; padding-left: 16px !important; font-weight: 800 !important; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%); .sidebar-section-link-prefix, .sidebar-section-link-content-text { color: var(--tertiary) !important; } } }
+.sidebar-section-link-wrapper .badge-category-bg { border-radius: 2px !important; width: 8px !important; height: 8px !important; box-shadow: 0 0 4px currentColor; }
+.sidebar-section-link-wrapper .sidebar-section-link-content-badge { background-color: var(--quaternary) !important; color: #fff !important; border-radius: 2px !important; font-family: "JetBrains Mono", monospace !important; font-weight: 800 !important; padding: 2px 6px !important; box-shadow: 0 0 6px rgba(255, 107, 53, 0.5); }
 
-/* 1. 侧边栏主架构：修复浅色模式的灰色布条，底色自适应 */
-.sidebar-wrapper {
-  border-right: 1px solid var(--tertiary-low) !important;
-  background-color: transparent !important; /* 让它自己呼吸，不要强制糊上深灰色！ */
-}
-
-/* 2. 压缩导航组块 (Sections) 的空旷感 */
-.sidebar-section {
-  margin-bottom: 16px !important; 
-}
-
-/* 3. 导航标题 (Section Header)：增加 PRTS 状态呼吸灯 */
-.sidebar-section-header {
-  position: relative;
-  /* 增加一个右侧闪烁的系统读取点，极大地增强科幻代入感 */
-  &::after {
-    content: "";
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 4px;
-    height: 4px;
-    background-color: var(--tertiary);
-    box-shadow: 0 0 6px var(--tertiary);
-    animation: prts-blink 2s step-end infinite;
-  }
-}
-
-/* 4. 菜单链接项 (Link Items) 的战术机动交互 (高能核心) */
-.sidebar-section-link-wrapper .sidebar-section-link {
-  border-radius: 0 !important;
-  margin: 2px 8px !important; /* 左右内收，给高亮边框留出物理空间 */
-  padding: 6px 10px !important; /* 压缩默认的上下高度，提升信息密度 */
-  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
-  border-left: 2px solid transparent !important; /* 预置左侧能量条插槽 */
-  
-  /* 默认图标颜色压暗，突出主次层级 */
-  .sidebar-section-link-prefix {
-    color: var(--primary-medium) !important;
-    transition: color 0.2s ease;
-  }
-
-  /* 【重要互动】悬浮状态：产生机械推拉感，文字发光 */
-  &:hover {
-    background-color: rgba(0, 212, 255, 0.05) !important;
-    border-left-color: var(--tertiary-medium) !important;
-    padding-left: 16px !important; /* 悬浮时向右滑入缩进，战术反馈感极强！*/
-    
-    .sidebar-section-link-prefix, .sidebar-section-link-content-text {
-      color: var(--tertiary) !important;
-      text-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
-    }
-  }
-
-  /* 激活状态：锁定并切割 */
-  &.active {
-    background-color: rgba(0, 212, 255, 0.1) !important;
-    border-left: 3px solid var(--tertiary) !important;
-    padding-left: 16px !important;
-    font-weight: 800 !important;
-    
-    /* 激活态加入标志性终末地右下切角 */
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
-    
-    .sidebar-section-link-prefix, .sidebar-section-link-content-text {
-      color: var(--tertiary) !important;
-    }
-  }
-}
-
-/* 5. 彻底抹杀圆润元素：分类小圆点与通知数字装甲化 */
-
-/* 分类颜色点：变为发光小方块 */
-.sidebar-section-link-wrapper .badge-category-bg {
-  border-radius: 2px !important; 
-  width: 8px !important;
-  height: 8px !important;
-  box-shadow: 0 0 4px currentColor; /* 完美继承各自分类颜色并发光 */
-}
-
-/* 通知数字气泡：战术橙 + 方块硬派装甲 */
-.sidebar-section-link-wrapper .sidebar-section-link-content-badge {
-  background-color: var(--quaternary) !important;
-  color: #fff !important;
-  border-radius: 2px !important;
-  font-family: "JetBrains Mono", monospace !important;
-  font-weight: 800 !important;
-  padding: 2px 6px !important;
-  box-shadow: 0 0 6px rgba(255, 107, 53, 0.5);
-}
-
-/* ==========================================================================
-   19. 右侧边栏战术压缩与高能反馈 (Right Sidebar Tactical Array)
-   ========================================================================== */
-
+// ==========================================================================
+// 17. 右侧边栏战术高能反馈 (Right Sidebar)
+// ==========================================================================
 .tc-right-sidebar-wrapper, .d-right-sidebar {
-  
-  /* 1. 压缩小组件之间的巨大沟壑 */
-  .rs-component {
-    margin-bottom: 16px !important;
-    
-    /* 2. 重组卡片内部空间 */
-    .rs-component-content {
-      padding: 8px 12px 12px 12px !important;
+  .rs-component { margin-bottom: 16px !important; .rs-component-content { padding: 8px 12px 12px 12px !important; ul { margin: 0 !important; padding: 0 !important; list-style: none !important; li { padding: 6px 4px !important; margin-bottom: 4px; border-bottom: 1px solid var(--primary-very-low); transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1); border-left: 2px solid transparent; display: flex; align-items: center; &:last-child { border-bottom: none; margin-bottom: 0; } &:hover { background-color: rgba(0, 212, 255, 0.05); border-left-color: var(--tertiary); padding-left: 12px !important; a { color: var(--tertiary) !important; text-shadow: 0 0 5px rgba(0, 212, 255, 0.3); } } } } } }
+  img.avatar { border-radius: 0 !important; }
+}
+
+// ==========================================================================
+// 18. 帖子内部系统提示对接 (System Notices)
+// ==========================================================================
+.post__row .post-notice {
+  display: flex !important; align-items: center !important; border-radius: 0 !important; padding: 4px 12px !important; margin: 15px 0 -1px 0 !important; min-height: 28px !important; position: relative; z-index: 2; box-shadow: none !important; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+  p { margin: 0 0 0 8px !important; font-family: "Rajdhani", "Noto Sans SC", sans-serif; color: var(--primary) !important; font-weight: 600 !important; font-size: 0.85em !important; line-height: 1.2 !important; }
+  img.emoji { width: 16px !important; height: 16px !important; flex-shrink: 0; filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.2)); }
+  &::before { position: absolute; top: 0; right: 0; font-family: "JetBrains Mono", monospace; font-size: 8px !important; font-weight: 900; padding: 1px 6px !important; border-bottom-left-radius: 4px; z-index: 2; line-height: 1.2; letter-spacing: 0.5px; }
+  &.new-user { background-color: rgba(0, 212, 255, 0.08) !important; border: 1px solid var(--tertiary-low) !important; border-bottom-color: transparent !important; border-left: 3px solid var(--tertiary) !important; background-image: linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px), linear-gradient(180deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px) !important; background-size: 10px 10px !important; &::before { content: "NEW_OP"; background: var(--tertiary-medium); color: #000; } }
+  &.returning-user { background-color: rgba(255, 107, 53, 0.08) !important; border: 1px solid rgba(255, 107, 53, 0.2) !important; border-bottom-color: transparent !important; border-left: 3px solid var(--quaternary) !important; background-image: linear-gradient(90deg, rgba(255, 107, 53, 0.03) 1px, transparent 1px), linear-gradient(180deg, rgba(255, 107, 53, 0.03) 1px, transparent 1px) !important; background-size: 10px 10px !important; &::before { content: "RET_OP"; background: rgba(255, 107, 53, 0.6); color: #fff; } }
+}
+.post__row:has(.post-notice) + .post__row { margin-top: 0 !important; padding-top: 0 !important; }
+
+// ==========================================================================
+// 19. 【核心镇压】AI 对话界面专属装甲 (Private Message Override)
+// ==========================================================================
+/* 使用 #main ID 级锚点，实施最高优先级样式覆写，彻底剥夺 Discourse 原生紫色的控制权 */
+#main {
+  .private_message {
+    .topic-post.current-user-post {
+      /* 1. 彻底溶解原有各层级的原生紫色底漆 (Discourse 喜欢在 article 或 .boxed 上加颜色) */
+      background: transparent !important;
       
-      /* 3. 针对内部列表 (如活跃用户、热门标签) 的高密度排列 */
-      ul {
-        margin: 0 !important;
-        padding: 0 !important;
-        list-style: none !important;
+      article, 
+      article.boxed,
+      .post__row,
+      .topic-body, 
+      .post__body {
+        background-color: transparent !important; 
+        border: none !important;
+        box-shadow: none !important;
+      }
+
+      /* 2. 在发帖行容器上统一重塑终末地机甲外观 */
+      .post__row {
+        background-color: rgba(0, 212, 255, 0.08) !important; /* 低浓度能量青 */
+        border: 1px solid rgba(0, 212, 255, 0.3) !important;
+        border-right: 4px solid #FF6B35 !important; /* 战术橙色右切边：标识为当前用户/我方阵营 */
+        border-radius: 0 !important; /* 铲除原生圆角 */
         
-        li {
-          padding: 6px 4px !important;
-          margin-bottom: 4px;
-          border-bottom: 1px solid var(--primary-very-low);
-          transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
-          border-left: 2px solid transparent; /* 预留给能量条的插槽 */
-          display: flex;
-          align-items: center;
-          
-          &:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-          }
-          
-          /* 【核心交互】悬浮微动：机械向右滑入并点亮 */
-          &:hover {
-            background-color: rgba(0, 212, 255, 0.05);
-            border-left-color: var(--tertiary);
-            padding-left: 12px !important; /* 悬浮时向右推挤，消除稀疏感 */
-            
-            /* 如果里面有链接，文字也跟着亮起 */
-            a {
-              color: var(--tertiary) !important;
-              text-shadow: 0 0 5px rgba(0, 212, 255, 0.3);
-            }
-          }
-        }
+        /* 标志性机械切角 */
+        clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px)) !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 0 20px rgba(0, 212, 255, 0.02) !important;
+        
+        padding: 12px !important;
+        margin-bottom: 10px !important;
+      }
+
+      /* 3. 强行接管文字颜色，防止被紫色主题附带的弱对比度变量污染 */
+      .cooked {
+        color: #E0E0E0 !important;
+        p { color: inherit !important; }
       }
     }
   }
-
-  /* 4. 右侧边栏特定元素的硬派修饰 */
-  img.avatar {
-    border-radius: 0 !important; /* 确保右侧的头像也被战术切角统管 */
-  }
 }
 
-/* ==========================================================================
-   Endfield System Notices (帖子内部系统提示 - 模块化对接装甲版)
-   ========================================================================== */
-.post__row .post-notice {
-  display: flex !important;
-  align-items: center !important;
-  border-radius: 0 !important;
-  
-  /* 极限压缩内边距 */
-  padding: 4px 12px !important; 
-  
-  /* [核心对接机制]：保留顶部间距，彻底抹杀底部间距，并轻微下沉 1px 咬合下方的卡片 */
-  margin: 15px 0 -1px 0 !important; 
-  min-height: 28px !important; 
-  
-  position: relative;
-  z-index: 2; /* 确保层级高于下方的帖子，压住边框缝隙 */
-  box-shadow: none !important; /* 取消整体阴影，使其融入下方的帖子组件 */
-  
-  /* 右下角保留微小切角，形成装甲拼接的机械缝隙感 */
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
-
-  p {
-    margin: 0 0 0 8px !important; 
-    font-family: "Rajdhani", "Noto Sans SC", sans-serif;
-    color: var(--primary) !important;
-    font-weight: 600 !important;
-    font-size: 0.85em !important; 
-    line-height: 1.2 !important;
+// ==========================================================================
+// 20. 【核心镇压】时间线装甲 (Timeline Override)
+// ==========================================================================
+#main {
+  /* 1. 精准狙击时间线滚动抓手，破解其 5 层 Class 嵌套的高优先级 */
+  .timeline-container .topic-timeline .timeline-scrollarea .timeline-scroller .timeline-handle {
+    background-color: #00D4FF !important; /* 斩断变量绑定，直写终末地青色十六进制！ */
+    width: 6px !important;
+    border-radius: 0 !important;
+    box-shadow: 0 0 12px rgba(0, 212, 255, 0.6) !important;
   }
 
-  img.emoji {
-    width: 16px !important; 
-    height: 16px !important;
-    flex-shrink: 0;
-    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.2)); 
-  }
+  /* 2. 时间线浮动读取面板 (Scroller Content) */
+  .timeline-container .topic-timeline .timeline-scroller-content {
+    background-color: #12151A !important;
+    border: 1px solid rgba(0, 212, 255, 0.4) !important;
+    border-radius: 0 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+    padding: 6px 12px !important;
+    /* 加入读取面板的机能切角 */
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)) !important;
 
-  /* 右上角战术情报标签 (微缩版) */
-  &::before {
-    position: absolute;
-    top: 0;
-    right: 0;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 8px !important; 
-    font-weight: 900;
-    padding: 1px 6px !important;
-    border-bottom-left-radius: 4px;
-    z-index: 2;
-    line-height: 1.2;
-    letter-spacing: 0.5px;
-  }
+    /* 进度数字高能显示 */
+    .timeline-replies {
+      color: #00D4FF !important;
+      font-family: "Rajdhani", "JetBrains Mono", monospace !important;
+      font-weight: 800 !important;
+      text-shadow: 0 0 5px rgba(0, 212, 255, 0.4) !important;
+    }
 
-  /* =======================================
-     1. 首次发帖通知 (青色能量阵营)
-     ======================================= */
-  &.new-user {
-    background-color: rgba(0, 212, 255, 0.08) !important; /* 略微提亮底色，增强实体感 */
-    border: 1px solid var(--tertiary-low) !important;
-    border-bottom-color: transparent !important; /* 隐藏底边框以实现无缝对接 */
-    border-left: 3px solid var(--tertiary) !important; 
-    
-    background-image:
-      linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px) !important;
-    background-size: 10px 10px !important; 
-
-    &::before {
-      content: "NEW_OP"; /* 进一步缩短文本 */
-      background: var(--tertiary-medium);
-      color: #000;
+    .timeline-ago {
+      color: rgba(255, 255, 255, 0.6) !important;
     }
   }
 
-  /* =======================================
-     2. 老用户回归通知 (战术橙色阵营)
-     ======================================= */
-  &.returning-user {
-    background-color: rgba(255, 107, 53, 0.08) !important;
-    border: 1px solid rgba(255, 107, 53, 0.2) !important;
-    border-bottom-color: transparent !important; /* 隐藏底边框以实现无缝对接 */
-    border-left: 3px solid var(--quaternary) !important;
-
-    background-image:
-      linear-gradient(90deg, rgba(255, 107, 53, 0.03) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(255, 107, 53, 0.03) 1px, transparent 1px) !important;
-    background-size: 10px 10px !important;
-
-    &::before {
-      content: "RET_OP";
-      background: rgba(255, 107, 53, 0.6);
-      color: #fff;
-    }
+  /* 3. 滑动轨道颜色防线校正 */
+  .timeline-container .topic-timeline .timeline-scrollarea {
+    border-left: 2px solid rgba(0, 212, 255, 0.15) !important;
   }
-}
 
-/* 强制下方的头像与发帖区域消除默认边距，主动上贴 */
-.post__row:has(.post-notice) + .post__row {
-  margin-top: 0 !important;
-  padding-top: 0 !important;
+  /* 4. 顶部与底部跳转日期鼠标悬停反馈 (战术橙告警) */
+  .timeline-container .timeline-date-wrapper a:hover,
+  .timeline-container .timeline-date-wrapper a:focus {
+    color: #FF6B35 !important;
+    background: transparent !important;
+    text-shadow: 0 0 8px rgba(255, 107, 53, 0.4) !important;
+  }
 }
