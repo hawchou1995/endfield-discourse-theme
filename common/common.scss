@@ -327,6 +327,80 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
 .topic-list tbody tr, .btn, .sidebar-wrapper .sidebar-container, .discourse-tag.box { will-change: transform, box-shadow, opacity; transform: translateZ(0); backface-visibility: hidden; }
 @media screen and (max-width: 767px) { .d-header { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; } .topic-list tbody tr { box-shadow: none !important; } }
 
+/* ==========================================================================
+   模块 1: Endfield AI Conversation Protocol (AI 对话界面专属装甲)
+   ========================================================================== */
+/* 零信任机制：仅当页面内探测到 AI 专属控件时，才接管当前用户的气泡，绝对防御常规话题被污染 */
+body:has(.ai-conversation__participants) .topic-post.post--current-user {
+  
+  /* 接管帖子主体外壳 */
+  .topic-body, .post__body {
+    background-color: rgba(0, 212, 255, 0.05) !important; /* 强制覆盖紫色，使用低浓度能量青 */
+    border: 1px solid var(--tertiary-medium) !important;
+    border-right: 4px solid var(--quaternary) !important; /* 战术橙色右边缘阵列，区分我方阵营 */
+    border-radius: 0 !important; /* 抹杀默认圆润边角 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 0 20px rgba(0, 212, 255, 0.02) !important;
+    
+    /* 终末地标志性 UI 切角：右下角机械切割 */
+    clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px)) !important;
+  }
+
+  /* 修复文字与背景的对比度，防止紫色主题残留的变量导致文字看不清 */
+  .cooked {
+    color: var(--primary) !important;
+    p { color: inherit !important; }
+  }
+}
+
+/* ==========================================================================
+   模块 2: Endfield Timeline System (时间线 HUD 视觉重构)
+   ========================================================================== */
+.timeline-container {
+
+  /* 1. 滚动条抓手 (Handle) 装甲化 */
+  .timeline-scroller .timeline-handle {
+    background-color: var(--tertiary) !important; /* 高亮青色核心 */
+    width: 6px !important; /* 强化物理实体感 */
+    border-radius: 0 !important; /* 铲除圆角 */
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.4) !important; /* 呼吸发光反馈 */
+  }
+
+  /* 2. 悬浮数据读取面板 (Scroller Content) */
+  .timeline-scroller-content {
+    background-color: var(--secondary) !important; /* 匹配深色装甲底色 */
+    border: 1px solid var(--tertiary-low) !important;
+    border-radius: 0 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+    
+    /* 引入科幻雷达切割角 */
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)) !important;
+    padding: 6px 12px !important;
+
+    /* 当前阅读进度数字的高能显示 */
+    .timeline-replies {
+      color: var(--tertiary) !important;
+      font-family: "Rajdhani", "JetBrains Mono", monospace !important;
+      font-weight: 800 !important;
+      letter-spacing: 1px;
+      text-shadow: 0 0 5px rgba(0, 212, 255, 0.3) !important;
+    }
+    
+    /* 时间戳文字降级显示，建立层次 */
+    .timeline-ago {
+      color: var(--primary-medium) !important;
+      font-size: 0.85em !important;
+      font-family: "Rajdhani", "Noto Sans SC", sans-serif !important;
+    }
+  }
+
+  /* 3. 彻底防线：抹杀时间线头部/尾部可能存在的紫色背景覆盖 */
+  .timeline-date-wrapper a:hover,
+  .timeline-date-wrapper a:focus {
+     color: var(--quaternary) !important; /* 交互时警示转为战术橙 */
+     background: transparent !important;
+  }
+}
+
 // ============================================
 // 15. 全局按钮 SVG 状态守护 (终极防消失机制)
 // ============================================
