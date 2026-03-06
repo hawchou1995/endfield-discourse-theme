@@ -34,15 +34,15 @@ $fluid-width: unquote($topic_list_width);
         margin-inline: 0 !important;
         padding-inline: 0 !important;
         box-sizing: border-box;
+        gap: 24px; /* 【新增屏障】添加安全间距，防止任何极端情况下贴脸 */
     }
     
-    body.archetype-list, body.navigation-topics, body.navigation-categories, body.tags-page {
-        #main-outlet {
-            max-width: $fluid-width !important; 
-            width: 100% !important;
-            margin-left: auto !important;  
-            margin-right: auto !important; 
-        }
+    // 【核心修复】：移除原本仅对列表页（body.archetype-list等）的限制，让包含话题页在内的全局 #main-outlet 均执行居中逻辑
+    #main-outlet {
+        max-width: $fluid-width !important; 
+        width: 100% !important;
+        margin-left: auto !important;  
+        margin-right: auto !important; 
     }
 
     .d-header > .wrap {
