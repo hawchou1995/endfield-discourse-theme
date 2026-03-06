@@ -360,26 +360,38 @@ html body:has(.ai-conversation__participants) .topic-post.current-user-post {
 }
 
 // ==========================================================================
-// 20. 【绝对镇压】时间线装甲 (Timeline Override)
+// 20. 【绝对镇压】时间线装甲 (Timeline Override) - 完美无缝融合版
 // ==========================================================================
 html body {
-  /* 1. 精准狙击时间线滚动抓手，以 html body 起手破解原生 5 层 Class 嵌套 */
+  /* 1. 精准狙击时间线滚动抓手 (蓝色能量轨滑块) */
   .timeline-container .topic-timeline .timeline-scrollarea .timeline-scroller .timeline-handle {
-    background-color: #00D4FF !important; /* 斩断变量绑定，直写终末地青色 HEX！ */
+    background-color: #00D4FF !important; 
     background: #00D4FF !important;
-    width: 6px !important;
+    width: 4px !important; /* 收细线条，增强精密感 */
     border-radius: 0 !important;
-    box-shadow: 0 0 12px rgba(0, 212, 255, 0.6) !important;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.6) !important;
+    z-index: 2 !important; /* 确保能量条在最上层 */
   }
 
-  /* 2. 时间线浮动读取面板 (Scroller Content) */
+  /* 2. 时间线浮动读取面板 (数据悬浮窗) */
   .timeline-container .topic-timeline .timeline-scroller-content {
     background-color: #12151A !important;
+    
+    /* 核心质感：在紧贴蓝条的左侧加入微弱青色渐变发光，呈现能量溢出效果 */
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.15) 0%, #12151A 15%) !important;
+    
     border: 1px solid rgba(0, 212, 255, 0.4) !important;
+    border-left: none !important; /* 核心对接：去掉左边框，让蓝色滑块直接充当它的左边界！ */
     border-radius: 0 !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
-    padding: 6px 12px !important;
-    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)) !important;
+    
+    /* 核心修复：设置等于蓝条宽度的 margin-left，完美无缝拼接，彻底消除"贯穿"错觉 */
+    margin-left: 4px !important; 
+    padding: 6px 12px 6px 10px !important; 
+    
+    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3) !important;
+    
+    /* 核心修复：左侧必须绝对平直(0 0 和 0 100%)，只在右侧做上下机能切角！杜绝破损感 */
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%) !important;
 
     .timeline-replies {
       color: #00D4FF !important;
@@ -393,12 +405,12 @@ html body {
     }
   }
 
-  /* 3. 滑动轨道颜色防线校正 */
+  /* 3. 滑动轨道底线 */
   .timeline-container .topic-timeline .timeline-scrollarea {
-    border-left: 2px solid rgba(0, 212, 255, 0.15) !important;
+    border-left: 1px solid rgba(0, 212, 255, 0.15) !important;
   }
 
-  /* 4. 顶部与底部跳转日期鼠标悬停反馈 (战术橙告警) */
+  /* 4. 顶部与底部跳转日期 */
   .timeline-container .timeline-date-wrapper a:hover,
   .timeline-container .timeline-date-wrapper a:focus {
     color: #FF6B35 !important;
