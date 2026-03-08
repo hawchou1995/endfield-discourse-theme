@@ -262,73 +262,92 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
 .chat-composer { background: var(--secondary) !important; border-top: 2px solid var(--tertiary-low) !important; padding: 12px 10px !important; .chat-composer__inner-container { background: var(--primary-very-low) !important; border: 1px solid var(--primary-low) !important; border-radius: 6px !important; padding: 4px 8px !important; display: flex !important; align-items: flex-end !important; transition: border-color 0.2s !important; &:focus-within { border-color: var(--tertiary) !important; box-shadow: 0 0 8px rgba(0, 212, 255, 0.1) !important; } } .chat-composer__input { background: transparent !important; border: none !important; box-shadow: none !important; color: var(--primary) !important; font-size: 0.95em !important; resize: none !important; } .chat-composer-button__wrapper .btn { border-radius: 4px !important; transition: all 0.2s !important; &:not([disabled]) { background: var(--tertiary) !important; color: var(--secondary) !important; border: 1px solid var(--tertiary) !important; &:hover { transform: scale(1.05) !important; background: var(--quaternary) !important; border-color: var(--quaternary) !important; } .d-icon { color: var(--secondary) !important; fill: var(--secondary) !important; } } } }
 
 // ==========================================================================
-// 14. 战术回复按钮矩阵 (Reply & Action Buttons - 柔和泛光增强版)
+// 14. 战术回复按钮矩阵 (高能霓虹泛光过载版)
 // ==========================================================================
 
 /* 1) 常规战术级：帖子右下角 & 时间线跟随的回复、回答按钮 */
 button.post-action-menu__reply, 
 button.create.reply-to-post,
 button.post-action-menu__post-voting-answer {
-  /* 静态状态：全息瞄准框风格 + 常驻微弱柔和泛光 */
   background: rgba(0, 212, 255, 0.08) !important;
-  border: 1px solid rgba(0, 212, 255, 0.4) !important;
+  border: 1px solid rgba(0, 212, 255, 0.6) !important; /* 加深边框基础底色 */
   color: var(--tertiary) !important; 
   border-radius: 0 !important;
   clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
   transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
   
-  /* 【新增】静止状态下的柔和双层泛光 (内蕴发光 + 外围弥散) */
-  box-shadow: 0 0 8px rgba(0, 212, 255, 0.15), inset 0 0 4px rgba(0, 212, 255, 0.05) !important;
+  /* 【静止高亮】紧贴边框的高强度青色泛光 + 内部微光 */
+  box-shadow: 
+    0 0 5px rgba(0, 212, 255, 0.6), 
+    0 0 12px rgba(0, 212, 255, 0.2), 
+    inset 0 0 6px rgba(0, 212, 255, 0.3) !important;
+    
+  /* 让图标和文字也带有微弱发光 */
+  text-shadow: 0 0 4px rgba(0, 212, 255, 0.4) !important;
 
-  /* 悬浮状态：青色能量注满，文字图标反黑，泛光增强且柔和 */
+  /* 【悬浮过载】青色能量彻底爆发，四层阴影叠化 */
   &:hover {
     background: var(--tertiary) !important;
     color: #000 !important; 
-    /* 【优化】更柔和、立体的悬浮发光 */
-    box-shadow: 0 0 16px rgba(0, 212, 255, 0.4), inset 0 0 8px rgba(0, 212, 255, 0.2) !important;
     border-color: var(--tertiary) !important;
     transform: translateY(-1px);
+    
+    /* 爆发级强光：极高亮内圈 + 大范围外圈 */
+    box-shadow: 
+      0 0 8px rgba(0, 212, 255, 0.9), 
+      0 0 20px rgba(0, 212, 255, 0.6), 
+      0 0 35px rgba(0, 212, 255, 0.3), 
+      inset 0 0 12px rgba(0, 212, 255, 0.6) !important;
+      
+    text-shadow: none !important; /* 字体反黑时去掉发光以保证锐利度 */
   }
 }
 
-/* 让帖子下方的回复/回答按钮和左侧的分享拉开一点呼吸距 */
+/* 按钮间距拉开，防止光晕互相干扰 */
 button.post-action-menu__reply,
 button.post-action-menu__post-voting-answer {
-  margin-left: 8px !important; 
+  margin-left: 12px !important; 
 }
 
-/* 2) 终极指令级：话题最下方的大号回复按钮 */
+/* 2) 终极指令级：话题最下方的大号回复按钮 (战术橙) */
 button.create.topic-footer-button {
-  /* 绑定终末地战术橙色，作为整个页面的核心视觉焦点 */
   background: var(--quaternary) !important;
   color: #fff !important; 
   border: 1px solid var(--quaternary) !important;
-  
-  /* 【新增】常驻橙色柔和泛光 */
-  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.2), 0 0 8px rgba(255, 107, 53, 0.15) !important;
   
   font-family: "Rajdhani", "Noto Sans SC", sans-serif;
   font-weight: 800 !important;
   letter-spacing: 2px;
   padding: 8px 24px !important;
   
-  /* 悬浮状态：橙色高能过载 (镂空线框发光效果) */
+  /* 【静止高亮】橙色高能待机，极强的物理存在感 */
+  box-shadow: 
+    0 4px 15px rgba(255, 107, 53, 0.3), 
+    0 0 10px rgba(255, 107, 53, 0.6),
+    inset 0 0 8px rgba(255, 107, 53, 0.4) !important;
+  
+  /* 【悬浮过载】镂空线框熔毁级发光 */
   &:hover {
     background: rgba(255, 107, 53, 0.1) !important; 
-    color: var(--quaternary) !important; /* 图标自动变橙 */
-    /* 柔和扩散的橙色过载光斑 */
-    box-shadow: 0 0 20px rgba(255, 107, 53, 0.35), inset 0 0 10px rgba(255, 107, 53, 0.15) !important;
+    color: var(--quaternary) !important; 
     border-color: var(--quaternary) !important;
     transform: translateY(-2px);
+    
+    /* 四层橙色过载爆发 */
+    box-shadow: 
+      0 0 12px rgba(255, 107, 53, 0.8), 
+      0 0 25px rgba(255, 107, 53, 0.5), 
+      0 0 40px rgba(255, 107, 53, 0.3), 
+      inset 0 0 15px rgba(255, 107, 53, 0.5) !important;
+      
+    text-shadow: 0 0 8px rgba(255, 107, 53, 0.6) !important;
   }
 }
 
-/* 3) 子程序级："添加评论" 按钮 (Post Voting 问答插件专属) */
+/* 3) 子程序级："添加评论" 按钮 (Post Voting 专属) */
 button.post-voting-comment-add-link {
-  background: rgba(0, 212, 255, 0.03) !important;
-  
-  /* 使用虚线框以区分这是次级操作 */
-  border: 1px dashed rgba(0, 212, 255, 0.35) !important; 
+  background: rgba(0, 212, 255, 0.05) !important;
+  border: 1px dashed rgba(0, 212, 255, 0.6) !important; /* 加深虚线可见度 */
   color: var(--tertiary) !important;
   border-radius: 0 !important;
   padding: 4px 12px !important;
@@ -338,19 +357,27 @@ button.post-voting-comment-add-link {
   font-weight: 700 !important;
   font-size: 0.85em !important;
   text-decoration: none !important;
-  
-  /* 稍微小一点的机能切角 */
   clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
   transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
   
-  /* 常驻微弱泛光 */
-  box-shadow: 0 0 6px rgba(0, 212, 255, 0.1) !important;
+  /* 【静止高亮】虚线边框也能透出耀眼光芒 */
+  box-shadow: 
+    0 0 5px rgba(0, 212, 255, 0.4), 
+    inset 0 0 4px rgba(0, 212, 255, 0.2) !important;
+  text-shadow: 0 0 3px rgba(0, 212, 255, 0.3) !important;
   
+  /* 【悬浮过载】虚线变实线并彻底点亮 */
   &:hover {
     background: rgba(0, 212, 255, 0.15) !important;
-    border-style: solid !important; /* 悬浮时边框变实线，提供明确的交互反馈 */
+    border-style: solid !important; 
     color: var(--tertiary) !important;
-    box-shadow: 0 0 12px rgba(0, 212, 255, 0.3), inset 0 0 6px rgba(0, 212, 255, 0.1) !important;
+    
+    box-shadow: 
+      0 0 10px rgba(0, 212, 255, 0.7), 
+      0 0 20px rgba(0, 212, 255, 0.4), 
+      inset 0 0 8px rgba(0, 212, 255, 0.4) !important;
+      
+    text-shadow: 0 0 8px rgba(0, 212, 255, 0.8) !important;
   }
 }
 
