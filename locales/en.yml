@@ -1,3 +1,12 @@
 en:
   theme_metadata:
     description: "Simplified front page design with classic colors and typography"
+
+en:
+  theme_metadata:
+    description: "A dark, sci-fi theme inspired by Arknights: Endfield."
+  theme_settings:
+    topic_list_width: "Width of the topic list container (e.g., 86%, 1200px)"
+    sidebar_stick_to_edge: "Stick sidebar to screen edge (True) or collapse with main content (False)"
+    # --- 👇 新增开关的后台显示说明 ---
+    enable_header_blur: "【视觉特效】启用顶部导航栏的磨砂玻璃 (Frosted Glass) 效果"
