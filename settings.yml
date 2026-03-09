@@ -7,3 +7,14 @@ sidebar_stick_to_edge:
   default: true
   type: bool
   description: "【布局切换】左侧导航栏和顶栏是否紧贴屏幕边缘？(勾选: 绝对贴边；不勾选: 居中收缩)"
+
+topic_list_width:
+  default: "86%"
+  type: string
+sidebar_stick_to_edge:
+  default: true
+  type: bool
+# --- 👇 新增的磨砂玻璃开关 ---
+enable_header_blur:
+  default: true
+  type: bool
