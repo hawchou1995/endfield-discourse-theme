@@ -227,9 +227,14 @@ img.avatar { border-radius: 0 !important; clip-path: polygon(15% 0, 100% 0, 100%
 #toggle-current-user { overflow: visible !important; .badge-notification { position: absolute; z-index: 99 !important; } }
 
 // ==========================================================================
-// 12. 全局渲染性能与细节 (Performance & SVG)
+// 12. 全局渲染性能与细节 (Performance Core)
 // ==========================================================================
-.topic-list tbody tr, .btn, .sidebar-wrapper .sidebar-container, .discourse-tag.box { will-change: transform, box-shadow, opacity; transform: translateZ(0); backface-visibility: hidden; }
+/* 【性能优化】已移除滥用的 will-change，释放大量 GPU 显存（VRAM），解决滚动卡顿 */
+.topic-list tbody tr, .btn, .sidebar-wrapper .sidebar-container, .discourse-tag.box { 
+  transform: translateZ(0); /* 仅保留极轻量级的硬件加速上下文 */
+  backface-visibility: hidden; 
+}
+
 @media screen and (max-width: 767px) { .d-header { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; } .topic-list tbody tr { box-shadow: none !important; } }
 
 .btn {
