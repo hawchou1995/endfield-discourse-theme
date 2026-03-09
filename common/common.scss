@@ -81,9 +81,22 @@ a:visited { color: $endfield-cyan; }
 // 3. 导航栏 (HUD) 防御阵列
 // ==========================================================================
 .d-header {
-  background: rgba(18, 21, 26, 0.95); border-bottom: 2px solid $endfield-cyan; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  // 👇 动态开关逻辑
+  @if $enable_header_blur == "true" {
+    background: rgba(18, 21, 26, 0.75) !important; /* 降低不透明度以透出背景 */
+    backdrop-filter: blur(12px) saturate(120%) !important; /* 磨砂玻璃核心效果，稍微增加饱和度让透出的色彩更鲜艳 */
+    -webkit-backdrop-filter: blur(12px) saturate(120%) !important;
+  } @else {
+    background: rgba(18, 21, 26, 0.95); /* 原版高不透明度实色 */
+  }
+  
+  border-bottom: 2px solid $endfield-cyan; 
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  
   &::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, $endfield-cyan, transparent 20%, transparent 80%, $endfield-cyan); }
   
+  /* ... 下方原有的 .title a 等代码保持不变 ... */
+   
   .title a, #site-text-logo { font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800 !important; letter-spacing: 0px; color: #fff !important; font-size: 1.2em; text-transform: uppercase; }
   
   .header-sidebar-toggle button, 
