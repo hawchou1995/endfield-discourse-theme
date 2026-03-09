@@ -1,8 +1,5 @@
 <style>
-  /* ===================================================
-     1. 反客为主：夺舍 Discourse 原生预加载屏
-     =================================================== */
-  /* 将原生加载屏直接伪装成终末地背景，填补 JS 延迟加载时的白屏空白 */
+  /* 1. 反客为主：夺舍 Discourse 原生预加载屏 */
   #d-splash {
     background-color: #12151A !important;
     background-image:
@@ -11,7 +8,6 @@
     background-size: 40px 40px !important;
     z-index: 9999998 !important; 
   }
-  /* 物理超度原生屏里的 5 个紫色点和预加载图 */
   #d-splash .dots, 
   #d-splash .preloader-image {
     display: none !important;
@@ -19,9 +15,7 @@
     animation: none !important;
   }
 
-  /* ===================================================
-     2. 常规内部加载圈拦截 (双保险)
-     =================================================== */
+  /* 2. 常规内部加载圈拦截 */
   #main-outlet > .spinner, 
   #main-outlet.wrap > .spinner, 
   #main-outlet-wrapper > .spinner,
@@ -39,9 +33,7 @@
     visibility: hidden !important;
   }
 
-  /* ===================================================
-     3. 终末地专属加载界面 (Endfield Loader)
-     =================================================== */
+  /* 3. 终末地专属加载界面 (性能优化版) */
   #endfield-loader {
     position: fixed;
     inset: 0;
@@ -63,15 +55,15 @@
     --sab: env(safe-area-inset-bottom, 0px);
   }
 
-  /* 转场幕布：从左侧锚定，初始宽度为0 */
   #ef-orange-flash {
     position: absolute; inset: 0;
     background-color: #FF6B35;
     z-index: 10;
     pointer-events: none;
-    transform-origin: left center; /* 锚定左边缘 */
-    transform: scaleX(0);          /* 初始 X 轴缩放为 0 */
-    transition: transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1); /* 清脆的推进感曲线 */
+    transform-origin: left center; 
+    transform: scaleX(0);          
+    transition: transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1); 
+    will-change: transform; /* 【性能优化】提前分配图层给大面积动画 */
   }
 
   .ef-rail {
@@ -88,23 +80,26 @@
     position: absolute;
     top: 0; left: 0;
     width: 100%;
-    height: 0%;
+    height: 100%; /* 【性能优化】初始设定为满高 */
     background: #FF6B35;
     box-shadow: 0 0 15px rgba(255, 107, 53, 0.8);
-    transition: height 0.05s linear;
+    transform-origin: top; /* 锚定顶部 */
+    transform: scaleY(0);  /* 【性能优化】用 GPU 加速的 scale 代替 height */
+    transition: transform 0.05s linear;
+    will-change: transform;
   }
 
   .ef-pct-container {
     position: absolute;
-    top: 100px; 
+    top: 0; /* 【性能优化】固定起点 */
     left: 28px;
-    transform: translateY(-50%); 
-    transition: top 0.05s linear;
+    transform: translateY(100px); /* 【性能优化】用 GPU 加速的 translate 代替 top */
+    transition: transform 0.05s linear;
     z-index: 5;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    will-change: top;
+    will-change: transform; 
   }
 
   .ef-pct-line-v {
@@ -193,15 +188,16 @@
       const vh = loader.getBoundingClientRect().height || window.innerHeight;
       let centerY = (pctValue / 100) * vh;
 
-      // 保底界限，防止字体未加载时撞破屏幕边缘
       if (centerY < 100) centerY = 100;
       if (centerY > vh - 100) centerY = vh - 100;
 
-      pctBox.style.top = centerY + "px";
+      // 【性能优化】使用 transform 位移，杜绝主线程阻塞
+      pctBox.style.transform = `translateY(${centerY}px)`;
     }
 
     function render() {
-      bar.style.height = pct + "%";
+      // 【性能优化】使用 GPU 硬件加速的缩放，不触发布局重排
+      bar.style.transform = `scaleY(${pct / 100})`;
       pctText.textContent = pct + "%";
       updatePctBoxPosition(pct);
     }
@@ -229,12 +225,10 @@
           return;
         }
       }
-      render();
+      // 利用 requestAnimationFrame 确保在浏览器绘制下一帧前更新 DOM，更平滑
+      requestAnimationFrame(render);
     }, 40);
 
-    // ==========================================
-    // 🚑 核心修复：把丢失的通讯函数加回来！
-    // ==========================================
     window.efFinishLoading = function () {
       if (isFinishing) return;
       isFinishing = true;
@@ -243,12 +237,9 @@
 
     function triggerOutro() {
       setTimeout(() => {
-        // 触发物理横扫
         if (orangeFlash) orangeFlash.style.transform = "scaleX(1)";
-        
         document.documentElement.style.backgroundColor = originalBg;
         
-        // 留足 250ms 让橙色闪光扫过全屏，然后整个界面淡出
         setTimeout(() => {
           loader.style.opacity = "0";
           loader.style.pointerEvents = "none";
