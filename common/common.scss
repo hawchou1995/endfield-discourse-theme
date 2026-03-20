@@ -426,6 +426,46 @@ button.post-voting-comment-add-link {
 .sidebar-section-link-wrapper .sidebar-section-link-content-badge { background-color: var(--quaternary) !important; color: #fff !important; border-radius: 2px !important; font-family: "JetBrains Mono", monospace !important; font-weight: 800 !important; padding: 2px 6px !important; box-shadow: 0 0 6px rgba(255, 107, 53, 0.5); }
 
 // ==========================================================================
+  // 🧩 修正：聊天频道未读预警节点 (剥离冗余橙色底座，重塑为高能光点)
+  // ==========================================================================
+  .sidebar-section-link-wrapper .sidebar-section-link-content-badge.icon.unread {
+    /* 1. 拆除多余的装甲底座 */
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    
+    /* 2. 对内部的核心圆点进行战术级 UI 改造 */
+    .d-icon {
+      /* 将原生小蓝点强制转换为终末地战术橙色 */
+      color: var(--quaternary) !important; 
+      fill: var(--quaternary) !important;
+      
+      /* 缩小核心体积，显得更加精密 */
+      width: 10px !important;
+      height: 10px !important;
+      
+      /* 注入全息发光滤镜与心跳呼吸动画 */
+      filter: drop-shadow(0 0 6px var(--quaternary));
+      animation: endfield-alert-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+  }
+
+// （注意：如果你的代码里没有这个动画定义，请把它放在 SCSS 文件的外层全局区域）
+@keyframes endfield-alert-pulse {
+  0%, 100% { 
+    opacity: 1; 
+    transform: scale(1); 
+    filter: drop-shadow(0 0 8px rgba(255, 107, 53, 0.9)); 
+  }
+  50% { 
+    opacity: 0.4; 
+    transform: scale(0.7); 
+    filter: drop-shadow(0 0 2px rgba(255, 107, 53, 0.2)); 
+  }
+}
+
+// ==========================================================================
 // 17. 右侧边栏战术高能反馈 (Right Sidebar)
 // ==========================================================================
 .tc-right-sidebar-wrapper, .d-right-sidebar {
