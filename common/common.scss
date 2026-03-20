@@ -589,3 +589,50 @@ html body {
     text-shadow: 0 0 8px rgba(255, 107, 53, 0.4) !important;
   }
 }
+
+// ==========================================================================
+// 🧩 修正：聊天抽屉未读预警节点 (Chat Drawer Unread Indicators)
+// ==========================================================================
+.chat-drawer {
+  
+  /* 1. 频道列表中的未读提示 & 底部 Tab 的未读小点：注入高能呼吸态 */
+  .chat-channel-unread-indicator,
+  .c-unread-indicator {
+    background-color: var(--quaternary) !important;
+    border: none !important;
+    animation: endfield-alert-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+  }
+
+  /* 2. 针对底部导航栏 (c-footer) 上的纯净小圆点 */
+  .c-unread-indicator {
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    top: 6px !important;   /* 微调在图标右上角的位置 */
+    right: 8px !important;
+    box-shadow: 0 0 6px var(--quaternary) !important;
+  }
+
+  /* 3. 针对频道列表里的提示块 (可能包含艾特数量或单纯显示未读) */
+  .chat-channel-unread-indicator {
+    border-radius: 2px !important; /* 终末地风格：极小的微倒角，拒绝大圆弧 */
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* 物理发光边缘 */
+    box-shadow: 
+      0 0 8px rgba(255, 107, 53, 0.6), 
+      inset 0 0 2px rgba(255, 255, 255, 0.5) !important;
+    
+    .chat-channel-unread-indicator__number {
+      font-family: "JetBrains Mono", "Rajdhani", monospace !important;
+      font-weight: 900 !important;
+      color: #fff !important;
+      font-size: 10px !important;
+      padding: 2px 6px !important;
+      line-height: 1;
+    }
+  }
+}
