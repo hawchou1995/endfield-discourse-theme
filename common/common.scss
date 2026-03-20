@@ -602,38 +602,31 @@ html body .sidebar-wrapper {
   }
 }
 
-// ==========================================================================
-// 🧩 修正：聊天抽屉未读预警节点 (Chat Drawer Fixes)
-// ==========================================================================
-html body .chat-drawer {
-  
-  /* --- A. 聊天频道列表中的未读提示块 --- */
-  .chat-channel-unread-indicator {
-    /* 父级容器剥离 */
-    background: transparent !important;
-    box-shadow: none !important;
+/* --- B. 聊天抽屉底部 & 顶部导航栏的未读提示 --- */
+  /* 修复切角马赛克：避开按钮右上角的物理切口，并改造成硬核机能方块 */
+  .c-unread-indicator,
+  .chat-header-icon .chat-channel-unread-indicator {
+    background: var(--quaternary) !important;
+    background-color: var(--quaternary) !important;
+    width: 6px !important;
+    height: 6px !important;
+    border-radius: 0 !important; /* 抛弃圆点，改用锐利的战术小方块 */
     border: none !important;
-    padding: 0 !important;
+    
+    /* 强制定位于安全区，向左下偏移，彻底避开右上角 10px 的切角刀锋！ */
+    position: absolute !important;
+    top: 12px !important;
+    right: 14px !important;
+    z-index: 10 !important;
 
-    /* 真正渲染背景的是里面的 __number */
-    &__number {
-      background: var(--quaternary) !important;
-      color: #fff !important;
-      border-radius: 2px !important;
-      font-family: "JetBrains Mono", "Rajdhani", monospace !important;
-      font-weight: 900 !important;
-      font-size: 10px !important;
-      padding: 2px 6px !important;
-      line-height: 1;
-      min-width: 16px !important; 
-      min-height: 16px !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      /* 这里不用 drop-shadow，改用内阴影避免外圈模糊 */
-      box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.3) !important;
-      animation: endfield-alert-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
-    }
+    /* 纯光效动画，拒绝缩放带来的边缘模糊 */
+    animation: endfield-dot-pulse-noscale 2s ease-in-out infinite !important;
+  }
+  
+  /* 顺手把顶栏聊天图标的未读圆点也修了，它和侧边栏底部是同一个毛病 */
+  .chat-header-icon .chat-channel-unread-indicator {
+    top: 6px !important;
+    right: 6px !important;
   }
 
   /* --- B. 聊天抽屉底部的纯净红点 (彻底消灭锯齿和半边) --- */
