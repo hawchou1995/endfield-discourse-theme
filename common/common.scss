@@ -591,48 +591,53 @@ html body {
 }
 
 // ==========================================================================
-// 🧩 修正：聊天抽屉未读预警节点 (Chat Drawer Unread Indicators)
+// 🧩 修正：聊天抽屉未读预警节点 (彻底消灭"蓝心橙皮"的套娃效果)
 // ==========================================================================
-.chat-drawer {
+html body .chat-drawer {
   
-  /* 1. 频道列表中的未读提示 & 底部 Tab 的未读小点：注入高能呼吸态 */
-  .chat-channel-unread-indicator,
-  .c-unread-indicator {
-    background-color: var(--quaternary) !important;
+  /* 1. 拆除父容器多余的橙色底座/背景，让它回归透明 */
+  .chat-channel-unread-indicator {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
     border: none !important;
-    animation: endfield-alert-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+    padding: 0 !important;
   }
 
-  /* 2. 针对底部导航栏 (c-footer) 上的纯净小圆点 */
+  /* 2. 直接对真正的"蓝点"实体（__number）和底部导航红点进行战术级覆写 */
+  .chat-channel-unread-indicator__number,
+  .c-unread-indicator {
+    background-color: var(--quaternary) !important;
+    background: var(--quaternary) !important;
+    color: #fff !important;
+    animation: endfield-alert-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+    box-shadow: 
+      0 0 8px rgba(255, 107, 53, 0.6), 
+      inset 0 0 2px rgba(255, 255, 255, 0.5) !important;
+  }
+
+  /* 3. 针对底部导航栏的小圆点，调整精确尺寸 */
   .c-unread-indicator {
     width: 8px !important;
     height: 8px !important;
     border-radius: 50% !important;
-    top: 6px !important;   /* 微调在图标右上角的位置 */
+    top: 6px !important;
     right: 8px !important;
-    box-shadow: 0 0 6px var(--quaternary) !important;
   }
 
-  /* 3. 针对频道列表里的提示块 (可能包含艾特数量或单纯显示未读) */
-  .chat-channel-unread-indicator {
-    border-radius: 2px !important; /* 终末地风格：极小的微倒角，拒绝大圆弧 */
-    padding: 0 !important;
+  /* 4. 针对频道列表里的数字/小蓝点，赋予终末地微倒角机能风 */
+  .chat-channel-unread-indicator__number {
+    border-radius: 2px !important; /* 机甲风格微倒角，告别大圆点 */
+    font-family: "JetBrains Mono", "Rajdhani", monospace !important;
+    font-weight: 900 !important;
+    font-size: 10px !important;
+    padding: 2px 6px !important;
+    line-height: 1;
+    min-width: 14px; /* 保证只有 &nbsp; 时也有足够的宽度 */
+    min-height: 14px;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: center;
-    
-    /* 物理发光边缘 */
-    box-shadow: 
-      0 0 8px rgba(255, 107, 53, 0.6), 
-      inset 0 0 2px rgba(255, 255, 255, 0.5) !important;
-    
-    .chat-channel-unread-indicator__number {
-      font-family: "JetBrains Mono", "Rajdhani", monospace !important;
-      font-weight: 900 !important;
-      color: #fff !important;
-      font-size: 10px !important;
-      padding: 2px 6px !important;
-      line-height: 1;
-    }
   }
 }
