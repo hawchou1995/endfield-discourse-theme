@@ -82,11 +82,11 @@ a:visited { color: $endfield-cyan; }
 // ==========================================================================
 .d-header {
   @if $enable_header_blur == "true" {
-    background: rgba(18, 21, 26, 0.75) !important; 
-    backdrop-filter: blur(12px) saturate(120%) !important; 
+    background: rgba(18, 21, 26, 0.75) !important;
+    backdrop-filter: blur(12px) saturate(120%) !important;
     -webkit-backdrop-filter: blur(12px) saturate(120%) !important;
   } @else {
-    background: rgba(18, 21, 26, 0.95); 
+    background: rgba(18, 21, 26, 0.95);
   }
   
   border-bottom: 2px solid $endfield-cyan; 
@@ -96,20 +96,11 @@ a:visited { color: $endfield-cyan; }
    
   .title a, #site-text-logo { font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800 !important; letter-spacing: 0px; color: #fff !important; font-size: 1.2em; text-transform: uppercase; }
   
-  /* 破除顶部导航栏结界，防止小点被切断 */
-  .d-header-icons li {
-    overflow: visible !important;
-  }
-
   .header-sidebar-toggle button, 
   .d-header-icons .icon, 
   .d-header-icons .btn,
   .header-buttons .btn:not(.login-button):not(.sign-up-button) { 
-    color: #fff !important; 
-    border: 1px solid transparent !important; 
-    clip-path: none !important; 
-    overflow: visible !important; /* 关键：释放内部小点的显示空间 */
-    background: transparent !important; 
+    color: #fff !important; border: 1px solid transparent !important; clip-path: none !important; background: transparent !important; 
     .d-icon { color: #fff !important; fill: #fff !important; opacity: 0.85 !important; transition: all 0.2s ease; } 
     &:hover, &:focus, &.active { background: rgba(0, 212, 255, 0.1) !important; border: 1px solid $endfield-cyan !important; border-radius: 0; color: $endfield-cyan !important; .d-icon { color: $endfield-cyan !important; fill: $endfield-cyan !important; opacity: 1 !important; } } 
   }
@@ -212,6 +203,7 @@ a:visited { color: $endfield-cyan; }
 .timeline-controls, .timeline-footer-controls, #topic-footer-buttons, .topic-footer-main-buttons {
   .btn-default:hover { background-color: $endfield-cyan !important; border-color: $endfield-cyan !important; color: #000 !important; .d-icon, .svg-icon { color: #000 !important; fill: #000 !important; stroke: transparent; } }
 }
+.badge-notification.new-topic { background-color: $endfield-cyan !important; color: transparent !important; width: 8px !important; height: 8px !important; border-radius: 50% !important; padding: 0 !important; margin: 0 5px !important; display: inline-block !important; vertical-align: middle !important; border: none !important; box-shadow: 0 0 4px $endfield-cyan !important; &::before, &::after { content: none !important; display: none !important; } }
 
 // ==========================================================================
 // 10. 加载动画终结器 (Spinner Override)
@@ -374,7 +366,6 @@ button.post-voting-comment-add-link {
 .sidebar-section-header { position: relative; &::after { content: ""; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); width: 4px; height: 4px; background-color: var(--tertiary); box-shadow: 0 0 6px var(--tertiary); animation: prts-blink 2s step-end infinite; } }
 .sidebar-section-link-wrapper .sidebar-section-link { border-radius: 0 !important; margin: 2px 8px !important; padding: 6px 10px !important; transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) !important; border-left: 2px solid transparent !important; .sidebar-section-link-prefix { color: var(--primary-medium) !important; transition: color 0.2s ease; } &:hover { background-color: rgba(0, 212, 255, 0.05) !important; border-left-color: var(--tertiary-medium) !important; padding-left: 16px !important; .sidebar-section-link-prefix, .sidebar-section-link-content-text { color: var(--tertiary) !important; text-shadow: 0 0 8px rgba(0, 212, 255, 0.3); } } &.active { background-color: rgba(0, 212, 255, 0.1) !important; border-left: 3px solid var(--tertiary) !important; padding-left: 16px !important; font-weight: 800 !important; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%); .sidebar-section-link-prefix, .sidebar-section-link-content-text { color: var(--tertiary) !important; } } }
 .sidebar-section-link-wrapper .badge-category-bg { border-radius: 2px !important; width: 8px !important; height: 8px !important; box-shadow: 0 0 4px currentColor; }
-.sidebar-section-link-wrapper .sidebar-section-link-content-badge { background-color: var(--quaternary) !important; color: #fff !important; border-radius: 2px !important; font-family: "JetBrains Mono", monospace !important; font-weight: 800 !important; padding: 2px 6px !important; box-shadow: 0 0 6px rgba(255, 107, 53, 0.5); }
 
 // ==========================================================================
 // 17. 右侧边栏战术高能反馈 (Right Sidebar)
@@ -440,25 +431,21 @@ html body:has(.ai-conversation__participants) .topic-post.current-user-post {
 // 20. 【绝对镇压】时间线装甲 (Timeline Override) - 完美无缝融合版
 // ==========================================================================
 html body {
-  /* 1. 精准狙击时间线滚动抓手 (蓝色能量轨滑块) */
   .timeline-container .topic-timeline .timeline-scrollarea .timeline-scroller .timeline-handle {
     background-color: #00D4FF !important; 
     background: #00D4FF !important;
-    width: 4px !important; /* 收细线条，增强精密感 */
+    width: 4px !important; 
     border-radius: 0 !important;
     box-shadow: 0 0 10px rgba(0, 212, 255, 0.6) !important;
-    z-index: 2 !important; /* 确保能量条在最上层 */
+    z-index: 2 !important; 
   }
 
-  /* 2. 时间线浮动读取面板 (数据悬浮窗) */
   .timeline-container .topic-timeline .timeline-scroller-content {
     background-color: #12151A !important;
     background: linear-gradient(90deg, rgba(0, 212, 255, 0.15) 0%, #12151A 15%) !important;
-    
     border: 1px solid rgba(0, 212, 255, 0.4) !important;
     border-left: none !important; 
     border-radius: 0 !important;
-    
     margin-left: 4px !important; 
     padding: 6px 12px 6px 10px !important; 
     box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3) !important;
@@ -476,12 +463,10 @@ html body {
     }
   }
 
-  /* 3. 滑动轨道底线 */
   .timeline-container .topic-timeline .timeline-scrollarea {
     border-left: 1px solid rgba(0, 212, 255, 0.15) !important;
   }
 
-  /* 4. 顶部与底部跳转日期 */
   .timeline-container .timeline-date-wrapper a:hover,
   .timeline-container .timeline-date-wrapper a:focus {
     color: #FF6B35 !important;
@@ -491,15 +476,17 @@ html body {
 }
 
 // ==========================================================================
-// 💡 全局预警灯效动画库
+// 💡 21. 全局预警灯效动画库
 // ==========================================================================
 @keyframes endfield-alert-pulse {
   0%, 100% { 
     opacity: 1; 
-    filter: drop-shadow(0 0 6px rgba(255, 107, 53, 0.9)); 
+    transform: scale(1); 
+    filter: drop-shadow(0 0 8px rgba(255, 107, 53, 0.9)); 
   }
   50% { 
     opacity: 0.6; 
+    transform: scale(0.85); 
     filter: drop-shadow(0 0 2px rgba(255, 107, 53, 0.3)); 
   }
 }
@@ -510,107 +497,124 @@ html body {
     box-shadow: 0 0 6px var(--quaternary) !important;
   }
   50% { 
-    opacity: 0.4; 
-    box-shadow: 0 0 1px var(--quaternary) !important;
+    opacity: 0.5; 
+    box-shadow: 0 0 2px var(--quaternary) !important;
   }
 }
 
 // ==========================================================================
-// 🧩 修正：左侧导航栏未读圆点
+// 22. 全局未读提示点矩阵 (Unread Indicators Master Fix)
 // ==========================================================================
-html body .sidebar-wrapper {
-  .sidebar-section-link-wrapper .sidebar-section-link-content-badge.icon.unread {
-    background: transparent !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
-    border: none !important;
-    padding: 0 !important;
+
+/* --- A. 左侧菜单栏 (Sidebar) --- */
+.sidebar-section-link-wrapper {
+  /* 原本用于纯数字的角标 (如 [ 12 ]) */
+  .sidebar-section-link-content-badge {
+    background-color: var(--quaternary) !important; 
+    color: #fff !important; 
+    border-radius: 2px !important; 
+    font-family: "JetBrains Mono", monospace !important; 
+    font-weight: 800 !important; 
+    padding: 2px 6px !important; 
+    box-shadow: 0 0 6px rgba(255, 107, 53, 0.5);
     
-    svg.d-icon.d-icon-circle {
-      color: var(--quaternary) !important; 
-      fill: var(--quaternary) !important;
-      width: 8px !important;
-      height: 8px !important;
-      animation: endfield-alert-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
-    }
-  }
-}
-
-// ==========================================================================
-// 🧩 修正：聊天系统未读预警节点 (防板砖 & 防裁切)
-// ==========================================================================
-html body {
-  /* --- A. 聊天抽屉：频道列表中的未读提示块 --- */
-  .chat-drawer {
-    .chat-channel-unread-indicator {
+    /* 核心修复：如果是图标(蓝点)，剥除背景，只让内部的SVG发光 */
+    &.icon.unread {
       background: transparent !important;
       box-shadow: none !important;
-      border: none !important;
       padding: 0 !important;
-
-      &__number {
-        background: var(--quaternary) !important;
-        color: #12151A !important; /* 文字反黑，高对比度 */
-        border-radius: 2px !important;
-        font-family: "JetBrains Mono", "Rajdhani", monospace !important;
-        font-weight: 900 !important;
-        font-size: 11px !important;
-        padding: 0 4px !important;
-        line-height: 14px !important;
-        min-width: 6px !important; /* 取消板砖，变回精干的小长条 */
-        height: 14px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.4) !important;
-        animation: endfield-alert-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+      
+      svg {
+        color: var(--quaternary) !important; 
+        fill: var(--quaternary) !important;
+        width: 10px !important;
+        height: 10px !important;
+        animation: endfield-alert-pulse 2s ease-in-out infinite !important;
       }
-    }
-
-    /* --- B. 聊天抽屉底部的纯净小方点 --- */
-    .c-footer__item {
-      overflow: visible !important;
-      clip-path: none !important;
-      contain: none !important; 
-    }
-
-    .c-unread-indicator {
-      background: var(--quaternary) !important;
-      background-color: var(--quaternary) !important;
-      width: 6px !important;
-      height: 6px !important;
-      border-radius: 1px !important; 
-      border: none !important;
-      position: absolute !important;
-      top: 8px !important; /* 往内部缩，避开边缘 */
-      right: 10px !important;
-      z-index: 10 !important;
-      animation: endfield-dot-pulse-noscale 2s ease-in-out infinite !important;
     }
   }
   
-  /* --- C. 顶栏右侧聊天图标的未读圆点 (防半边马赛克) --- */
-  .chat-header-icon {
-    overflow: visible !important;
-    
-    .btn {
-      overflow: visible !important;
-      clip-path: none !important;
-    }
-    
-    .chat-channel-unread-indicator {
+  /* 常规版块(非聊天)的未读蓝点 */
+  .sidebar-section-link-suffix.icon.unread svg {
+    color: var(--quaternary) !important; 
+    fill: var(--quaternary) !important;
+    width: 10px !important;
+    height: 10px !important;
+    animation: endfield-alert-pulse 2s ease-in-out infinite !important;
+  }
+}
+
+/* --- B. 顶部导航栏 (Header Chat Icon) --- */
+.d-header .chat-header-icon {
+  overflow: visible !important;
+  .btn { overflow: visible !important; clip-path: none !important; }
+  
+  .chat-channel-unread-indicator {
+    background: var(--quaternary) !important;
+    background-color: var(--quaternary) !important;
+    width: 6px !important; /* 战术极小方块 */
+    height: 6px !important;
+    border-radius: 1px !important; 
+    border: none !important;
+    position: absolute !important;
+    top: 4px !important; 
+    right: 4px !important; /* 往内部收缩，彻底避开切角马赛克 */
+    z-index: 99 !important;
+    box-shadow: 0 0 4px var(--quaternary) !important;
+    animation: endfield-dot-pulse-noscale 2s ease-in-out infinite !important;
+  }
+}
+
+/* --- C. 右下角聊天抽屉 (Chat Drawer) --- */
+.chat-drawer {
+  
+  /* 1. 频道列表中的提示 (包含文字和纯提示点) */
+  .chat-channel-unread-indicator {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+
+    &__number {
       background: var(--quaternary) !important;
-      background-color: var(--quaternary) !important;
-      width: 8px !important;
-      height: 8px !important;
-      border-radius: 1px !important; /* 机能风小方块 */
-      border: none !important;
-      position: absolute !important;
-      top: 2px !important; /* 大幅往内收缩，躲开原本可能存在的裁切线 */
-      right: 2px !important;
-      z-index: 99 !important;
-      box-shadow: 0 0 6px var(--quaternary) !important;
-      animation: endfield-dot-pulse-noscale 2s ease-in-out infinite !important;
+      color: #12151A !important; 
+      border-radius: 2px !important;
+      font-family: "JetBrains Mono", "Rajdhani", monospace !important;
+      font-weight: 900 !important;
+      font-size: 10px !important;
+      
+      /* 核心修复：彻底砸碎板砖！把无内容的空格状态收紧为极小方块 */
+      padding: 0 !important;
+      width: 6px !important; 
+      height: 6px !important;
+      min-width: 6px !important;
+      min-height: 6px !important;
+      overflow: hidden; /* 强行裁掉那个讨厌的 &nbsp; */
+      color: transparent !important; /* 把空格设为透明 */
+      
+      box-shadow: 0 0 4px var(--quaternary) !important;
+      animation: endfield-alert-pulse 2s ease-in-out infinite !important;
     }
+  }
+
+  /* 2. 抽屉底部 Tab 的红点 */
+  .c-footer__item {
+    overflow: visible !important;
+    clip-path: none !important; /* 取消切角，防止切掉红点 */
+  }
+  
+  .c-unread-indicator {
+    background: var(--quaternary) !important;
+    background-color: var(--quaternary) !important;
+    width: 6px !important; /* 战术方块 */
+    height: 6px !important;
+    border-radius: 1px !important; 
+    border: none !important;
+    position: absolute !important;
+    top: 6px !important;
+    right: 12px !important; /* 往内部偏移，避开物理裁切边缘 */
+    z-index: 10 !important;
+    box-shadow: 0 0 4px var(--quaternary) !important;
+    animation: endfield-dot-pulse-noscale 2s ease-in-out infinite !important;
   }
 }
