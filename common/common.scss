@@ -82,11 +82,11 @@ a:visited { color: $endfield-cyan; }
 // ==========================================================================
 .d-header {
   @if $enable_header_blur == "true" {
-    background: rgba(18, 21, 26, 0.75) !important;
-    backdrop-filter: blur(12px) saturate(120%) !important;
+    background: rgba(18, 21, 26, 0.75) !important; 
+    backdrop-filter: blur(12px) saturate(120%) !important; 
     -webkit-backdrop-filter: blur(12px) saturate(120%) !important;
   } @else {
-    background: rgba(18, 21, 26, 0.95);
+    background: rgba(18, 21, 26, 0.95); 
   }
   
   border-bottom: 2px solid $endfield-cyan; 
@@ -96,11 +96,20 @@ a:visited { color: $endfield-cyan; }
    
   .title a, #site-text-logo { font-family: "Rajdhani", "Noto Sans SC", sans-serif; font-weight: 800 !important; letter-spacing: 0px; color: #fff !important; font-size: 1.2em; text-transform: uppercase; }
   
+  /* 破除顶部导航栏结界，防止小点被切断 */
+  .d-header-icons li {
+    overflow: visible !important;
+  }
+
   .header-sidebar-toggle button, 
   .d-header-icons .icon, 
   .d-header-icons .btn,
   .header-buttons .btn:not(.login-button):not(.sign-up-button) { 
-    color: #fff !important; border: 1px solid transparent !important; clip-path: none !important; background: transparent !important; 
+    color: #fff !important; 
+    border: 1px solid transparent !important; 
+    clip-path: none !important; 
+    overflow: visible !important; /* 关键：释放内部小点的显示空间 */
+    background: transparent !important; 
     .d-icon { color: #fff !important; fill: #fff !important; opacity: 0.85 !important; transition: all 0.2s ease; } 
     &:hover, &:focus, &.active { background: rgba(0, 212, 255, 0.1) !important; border: 1px solid $endfield-cyan !important; border-radius: 0; color: $endfield-cyan !important; .d-icon { color: $endfield-cyan !important; fill: $endfield-cyan !important; opacity: 1 !important; } } 
   }
@@ -203,7 +212,6 @@ a:visited { color: $endfield-cyan; }
 .timeline-controls, .timeline-footer-controls, #topic-footer-buttons, .topic-footer-main-buttons {
   .btn-default:hover { background-color: $endfield-cyan !important; border-color: $endfield-cyan !important; color: #000 !important; .d-icon, .svg-icon { color: #000 !important; fill: #000 !important; stroke: transparent; } }
 }
-.badge-notification.new-topic { background-color: $endfield-cyan !important; color: transparent !important; width: 8px !important; height: 8px !important; border-radius: 50% !important; padding: 0 !important; margin: 0 5px !important; display: inline-block !important; vertical-align: middle !important; border: none !important; box-shadow: 0 0 4px $endfield-cyan !important; &::before, &::after { content: none !important; display: none !important; } }
 
 // ==========================================================================
 // 10. 加载动画终结器 (Spinner Override)
@@ -395,7 +403,9 @@ button.post-voting-comment-add-link {
 html body .private_message .topic-post.current-user-post,
 html body.archetype-private_message .topic-post.current-user-post,
 html body:has(.ai-conversation__participants) .topic-post.current-user-post {
+  
   background: none !important;
+  
   & > article, 
   .post__row,
   .post__regular,
@@ -405,17 +415,21 @@ html body:has(.ai-conversation__participants) .topic-post.current-user-post {
     border: none !important;
     box-shadow: none !important;
   }
+
   .topic-body, .post__body {
-    background: rgba(0, 212, 255, 0.08) !important; 
+    background: rgba(0, 212, 255, 0.08) !important;
     background-color: rgba(0, 212, 255, 0.08) !important;
     border: 1px solid rgba(0, 212, 255, 0.3) !important;
-    border-right: 4px solid #FF6B35 !important; 
+    border-right: 4px solid #FF6B35 !important;
     border-left: none !important; 
     border-radius: 0 !important; 
+    
     clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px)) !important;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05), inset 0 0 20px rgba(0, 212, 255, 0.02) !important;
+    
     padding: 12px 12px 12px 15px !important;
   }
+
   .cooked {
     color: var(--primary) !important;
     p { color: inherit !important; }
@@ -430,19 +444,21 @@ html body {
   .timeline-container .topic-timeline .timeline-scrollarea .timeline-scroller .timeline-handle {
     background-color: #00D4FF !important; 
     background: #00D4FF !important;
-    width: 4px !important; 
+    width: 4px !important; /* 收细线条，增强精密感 */
     border-radius: 0 !important;
     box-shadow: 0 0 10px rgba(0, 212, 255, 0.6) !important;
-    z-index: 2 !important; 
+    z-index: 2 !important; /* 确保能量条在最上层 */
   }
 
   /* 2. 时间线浮动读取面板 (数据悬浮窗) */
   .timeline-container .topic-timeline .timeline-scroller-content {
     background-color: #12151A !important;
     background: linear-gradient(90deg, rgba(0, 212, 255, 0.15) 0%, #12151A 15%) !important;
+    
     border: 1px solid rgba(0, 212, 255, 0.4) !important;
     border-left: none !important; 
     border-radius: 0 !important;
+    
     margin-left: 4px !important; 
     padding: 6px 12px 6px 10px !important; 
     box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3) !important;
@@ -454,6 +470,7 @@ html body {
       font-weight: 800 !important;
       text-shadow: 0 0 5px rgba(0, 212, 255, 0.4) !important;
     }
+
     .timeline-ago {
       color: rgba(255, 255, 255, 0.6) !important;
     }
@@ -479,12 +496,10 @@ html body {
 @keyframes endfield-alert-pulse {
   0%, 100% { 
     opacity: 1; 
-    transform: scale(1); 
-    filter: drop-shadow(0 0 8px rgba(255, 107, 53, 0.9)); 
+    filter: drop-shadow(0 0 6px rgba(255, 107, 53, 0.9)); 
   }
   50% { 
     opacity: 0.6; 
-    transform: scale(0.85); 
     filter: drop-shadow(0 0 2px rgba(255, 107, 53, 0.3)); 
   }
 }
@@ -495,8 +510,8 @@ html body {
     box-shadow: 0 0 6px var(--quaternary) !important;
   }
   50% { 
-    opacity: 0.5; 
-    box-shadow: 0 0 2px var(--quaternary) !important;
+    opacity: 0.4; 
+    box-shadow: 0 0 1px var(--quaternary) !important;
   }
 }
 
@@ -514,18 +529,18 @@ html body .sidebar-wrapper {
     svg.d-icon.d-icon-circle {
       color: var(--quaternary) !important; 
       fill: var(--quaternary) !important;
-      width: 10px !important;
-      height: 10px !important;
+      width: 8px !important;
+      height: 8px !important;
       animation: endfield-alert-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
     }
   }
 }
 
 // ==========================================================================
-// 🧩 修正：聊天抽屉未读预警节点 & 顶部导航栏红点 (Chat Drawer Fixes)
+// 🧩 修正：聊天系统未读预警节点 (防板砖 & 防裁切)
 // ==========================================================================
 html body {
-  /* --- A. 聊天频道列表中的未读提示块 --- */
+  /* --- A. 聊天抽屉：频道列表中的未读提示块 --- */
   .chat-drawer {
     .chat-channel-unread-indicator {
       background: transparent !important;
@@ -535,24 +550,24 @@ html body {
 
       &__number {
         background: var(--quaternary) !important;
-        color: #fff !important;
+        color: #12151A !important; /* 文字反黑，高对比度 */
         border-radius: 2px !important;
         font-family: "JetBrains Mono", "Rajdhani", monospace !important;
         font-weight: 900 !important;
-        font-size: 10px !important;
-        padding: 2px 6px !important;
-        line-height: 1;
-        min-width: 16px !important; 
-        min-height: 16px !important;
+        font-size: 11px !important;
+        padding: 0 4px !important;
+        line-height: 14px !important;
+        min-width: 6px !important; /* 取消板砖，变回精干的小长条 */
+        height: 14px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.3) !important;
+        box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.4) !important;
         animation: endfield-alert-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
       }
     }
 
-    /* --- B. 聊天抽屉底部的纯净红点 --- */
+    /* --- B. 聊天抽屉底部的纯净小方点 --- */
     .c-footer__item {
       overflow: visible !important;
       clip-path: none !important;
@@ -564,28 +579,38 @@ html body {
       background-color: var(--quaternary) !important;
       width: 6px !important;
       height: 6px !important;
-      border-radius: 0 !important; 
+      border-radius: 1px !important; 
       border: none !important;
       position: absolute !important;
-      top: 12px !important;
-      right: 14px !important;
+      top: 8px !important; /* 往内部缩，避开边缘 */
+      right: 10px !important;
       z-index: 10 !important;
       animation: endfield-dot-pulse-noscale 2s ease-in-out infinite !important;
     }
   }
   
-  /* --- C. 顶栏聊天图标的未读圆点 --- */
-  .chat-header-icon .chat-channel-unread-indicator {
-    background: var(--quaternary) !important;
-    background-color: var(--quaternary) !important;
-    width: 6px !important;
-    height: 6px !important;
-    border-radius: 0 !important;
-    border: none !important;
-    position: absolute !important;
-    top: 6px !important;
-    right: 6px !important;
-    z-index: 10 !important;
-    animation: endfield-dot-pulse-noscale 2s ease-in-out infinite !important;
+  /* --- C. 顶栏右侧聊天图标的未读圆点 (防半边马赛克) --- */
+  .chat-header-icon {
+    overflow: visible !important;
+    
+    .btn {
+      overflow: visible !important;
+      clip-path: none !important;
+    }
+    
+    .chat-channel-unread-indicator {
+      background: var(--quaternary) !important;
+      background-color: var(--quaternary) !important;
+      width: 8px !important;
+      height: 8px !important;
+      border-radius: 1px !important; /* 机能风小方块 */
+      border: none !important;
+      position: absolute !important;
+      top: 2px !important; /* 大幅往内收缩，躲开原本可能存在的裁切线 */
+      right: 2px !important;
+      z-index: 99 !important;
+      box-shadow: 0 0 6px var(--quaternary) !important;
+      animation: endfield-dot-pulse-noscale 2s ease-in-out infinite !important;
+    }
   }
 }
