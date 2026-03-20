@@ -551,82 +551,114 @@ html body {
 }
 
 // ==========================================================================
-// 💡 极小指示灯专用呼吸动画 (无形变，防模糊)
+// 💡 全局预警灯效动画库
 // ==========================================================================
-@keyframes endfield-dot-pulse {
+@keyframes endfield-alert-pulse {
   0%, 100% { 
     opacity: 1; 
-    box-shadow: 
-      0 0 8px rgba(255, 107, 53, 0.8), 
-      inset 0 0 2px rgba(255, 255, 255, 0.5);
+    transform: scale(1); 
+    filter: drop-shadow(0 0 8px rgba(255, 107, 53, 0.9)); 
   }
   50% { 
-    opacity: 0.5; 
-    box-shadow: 
-      0 0 2px rgba(255, 107, 53, 0.3), 
-      inset 0 0 1px rgba(255, 255, 255, 0.2);
+    opacity: 0.6; 
+    transform: scale(0.85); 
+    filter: drop-shadow(0 0 2px rgba(255, 107, 53, 0.3)); 
   }
 }
 
+@keyframes endfield-dot-pulse-noscale {
+  0%, 100% { 
+    opacity: 1; 
+    box-shadow: 0 0 6px var(--quaternary) !important;
+  }
+  50% { 
+    opacity: 0.5; 
+    box-shadow: 0 0 2px var(--quaternary) !important;
+  }
+}
+
+
 // ==========================================================================
-// 🧩 修正：聊天抽屉未读预警节点 (彻底消灭"蓝心橙皮"的套娃效果)
+// 🧩 修正：左侧导航栏未读圆点 (彻底拔除蓝心橙皮)
 // ==========================================================================
-html body .chat-drawer {
-  
-  /* 1. 拆除父容器多余的橙色底座/背景，让它回归透明 */
-  .chat-channel-unread-indicator {
+html body .sidebar-wrapper {
+  .sidebar-section-link-wrapper .sidebar-section-link-content-badge.icon.unread {
+    /* 强力拆除父容器装甲 */
     background: transparent !important;
     background-color: transparent !important;
     box-shadow: none !important;
     border: none !important;
     padding: 0 !important;
+    
+    /* 靶向重铸内部的 SVG 小圈圈 */
+    svg.d-icon.d-icon-circle {
+      color: var(--quaternary) !important; 
+      fill: var(--quaternary) !important;
+      width: 10px !important;
+      height: 10px !important;
+      /* 注入脉冲动画 */
+      animation: endfield-alert-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+    }
+  }
+}
+
+// ==========================================================================
+// 🧩 修正：聊天抽屉未读预警节点 (Chat Drawer Fixes)
+// ==========================================================================
+html body .chat-drawer {
+  
+  /* --- A. 聊天频道列表中的未读提示块 --- */
+  .chat-channel-unread-indicator {
+    /* 父级容器剥离 */
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+
+    /* 真正渲染背景的是里面的 __number */
+    &__number {
+      background: var(--quaternary) !important;
+      color: #fff !important;
+      border-radius: 2px !important;
+      font-family: "JetBrains Mono", "Rajdhani", monospace !important;
+      font-weight: 900 !important;
+      font-size: 10px !important;
+      padding: 2px 6px !important;
+      line-height: 1;
+      min-width: 16px !important; 
+      min-height: 16px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      /* 这里不用 drop-shadow，改用内阴影避免外圈模糊 */
+      box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.3) !important;
+      animation: endfield-alert-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+    }
   }
 
-  /* 2. 直接对真正的"蓝点"实体（__number）和底部导航红点进行战术级覆写 */
-  .chat-channel-unread-indicator__number,
+  /* --- B. 聊天抽屉底部的纯净红点 (彻底消灭锯齿和半边) --- */
+  /* 解开底部按钮的结界 */
+  .c-footer__item {
+    overflow: visible !important;
+    clip-path: none !important;
+    contain: none !important; /* 有些版本的 Ember 会加上 contain */
+  }
+
   .c-unread-indicator {
-    background-color: var(--quaternary) !important;
     background: var(--quaternary) !important;
-    color: #fff !important;
-    box-shadow: 
-      0 0 8px rgba(255, 107, 53, 0.6), 
-      inset 0 0 2px rgba(255, 255, 255, 0.5) !important;
-  }
-
-  /* 分别应用动画以避免小圆点模糊 */
-  .chat-channel-unread-indicator__number {
-    animation: endfield-alert-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
-  }
-
-  /* 3. 针对底部导航栏的小圆点，调整精确尺寸并使用无形变动画 */
-  .c-unread-indicator {
+    background-color: var(--quaternary) !important;
     width: 8px !important;
     height: 8px !important;
     border-radius: 50% !important;
-    top: 6px !important;
-    right: 8px !important;
-    animation: endfield-dot-pulse 2s ease-in-out infinite !important;
-  }
+    border: none !important;
+    
+    /* 强制在右上角浮空 */
+    position: absolute !important;
+    top: 4px !important;
+    right: 4px !important;
+    z-index: 10 !important;
 
-  /* 4. 针对频道列表里的数字/小蓝点，赋予终末地微倒角机能风 */
-  .chat-channel-unread-indicator__number {
-    border-radius: 2px !important; /* 机甲风格微倒角，告别大圆点 */
-    font-family: "JetBrains Mono", "Rajdhani", monospace !important;
-    font-weight: 900 !important;
-    font-size: 10px !important;
-    padding: 2px 6px !important;
-    line-height: 1;
-    min-width: 14px; /* 保证只有 &nbsp; 时也有足够的宽度 */
-    min-height: 14px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* 5. 破除底部导航栏的物理裁切限制，释放小圆点，防止只显示一半 */
-  .c-footer .btn.c-footer__item {
-    clip-path: none !important;
-    overflow: visible !important;
+    /* 纯光效动画，拒绝缩放带来的边缘锯齿 */
+    animation: endfield-dot-pulse-noscale 2s ease-in-out infinite !important;
   }
 }
